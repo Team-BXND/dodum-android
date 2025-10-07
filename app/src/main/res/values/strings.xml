@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">dodum_Android</string>
+    <string name="app_name">dodum-Android</string>
     <string name="title_activity_profile">ProfileActivity</string>
 </resources>
