@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "dodum_Android"
+rootProject.name = "dodum-Android"
 include(":app")
