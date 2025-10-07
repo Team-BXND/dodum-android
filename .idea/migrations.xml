@@ -3,7 +3,7 @@
   <component name="ProjectMigrations">
     <option name="MigrateToGradleLocalJavaHome">
       <set>
-        <option value="$USER_HOME$/바인드/dodum_Android" />
+        <option value="$USER_HOME$/dodum-Android" />
       </set>
     </option>
   </component>
