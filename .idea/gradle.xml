@@ -20,8 +20,8 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/바인드/dodum_Android" />
-            <option value="$USER_HOME$/바인드/dodum_Android/app" />
+            <option value="$USER_HOME$/바인드/dodum-Android" />
+            <option value="$USER_HOME$/바인드/dodum-Android/app" />
           </set>
         </option>
       </GradleProjectSettings>
