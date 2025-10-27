@@ -9,6 +9,9 @@ import retrofit2.http.Path
 data class Profile(
     val username: String,
     val studentId: String,
+    val grade: String,
+    val class_no: String,
+    val student_no: String,
     val phone: String,
     val email: String,
     val club: String
