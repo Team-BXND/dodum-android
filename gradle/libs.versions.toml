@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.3"
+# Removed composeBomVersion since we're using the newer 'composeBom'
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -7,18 +8,21 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.10.01"
-retrofit = "2.11.0"
 gson = "2.11.0"
 kotlinxCoroutinesCore = "1.8.1"
 kotlinxCoroutinesAndroid = "1.8.1"
+# No explicit version needed if it's covered by Compose BOM, or set directly
+# materialIconsExtended = "1.2.1"
 navigation = "2.9.5"
 hilt = "2.54"
 androidxHiltNavigationCompose = "1.3.0"
-material3 = "1.1.1"
 datastore = "1.1.7"
+composeBom = "2025.10.01" # Keep the newer one
+retrofit = "2.11.0"
+material3 = "1.2.1" # Explicitly define material3 version if you want to control it separately from the BOM. Often covered by BOM.
 
 [libraries]
+# Removed the older compose-bom-v20230800
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -32,18 +36,20 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" } # Added this
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" } # Updated module to use the older Material library which includes this artifact. If you strictly want material3 icons, use androidx.compose.material3:material-icons-extended. The BOM typically handles this.
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+# Removed duplicate material-icons-extended
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "gson" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
-androidx-material-icons-extended = { module = "androidx.compose.material3:material-icons-extended", version.ref = "material3" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 
@@ -51,4 +57,3 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

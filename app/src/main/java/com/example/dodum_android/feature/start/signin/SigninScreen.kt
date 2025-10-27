@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun SigninScreen (navController: NavHostController) {
+fun SigninScreen (
+    navController: NavHostController
+) {
 
 }

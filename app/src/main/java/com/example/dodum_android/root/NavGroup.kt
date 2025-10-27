@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.start.signin.SigninScreen
+import com.example.dodum_android.feature.start.splash.SplashScreen
+
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(startDestination = "splash", route = "auth_graph") {
