@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.start.signin.SigninRequest
 import com.example.dodum_android.network.start.signin.SigninResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ import com.example.dodum_android.network.start.signin.SigninService
 @HiltViewModel
 class SigninViewModel @Inject constructor (
     private val signinService: SigninService,
-//    private val userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _signinSuccess = mutableStateOf<Boolean?>(null)
@@ -33,11 +34,11 @@ class SigninViewModel @Inject constructor (
                         println("로그인 성공: accessToken=${response.data.accessToken}, refreshToken=${response.data.refreshToken}")
                         _signinSuccess.value = true
 
-//                        userRepository.saveUserData(
-//                            publicId = username,
-//                            token = response.token,
-//                            isChecked = false
-//                        )
+                        userRepository.saveUserData(
+                            publicId = username,
+                            accessToken = response.data.accessToken,
+                            refreshToken = response.data.refreshToken
+                        )
                     }
                     response.error != null -> {
                         println("로그인 실패: ${response.error.message}")

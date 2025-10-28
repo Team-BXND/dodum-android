@@ -5,7 +5,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.dodum_android.data.datastore.UserPrefsKeys.PUBLIC_ID
-import com.example.dodum_android.data.datastore.UserPrefsKeys.TOKEN
+import com.example.dodum_android.data.datastore.UserPrefsKeys.ACCESS_TOKEN
+import com.example.dodum_android.data.datastore.UserPrefsKeys.REFRESH_TOKEN
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -30,12 +31,13 @@ class UserRepository @Inject constructor(
     // 저장 함수: 모든 사용자 데이터를 DataStore에 저장
     suspend fun saveUserData(
         publicId: String? = null,
-        token: String? = null,
-        isChecked: Boolean? = null
+        accessToken: String? = null,
+        refreshToken: String? = null
     ) {
         context.dataStore.edit { prefs ->
             publicId?.let { prefs[PUBLIC_ID] = it }
-            token?.let { prefs[TOKEN] = it }
+            accessToken?.let { prefs[ACCESS_TOKEN] = it }
+            refreshToken?.let { prefs[REFRESH_TOKEN] = it }
         }
     }
 
@@ -44,14 +46,18 @@ class UserRepository @Inject constructor(
         context.dataStore.edit { prefs ->
             // 원래 코드의 초기화 로직을 그대로 구현
             prefs.remove(PUBLIC_ID)
-            prefs.remove(TOKEN)
+            prefs.remove(ACCESS_TOKEN)
+            prefs.remove(REFRESH_TOKEN)
         }
     }
 
     suspend fun getPublicIdSnapshot(): String? =
         context.dataStore.data.map { it[PUBLIC_ID] }.first()
 
-    suspend fun getTokenSnapshot(): String? =
-        context.dataStore.data.map { it[TOKEN] }.first()
+    suspend fun getAccessTokenSnapshot(): String? =
+        context.dataStore.data.map { it[ACCESS_TOKEN] }.first()
+
+    suspend fun getRefreshTokenSnapshot(): String? =
+        context.dataStore.data.map { it[REFRESH_TOKEN] }.first()
 
 }

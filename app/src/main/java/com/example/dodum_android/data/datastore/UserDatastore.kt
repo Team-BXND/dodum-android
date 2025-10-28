@@ -5,5 +5,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 object UserPrefsKeys {
     val PUBLIC_ID = stringPreferencesKey("public_id")
-    val TOKEN = stringPreferencesKey("token")
+    val ACCESS_TOKEN = stringPreferencesKey("acces_token")
+    val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
 }
