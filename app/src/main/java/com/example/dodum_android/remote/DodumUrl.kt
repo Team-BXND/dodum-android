@@ -1,7 +1,7 @@
 package com.example.dodum_android.remote
 
 object DodumUrl {
-    const val BASE_URL = "example"
+    const val BASE_URL = "https://api.dodum.test/"
 
     const val AUTH = "${BASE_URL}/auth"
     const val EMAIL = "${BASE_URL}/email"

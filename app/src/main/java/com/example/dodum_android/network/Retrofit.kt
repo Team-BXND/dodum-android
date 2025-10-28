@@ -1,6 +1,7 @@
 package com.example.dodum_android.network
 
 import com.example.dodum_android.network.start.signin.SigninService
+import com.example.dodum_android.network.start.signup.SignupService
 import com.example.dodum_android.remote.DodumUrl
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,12 @@ object NetworkModule {
     @Singleton
     fun provideSigninService(retrofit: Retrofit): SigninService {
         return retrofit.create(SigninService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignupService(retrofit: Retrofit): SignupService {
+        return retrofit.create(SignupService::class.java)
     }
 
 

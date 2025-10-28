@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.dodum_android.ui.theme.MainColor
+import com.example.dodum_android.ui.theme.ButtonHover
 
 
 @Composable
@@ -27,7 +27,7 @@ fun AuthButton(
             .height(40.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MainColor,
+            containerColor = ButtonHover,
             contentColor = Color.White
         )
     ) {

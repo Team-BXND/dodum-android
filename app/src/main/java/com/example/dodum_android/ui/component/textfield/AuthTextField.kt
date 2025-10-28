@@ -28,7 +28,7 @@ fun AuthTextField(
     errortext: String? = null
 ) {
     Column (modifier = Modifier
-        .width(314.dp)
+        .width(330.dp)
     ) {
         Text(text = fieldname,
             color = Color.Black,
