@@ -15,7 +15,7 @@ import com.example.dodum_android.network.start.signin.SigninService
 
 @HiltViewModel
 class SigninViewModel @Inject constructor (
-    private val loginService: SigninService,
+    private val signinService: SigninService,
 //    private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -26,7 +26,7 @@ class SigninViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 val request = SigninRequest(username, password)
-                val response: SigninResponse = loginService.signin(request)
+                val response: SigninResponse = signinService.signin(request)
 
                 when {
                     response.status == 200 && response.data != null -> {
