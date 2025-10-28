@@ -102,7 +102,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate("/* 추가해야 함 */")
+                                navController.navigate("signup")
                             }
                             .align(Alignment.CenterEnd)
                     )

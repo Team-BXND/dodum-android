@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.start.signin.SigninScreen
+import com.example.dodum_android.feature.start.signup.SignupScreen
 import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
 
@@ -14,6 +15,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable("splash") { SplashScreen(navController) }
         composable("welcome") { WelcomeSigninScreen(navController) }
         composable("signin") { SigninScreen(navController) }
-//        composable("signup") { SignUpScreen(navController) }
+        composable("signup") { SignupScreen(navController) }
     }
 }

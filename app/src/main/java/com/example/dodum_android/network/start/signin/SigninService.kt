@@ -1,9 +1,10 @@
 package com.example.dodum_android.network.start.signin
 
+import com.example.dodum_android.remote.DodumUrl
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SigninService {
-    @POST("/signin")
+    @POST(DodumUrl.Auth.SIGNIN)
     suspend fun signin(@Body request: SigninRequest): SigninResponse
 }
