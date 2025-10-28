@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.example.dodum_android"
-    compileSdk = 36 // Recommended to be 34 or higher for new apps
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.dodum_android"
         minSdk = 27
-        targetSdk = 36 // Match compileSdk for consistency
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -47,16 +47,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    // Use the latest Compose BOM consistently
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3) // Uncommented to use Material 3
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom)) // Use the same BOM here
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
@@ -69,7 +68,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Only one material icons extended dependency needed, and it comes from material3
     implementation(libs.androidx.material.icons.extended)
 
     implementation (libs.androidx.datastore.preferences)
