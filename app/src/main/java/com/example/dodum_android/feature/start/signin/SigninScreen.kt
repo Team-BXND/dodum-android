@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.dodum_android.R
 import com.example.dodum_android.ui.component.button.AuthButton
@@ -31,6 +32,8 @@ import com.example.dodum_android.ui.theme.FontGray
 fun SigninScreen (
     navController: NavHostController
 ) {
+    val signinViewModel: SigninViewModel = hiltViewModel()
+
     Box(modifier = Modifier
         .fillMaxSize() ) {
 
@@ -53,8 +56,7 @@ fun SigninScreen (
 
             var username by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }
-            var usernameError by remember { mutableStateOf(false) }
-            var passwordError by remember { mutableStateOf(false) }
+            var isError by remember { mutableStateOf(false) }
 
             Column (modifier = Modifier
                 .fillMaxWidth()
@@ -66,7 +68,7 @@ fun SigninScreen (
                     fieldname = "아이디",
                     value =  username,
                     onValueChange = { username = it },
-                    iserror = usernameError,
+                    iserror =  isError,
 //                    errortext = "아이디 또는 비밀번호가 일치하지 않습니다."
                 )
 
@@ -76,7 +78,7 @@ fun SigninScreen (
                     fieldname = "비밀번호",
                     value =  password,
                     onValueChange = { password = it },
-                    iserror = passwordError,
+                    iserror = isError,
                     errortext = "존재하지 않는 계정이거나 비밀번호가 일치하지 않습니다."
                 )
 
@@ -111,7 +113,11 @@ fun SigninScreen (
                 AuthButton(
                     buttonname = "로그인",
                     onClick = {
-                        navController.navigate("/* 적어야함 */")
+                        if (username.isNotEmpty() && password.isNotEmpty()) {
+                            signinViewModel.signin(username = username, password = password)
+                        } else {
+                            isError = true
+                        }
                     })
             }
 
