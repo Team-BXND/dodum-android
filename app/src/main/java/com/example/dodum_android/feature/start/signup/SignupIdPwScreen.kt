@@ -22,12 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.dodum_android.feature.start.signup.SignupViewModel
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
-fun SignupScreen(
+fun SignupIdPwScreen(
     navController: NavHostController
 ) {
     val signupViewModel: SignupViewModel = hiltViewModel()
@@ -86,7 +85,7 @@ fun SignupScreen(
                     value = passwordcheck,
                     onValueChange = { passwordcheck = it },
                     iserror = isError,
-                    errortext = "입력한 값을 확인해주세요."
+                    errortext = "입력한 값들을 확인해주세요."
                 )
 
                 Spacer(modifier = Modifier .height(35.dp))
@@ -96,7 +95,11 @@ fun SignupScreen(
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordcheck.isNotEmpty() ) {
                             if (password == passwordcheck) {
-                                navController.navigate("/* 적어야함 */")
+                                signupViewModel.updateIdPw(username, password)
+//                                if (signupViewModel.signupSuccess.value == true) {
+//                                    navController.navigate("signupInfo")
+//                                }
+                                navController.navigate("signupInfo") //테스트용
                             }
                         } else {
                             isError = true

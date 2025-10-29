@@ -101,7 +101,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate("signup")
+                                navController.navigate("signupIdPw")
                             }
                             .align(Alignment.CenterEnd)
                     )
@@ -115,7 +115,7 @@ fun SigninScreen (
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
                             if ( signinViewModel.signinSuccess.value == true ) {
-                                navController.navigate("/* 적어야함 */")
+                                navController.navigate("signupIdPw")
                             }
                         } else {
                             isError = true
