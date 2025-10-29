@@ -2,8 +2,6 @@ package com.example.dodum_android.network.start.email
 
 import com.example.dodum_android.remote.DodumUrl
 
-package com.example.dodum_android.network.start.email
-
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.example.dodum_android.feature.start.signin.SigninScreen
 import com.example.dodum_android.feature.start.signup.SignupIdPwScreen
 import com.example.dodum_android.feature.start.signup.SignupInfoScreen
+import com.example.dodum_android.feature.start.signup.VerifyEmailScreen
 import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
 
@@ -19,5 +20,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable("signin") { SigninScreen(navController) }
         composable("signupIdPw") { SignupIdPwScreen(navController) }
         composable("signupInfo") { SignupInfoScreen(navController) }
+        composable("signupEmail") { VerifyEmailScreen(navController) }
     }
 }

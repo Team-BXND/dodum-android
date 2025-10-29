@@ -149,7 +149,7 @@ fun SignupInfoScreen(
                                 club = selectedClub
                             )
 
-                            navController.navigate("SignupNextScreen")
+                            navController.navigate("signupEmail")
                         }
                     }
                 )

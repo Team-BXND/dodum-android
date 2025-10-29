@@ -1,5 +1,6 @@
 package com.example.dodum_android.network
 
+import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
 import com.example.dodum_android.network.start.signup.SignupService
 import com.example.dodum_android.remote.DodumUrl
@@ -36,6 +37,10 @@ object NetworkModule {
         return retrofit.create(SignupService::class.java)
     }
 
-
+    @Provides
+    @Singleton
+    fun provideEmailService(retrofit: Retrofit): EmailService {
+        return retrofit.create(EmailService::class.java)
+    }
 
 }
