@@ -71,7 +71,7 @@ fun AuthDropdown(
                 onValueChange = {},
                 readOnly = true,
                 singleLine = true,
-                shape = RoundedCornerShape(17.dp),
+                shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,

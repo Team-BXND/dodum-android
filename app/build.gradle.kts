@@ -74,4 +74,8 @@ dependencies {
 
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.kotlinx.coroutines.android)
+
+    implementation(libs.ui)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.text)
 }

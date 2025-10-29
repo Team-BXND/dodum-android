@@ -54,6 +54,7 @@ fun SignupIdPwScreen(
             var username by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }
             var passwordcheck by remember { mutableStateOf("") }
+
             var isError by remember { mutableStateOf(false) }
 
             Column (modifier = Modifier
