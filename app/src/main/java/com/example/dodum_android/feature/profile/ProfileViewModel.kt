@@ -13,25 +13,6 @@ class ProfileViewModel : ViewModel() {
     val profile = mutableStateOf<Profile?>(null)
     val posts = mutableStateOf<List<Post>>(emptyList())
 
-    fun loadMockData() {
-        val fakeProfile = Profile(
-            username = "홍길동",
-            studentId = "honggildong1234",
-            grade = "1",
-            class_no = "1",
-            student_no = "01",
-            phone = "010-1234-5678",
-            email = "bind@example.com",
-            club = "바인드"
-        )
-
-        val fakePosts = listOf(
-            Post(title = "첫 글", date = LocalDateTime.now().toString())
-        )
-
-        profile.value = fakeProfile
-        posts.value = fakePosts
-    }
 
     fun loadProfile(profileId: String) {
         viewModelScope.launch {
