@@ -26,8 +26,8 @@ import com.example.dodum_android.ui.theme.FontGray
 fun AuthIntField(
     fieldname: String = "",
     placename: String,
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: Int,
+    onValueChange: (Int) -> Unit,
     iserror: Boolean,
     errortext: String? = null
 ) {
@@ -43,11 +43,12 @@ fun AuthIntField(
         Spacer(modifier = Modifier.height(4.dp))
 
         OutlinedTextField(
-            value = value,
+            value = value.toString(),
             onValueChange = { input ->
                 val onlyDigits = input.filter { it.isDigit() }
                 val normalized = onlyDigits.trimStart('0')
-                onValueChange(normalized)
+                val intValue = if (normalized.isEmpty()) 0 else normalized.toInt()
+                onValueChange(intValue)
             },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),

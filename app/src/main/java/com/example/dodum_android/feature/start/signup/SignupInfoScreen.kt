@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.dropdownmenu.AuthDropdown
 import com.example.dodum_android.ui.component.textfield.AuthIntField
+import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
 fun SignupInfoScreen(
@@ -64,8 +67,8 @@ fun SignupInfoScreen(
                 var selectedGrade by remember { mutableStateOf("") }
                 var selectedClub by remember { mutableStateOf("") }
 
-                var class_no by remember { mutableStateOf("") }
-                var student_no by remember { mutableStateOf("") }
+                var class_no by remember { mutableIntStateOf(0) }
+                var student_no by remember { mutableIntStateOf(0) }
                 var phone by remember { mutableStateOf("") }
 
                 var isError by remember { mutableStateOf(false) }
@@ -105,10 +108,51 @@ fun SignupInfoScreen(
                         onValueChange = { student_no = it },
                         iserror = isError
                     )
-
                 }
 
+                Spacer(modifier = Modifier .height(12.dp))
 
+                AuthTextField(
+                    fieldname = "전화번호",
+                    value = phone,
+                    onValueChange = { phone = it },
+                    iserror = isError
+                )
+
+                Spacer(modifier = Modifier .height(12.dp))
+
+                AuthDropdown(
+                    fieldname = "동아리",
+                    placeholder = "동아리",
+                    selects = club,
+                    selectedClub = selectedClub,
+                    onClubSelected = { selectedClub = it },
+                    width = 330,
+                    isError = isError
+                )
+
+                Spacer(modifier = Modifier .height(35.dp))
+
+                AuthButton(
+                    buttonname = "다음",
+                    onClick = {
+                        val hasError = selectedGrade.isEmpty() || class_no == 0 || student_no == 0 ||
+                                phone.isEmpty() || selectedClub.isEmpty()
+                        isError = hasError
+
+                        if (!hasError) {
+                            signupViewModel.updateContactInfo(
+                                gradee = selectedGrade,
+                                class_no = class_no,
+                                student_no = student_no,
+                                phone = phone,
+                                club = selectedClub
+                            )
+
+                            navController.navigate("SignupNextScreen")
+                        }
+                    }
+                )
 
             }
         }

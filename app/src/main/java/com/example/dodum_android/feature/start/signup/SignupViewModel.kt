@@ -49,8 +49,10 @@ class SignupViewModel @Inject constructor (
     }
 
     fun updateContactInfo(
-        grade: Int, class_no: Int, student_no: Int, phone: String, club: String
+        gradee: String, class_no: Int, student_no: Int, phone: String, club: String
     ) {
+        val grade = if (gradee == "1학년") 1 else if (gradee == "2학년") 2 else 3
+
         _grade.value = grade
         _class_no.value = class_no
         _student_no.value = student_no
