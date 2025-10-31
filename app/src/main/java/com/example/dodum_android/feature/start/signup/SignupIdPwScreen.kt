@@ -67,7 +67,8 @@ fun SignupIdPwScreen(
                     fieldname = "아이디",
                     value = username,
                     onValueChange = { username = it },
-                    iserror = isError
+                    iserror = isError,
+                    placeholder = "아이디를 입력해주세요."
                 )
 
                 Spacer(modifier = Modifier .height(12.dp))
@@ -76,7 +77,8 @@ fun SignupIdPwScreen(
                     fieldname = "비밀번호",
                     value = password,
                     onValueChange = { password = it },
-                    iserror = isError
+                    iserror = isError,
+                    placeholder = "비밀번호를 입력해주세요."
                 )
 
                 Spacer(modifier = Modifier .height(12.dp))
@@ -86,7 +88,8 @@ fun SignupIdPwScreen(
                     value = passwordcheck,
                     onValueChange = { passwordcheck = it },
                     iserror = isError,
-                    errortext = "입력한 값들을 확인해주세요."
+                    errortext = "입력한 값들을 확인해주세요.",
+                    placeholder = "비밀번호를 다시 한 번 입력해주세요."
                 )
 
                 Spacer(modifier = Modifier .height(35.dp))

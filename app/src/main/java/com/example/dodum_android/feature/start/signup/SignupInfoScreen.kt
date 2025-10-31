@@ -116,7 +116,8 @@ fun SignupInfoScreen(
                     fieldname = "전화번호",
                     value = phone,
                     onValueChange = { phone = it },
-                    iserror = isError
+                    iserror = isError,
+                    placeholder = "전화번호를 입력해주세요."
                 )
 
                 Spacer(modifier = Modifier .height(12.dp))

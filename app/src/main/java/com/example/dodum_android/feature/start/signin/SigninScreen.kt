@@ -68,6 +68,7 @@ fun SigninScreen (
                     value =  username,
                     onValueChange = { username = it },
                     iserror =  isError,
+                    placeholder = "아이디를 입력해주세요."
 //                    errortext = "아이디 또는 비밀번호가 일치하지 않습니다."
                 )
 
@@ -78,6 +79,7 @@ fun SigninScreen (
                     value =  password,
                     onValueChange = { password = it },
                     iserror = isError,
+                    placeholder = "비밀번호를 입력해주세요.",
                     errortext = "존재하지 않는 계정이거나 비밀번호가 일치하지 않습니다."
                 )
 

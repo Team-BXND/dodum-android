@@ -22,6 +22,7 @@ import com.example.dodum_android.ui.theme.FontGray
 @Composable
 fun AuthTextField(
     fieldname: String,
+    placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
     iserror: Boolean,
@@ -50,7 +51,7 @@ fun AuthTextField(
             ),
             placeholder = {
                 Text(
-                    text = "${fieldname}을(를) 입력해주세요.",
+                    text = placeholder,
                     color = FontGray,
                     fontSize = 12.sp
                 )
