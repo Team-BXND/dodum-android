@@ -80,10 +80,10 @@ fun VerifyEmailScreen (
                 onclick = {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                         coroutineScope.launch {
-//                            val result = signupViewModel.sendEmail(email)
-//                            if (result) {
-//                                ischeckCode += 1
-//                            }
+                            val result = signupViewModel.sendEmail(email)
+                            if (result) {
+                                ischeckCode += 1
+                            }
                         }
                     } else {
                         iserror = true
@@ -113,13 +113,16 @@ fun VerifyEmailScreen (
                     !authcode.matches(Regex("^\\d{6}\$")) -> isAuthCodeerror = true
                     else -> {
                         coroutineScope.launch {
-//                            val emailChecked = signupViewModel.checkEmail(email, authcode) // suspend
-//                            if (emailChecked) {
-//                                val signupSuccess = signupViewModel.signup(email, selectedRole) // suspend
-//                                if (signupSuccess) navController.navigate("login")
-//                            } else {
-//                                isAuthCodeerror = true
-//                            }
+                            val emailChecked = signupViewModel.checkEmail(email, authcode)
+
+                            if (emailChecked) {
+                                signupViewModel.updateEmail(email)
+                                val signupSuccess = signupViewModel.signup()
+                                if (signupSuccess) navController.navigate("login")
+
+                            } else {
+                                isAuthCodeerror = true
+                            }
                         }
                     }
                 }

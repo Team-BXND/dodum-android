@@ -146,7 +146,7 @@ class SignupViewModel @Inject constructor (
         return try {
             val request = EmailCheckRequest(email, authNum)
 
-            val response = emailService.checkEmail(request) // emailService 정상 사용
+            val response = emailService.checkEmail(request)
 
             if (response.isSuccessful) {
                 val body = response.body()
