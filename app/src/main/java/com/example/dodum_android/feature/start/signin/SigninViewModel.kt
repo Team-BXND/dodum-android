@@ -1,6 +1,7 @@
 package com.example.dodum_android.feature.start.signin
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,8 +21,7 @@ class SigninViewModel @Inject constructor (
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _signinSuccess = mutableStateOf<Boolean?>(null)
-    val signinSuccess: State<Boolean?> = _signinSuccess
+    var signinSuccess by mutableStateOf<Boolean?>(null)
 
     fun signin(username: String, password: String) {
         viewModelScope.launch {
@@ -32,7 +32,7 @@ class SigninViewModel @Inject constructor (
                 when {
                     response.status == 200 && response.data != null -> {
                         println("로그인 성공: accessToken=${response.data.accessToken}, refreshToken=${response.data.refreshToken}")
-                        _signinSuccess.value = true
+                        signinSuccess = true
 
                         userRepository.saveUserData(
                             publicId = username,
@@ -42,22 +42,22 @@ class SigninViewModel @Inject constructor (
                     }
                     response.error != null -> {
                         println("로그인 실패: ${response.error.message}")
-                        _signinSuccess.value = false
+                        signinSuccess = false
                     }
                     else -> {
                         println("로그인 실패: 알 수 없는 오류 발생 (status=${response.status})")
-                        _signinSuccess.value = false
+                        signinSuccess = false
                     }
                 }
             } catch (e: HttpException) {
                 println("HTTP 예외 발생: ${e.message}")
-                _signinSuccess.value = false
+                signinSuccess = false
             } catch (e: IOException) {
                 println("네트워크 오류: ${e.message}")
-                _signinSuccess.value = false
+                signinSuccess = false
             } catch (e: Exception) {
                 println("알 수 없는 오류: ${e.message}")
-                _signinSuccess.value = false
+                signinSuccess = false
             }
         }
     }
