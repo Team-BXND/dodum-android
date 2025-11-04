@@ -116,7 +116,7 @@ fun SigninScreen (
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
-                            if ( signinViewModel.signinSuccess.value == true ) {
+                            if ( signinViewModel.signinSuccess == true ) {
                                 navController.navigate("/* 써야 함 */")
                             }
                         } else {

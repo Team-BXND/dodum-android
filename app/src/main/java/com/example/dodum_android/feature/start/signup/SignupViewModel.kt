@@ -23,8 +23,6 @@ class SignupViewModel @Inject constructor (
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _signupSuccess = mutableStateOf<Boolean?>(null)
-//    val signupSuccess: State<Boolean?> = _signupSuccess
 
 //    username:String
 //    Password:String
@@ -52,7 +50,6 @@ class SignupViewModel @Inject constructor (
 //    private val _major = mutableStateOf<String?>(null)
 //    private val _history = mutableStateOf<String?>(null)
 //
-    private val _emailSuccess = mutableStateOf<Boolean?>(null)
 //
 //    fun updateIdPw(username: String, password: String) {
 //        _username.value = username
@@ -122,11 +119,11 @@ class SignupViewModel @Inject constructor (
 
             if (response.status == 200) {
                 println("회원가입 성공: ${response.data}")
-                _signupSuccess.value = true
+                signupSuccess = true
                 true
             } else {
                 println("회원가입 실패: ${response.data}")
-                _signupSuccess.value = false
+                signupSuccess = false
                 false
             }
         } catch (e: HttpException) {
@@ -151,12 +148,12 @@ class SignupViewModel @Inject constructor (
             if (response.isSuccessful) {
                 val body = response.body()
                 println("이메일 전송 성공: ${body?.data}")
-                _emailSuccess.value = true
+                emailSuccess = true
                 true
             } else {
                 val errorBody = response.errorBody()?.string()
                 println("이메일 전송 실패: $errorBody")
-                _emailSuccess.value = false
+                emailSuccess = false
                 false
             }
         } catch (e: HttpException) {
@@ -180,12 +177,12 @@ class SignupViewModel @Inject constructor (
             if (response.isSuccessful) {
                 val body = response.body()
                 println("이메일 인증 성공: ${body?.data}")
-                _emailSuccess.value = true
+                emailSuccess = true
                 true
             } else {
                 val errorBody = response.errorBody()?.string()
                 println("이메일 인증 실패: $errorBody")
-                _emailSuccess.value = false
+                emailSuccess = false
                 false
             }
         } catch (e: HttpException) {
