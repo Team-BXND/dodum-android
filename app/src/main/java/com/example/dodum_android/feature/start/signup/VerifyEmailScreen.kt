@@ -116,7 +116,9 @@ fun VerifyEmailScreen (
                             val emailChecked = signupViewModel.checkEmail(email, authcode)
 
                             if (emailChecked) {
-                                signupViewModel.updateEmail(email)
+                                signupViewModel.form = signupViewModel.form.copy(
+                                    email = email
+                                )
                                 val signupSuccess = signupViewModel.signup()
                                 if (signupSuccess) navController.navigate("login")
 
