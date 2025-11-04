@@ -1,7 +1,8 @@
 package com.example.dodum_android.feature.start.signup
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.start.email.EmailCheckRequest
@@ -23,7 +24,7 @@ class SignupViewModel @Inject constructor (
 ) : ViewModel() {
 
     private val _signupSuccess = mutableStateOf<Boolean?>(null)
-    val signupSuccess: State<Boolean?> = _signupSuccess
+//    val signupSuccess: State<Boolean?> = _signupSuccess
 
 //    username:String
 //    Password:String
@@ -36,57 +37,85 @@ class SignupViewModel @Inject constructor (
 //    major:String
 //    history:String
 //    club:”BIND”|”3D”|”두카미”|”Louter”|”CNS”|”모디”|”ALT”|”Chatty”|”NONE”
-
-    private val _username = mutableStateOf("")
-    private val _password = mutableStateOf("")
-
-    private val _grade = mutableStateOf<Int?>(null)
-    private val _class_no = mutableStateOf<Int?>(null)
-    private val _student_no = mutableStateOf<Int?>(null)
-    private val _phone = mutableStateOf("")
-    private val _club = mutableStateOf<String?>(null)
-
-    private val _email = mutableStateOf("")
-
-    private val _major = mutableStateOf<String?>(null)
-    private val _history = mutableStateOf<String?>(null)
-
+//
+//    private val _username = mutableStateOf("")
+//    private val _password = mutableStateOf("")
+//
+//    private val _grade = mutableStateOf<Int?>(null)
+//    private val _class_no = mutableStateOf<Int?>(null)
+//    private val _student_no = mutableStateOf<Int?>(null)
+//    private val _phone = mutableStateOf("")
+//    private val _club = mutableStateOf<String?>(null)
+//
+//    private val _email = mutableStateOf("")
+//
+//    private val _major = mutableStateOf<String?>(null)
+//    private val _history = mutableStateOf<String?>(null)
+//
     private val _emailSuccess = mutableStateOf<Boolean?>(null)
+//
+//    fun updateIdPw(username: String, password: String) {
+//        _username.value = username
+//        _password.value = password
+//    }
+//
+//    fun updateContactInfo(
+//        gradee: String?, class_no: Int?, student_no: Int?, phone: String, club: String?
+//    ) {
+//        val grade = when (gradee) {
+//            "1학년" -> 1
+//            "2학년" -> 2
+//            "3학년" -> 3
+//            else -> null
+//        }
+//
+//        _grade.value = grade
+//        _class_no.value = class_no
+//        _student_no.value = student_no
+//        _phone.value = phone
+//
+//        _club.value = club?.ifBlank { null }
+//    }
+//
+//    fun updateEmail(email: String) {
+//        _email.value = email
+//    }
 
-    fun updateIdPw(username: String, password: String) {
-        _username.value = username
-        _password.value = password
-    }
+    var form by mutableStateOf(SignupForm())
+        internal set
 
-    fun updateContactInfo(
-        gradee: String?, class_no: Int?, student_no: Int?, phone: String, club: String?
-    ) {
-        val grade = when (gradee) {
-            "1학년" -> 1
-            "2학년" -> 2
-            "3학년" -> 3
-            else -> null
-        }
+    var signupSuccess by mutableStateOf<Boolean?>(null)
+        private set
 
-        _grade.value = grade
-        _class_no.value = class_no
-        _student_no.value = student_no
-        _phone.value = phone
-
-        _club.value = club?.ifBlank { null }
-    }
-
-    fun updateEmail(email: String) {
-        _email.value = email
-    }
+    var emailSuccess by mutableStateOf<Boolean?>(null)
+        private set
 
     suspend fun signup(): Boolean {
         return try {
+//            val request = SignupRequest(
+//                username = form.username.toString(),
+//                password = form.password.toString(),
+//                grade = form.grade,
+//                class_no = form.classNo,
+//                student_no = form.studentNo,
+//                phone = form.phone.toString(),
+//                email = form.email.toString(),
+//                major = form.major.toString(),
+//                history = form.history.toString(),
+//                club = form.club.toString()
+//            )
+
             val request = SignupRequest(
-                username = _username.value, password = _password.value,
-                grade = _grade.value, class_no = _class_no.value, student_no = _student_no.value,
-                phone = _phone.value, email = _email.value,
-                major = _major.value, history = _history.value, club = _club.value
+                username = form.username,
+                password = form.password,
+                grade = form.grade,
+                class_no = form.classNo,
+                student_no = form.studentNo,
+                phone = form.phone,
+                email = form.email,
+                major = form.major,
+                history = form.history,
+                club = form.club
             )
 
             val response: SignupResponse = signupService.signup(request)

@@ -142,12 +142,17 @@ fun SignupInfoScreen(
                         isError = hasError
 
                         if (!hasError) {
-                            signupViewModel.updateContactInfo(
-                                gradee = selectedGrade,
-                                class_no = class_no,
-                                student_no = student_no,
+                            signupViewModel.form = signupViewModel.form.copy(
+                                grade = when (selectedGrade) {
+                                    "1학년" -> 1
+                                    "2학년" -> 2
+                                    "3학년" -> 3
+                                    else -> null
+                                },
+                                classNo = class_no,
+                                studentNo = student_no,
                                 phone = phone,
-                                club = selectedClub
+                                club = selectedClub.ifBlank { null }
                             )
 
                             navController.navigate("signupEmail")

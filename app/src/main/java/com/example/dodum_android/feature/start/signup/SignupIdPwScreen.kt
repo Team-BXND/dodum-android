@@ -99,7 +99,11 @@ fun SignupIdPwScreen(
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordcheck.isNotEmpty() ) {
                             if (password == passwordcheck) {
-                                signupViewModel.updateIdPw(username, password)
+//                                signupViewModel.updateIdPw(username, password)
+                                signupViewModel.form = signupViewModel.form.copy(
+                                    username = username,
+                                    password = password
+                                )
 //                                if (signupViewModel.signupSuccess.value == true) {
 //                                    navController.navigate("signupInfo")
 //                                }
