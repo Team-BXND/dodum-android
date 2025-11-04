@@ -117,7 +117,7 @@ fun SigninScreen (
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
                             if ( signinViewModel.signinSuccess.value == true ) {
-                                navController.navigate("signupIdPw")
+                                navController.navigate("/* 써야 함 */")
                             }
                         } else {
                             isError = true

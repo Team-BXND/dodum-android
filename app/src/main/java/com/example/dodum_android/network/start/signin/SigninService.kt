@@ -1,6 +1,6 @@
 package com.example.dodum_android.network.start.signin
 
-import com.example.dodum_android.remote.DodumUrl
+import com.example.dodum_android.network.DodumUrl
 import retrofit2.http.Body
 import retrofit2.http.POST
 
