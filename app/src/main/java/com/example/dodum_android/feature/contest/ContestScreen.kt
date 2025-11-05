@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.dodum_android.ui.component.navbar.HomeNavBar
+import com.example.dodum_android.ui.component.navbar.HomeTopBar
 
 @Composable
 fun ContestScreen(
@@ -22,6 +23,7 @@ fun ContestScreen(
 //        .background(Color.Black)
     ) {
 
+        HomeTopBar(navController = navController)
 
 
         Box (modifier = Modifier
