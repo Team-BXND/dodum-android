@@ -17,10 +17,6 @@ plugins {
     kotlin("kapt")
 }
 
-val localProperties = Properties().apply {
-    load(project.rootProject.file("local.properties").inputStream())
-}
-
 android {
     namespace = "com.example.dodum_android"
     compileSdk = 36
