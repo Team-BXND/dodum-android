@@ -94,7 +94,8 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate("/* 추가해야 함 */")
+                                navController.navigate("main_graph") //테스트용
+//                                navController.navigate("/* 추가해야 함 */")
                             }
                             .align(Alignment.CenterStart)
                     )
@@ -117,7 +118,7 @@ fun SigninScreen (
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
                             if ( signinViewModel.signinSuccess == true ) {
-                                navController.navigate("/* 써야 함 */")
+                                navController.navigate("profile")
                             }
                         } else {
                             isError = true
