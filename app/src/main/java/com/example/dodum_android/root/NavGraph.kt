@@ -10,6 +10,6 @@ fun MyAppNavHost(
 ) {
     NavHost(navController = navController, startDestination = "auth_graph") { // ← NavGraph
         authNavGraph(navController)   // NavGroup 호출
-//        mainNavGraph(navController)   // NavGroup 호출
+        mainNavGraph(navController)   // NavGroup 호출
     }
 }
