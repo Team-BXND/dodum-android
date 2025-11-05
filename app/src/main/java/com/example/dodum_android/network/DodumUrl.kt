@@ -5,16 +5,16 @@ import com.example.dodum_android.BuildConfig
 object DodumUrl {
     const val BASE_URL = BuildConfig.BASE_URL
 
-    const val AUTH = "$BASE_URL/auth"
-    const val EMAIL = "$AUTH/email"
+    const val AUTH = "${BASE_URL}auth/"
+    const val EMAIL = "${AUTH}email/"
 
     object Auth {
-        const val SIGNIN = "$AUTH/signin"
-        const val SIGNUP = "$AUTH/signup"
+        const val SIGNIN = "${AUTH}signin"
+        const val SIGNUP = "${AUTH}signup"
     }
 
     object Email {
-        const val SEND = "$EMAIL/send"
-        const val CHECK = "$EMAIL/check"
+        const val SEND = "${EMAIL}send"
+        const val CHECK = "${EMAIL}check"
     }
 }

@@ -3,7 +3,6 @@ package com.example.dodum_android.network
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
 import com.example.dodum_android.network.start.signup.SignupService
-import com.example.dodum_android.network.DodumUrl
 
 import dagger.Module
 import dagger.Provides
@@ -25,23 +24,29 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AuthModule {
 
     @Provides
     @Singleton
-    fun provideSigninService(retrofit: Retrofit): SigninService {
-        return retrofit.create(SigninService::class.java)
-    }
+    fun provideSigninService(retrofit: Retrofit): SigninService =
+        retrofit.create(SigninService::class.java)
 
     @Provides
     @Singleton
-    fun provideSignupService(retrofit: Retrofit): SignupService {
-        return retrofit.create(SignupService::class.java)
-    }
+    fun provideSignupService(retrofit: Retrofit): SignupService =
+        retrofit.create(SignupService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object EmailModule {
 
     @Provides
     @Singleton
-    fun provideEmailService(retrofit: Retrofit): EmailService {
-        return retrofit.create(EmailService::class.java)
-    }
-
+    fun provideEmailService(retrofit: Retrofit): EmailService =
+        retrofit.create(EmailService::class.java)
 }
