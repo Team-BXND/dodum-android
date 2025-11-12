@@ -1,13 +1,15 @@
 package com.example.dodum_android.root
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.dodum_android.feature.profile.ChangeInformScreen
 import com.example.dodum_android.feature.profile.ChangePwScreen
 import com.example.dodum_android.feature.profile.MyInformScreen
+import com.example.dodum_android.feature.profile.MypostsScreen
+import com.example.dodum_android.feature.profile.ProfileScreen
 import com.example.dodum_android.feature.profile.ProfileViewModel
 
 @Composable
@@ -15,11 +17,11 @@ fun AppNavGraph(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController, startDestination = "${Screens.MyInform.route}/1" // 시작 스크린
+        navController = navController, startDestination = "${Screens.Profile.route}/1" // 시작 스크린
     ) {
         composable("${Screens.MyInform.route}/{id}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id") ?: ""
-            val viewModel: ProfileViewModel = viewModel()
+            val viewModel: ProfileViewModel = hiltViewModel()
             MyInformScreen(
                 navController = navController,
                 viewModel = viewModel,
@@ -39,6 +41,26 @@ fun AppNavGraph(
             val id = backstackEnrty.arguments?.getString("id") ?: ""
             ChangePwScreen(
                 navController = navController,
+                profileId = id
+            )
+        }
+
+        composable("${Screens.Profile.route}/{id}"){backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val viewModel: ProfileViewModel = hiltViewModel()
+            ProfileScreen(
+                navController = navController,
+                viewModel = viewModel,
+                profileId = id
+            )
+        }
+
+        composable("${Screens.MyPosts.route}/{id}"){backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val viewModel: ProfileViewModel = hiltViewModel()
+            MypostsScreen(
+                navController = navController,
+                viewModel = viewModel,
                 profileId = id
             )
         }
