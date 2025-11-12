@@ -1,27 +1,39 @@
 package com.example.dodum_android.network
 
 import com.example.dodum_android.network.profile.ApiService
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 
-object RetrofitClient {
+@Module
+@InstallIn(SingletonComponent::class) // 앱 전체 싱글톤
+object NetworkModule {
 
-    private val logging = HttpLoggingInterceptor().apply {
-        setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+    private const val BASE_URL = "https://example.com" // 서버 주소
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .build()
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
 
-    val apiService: ApiService by lazy {
+    @Provides
+    @Singleton
+    fun provideRetrofit(Client: OkHttpClient): Retrofit=
         Retrofit.Builder()
-            .baseUrl("https://") // 서버 주소
-            .client(client)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(Client)
             .build()
-            .create(ApiService::class.java)
-    }
+
+
+    @Singleton
+    @Provides
+    fun provideApiService(retrofit: Retrofit): ApiService =
+        retrofit.create(ApiService::class.java)
+
 }
+
