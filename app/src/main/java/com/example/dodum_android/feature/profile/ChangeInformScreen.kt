@@ -1,5 +1,7 @@
 package com.example.dodum_android.feature.profile
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -73,7 +75,7 @@ fun ChangeInformScreen(
                         modifier = Modifier
                             .size(52.dp)
                             .align(Alignment.BottomEnd)
-                            .clickable(onClick = { TODO() })
+                            .clickable(onClick = { Log.d(TAG, "ChangeInformScreen: 프로필 변경 클릭") })
                     )
                 }
                 Column(
@@ -194,7 +196,7 @@ fun ChangeInformScreen(
                                 .weight(secondWeight)
                                 .height(43.dp)
                                 .background(MainColor, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { TODO() })
+                                .clickable(onClick = { Log.d(TAG, "ChangeInformScreen: 수정 완료 클릭") })
                         ) {
                             Text(
                                 text = "수정 완료",
@@ -209,7 +211,7 @@ fun ChangeInformScreen(
                                 .weight(thirdWeight)
                                 .height(43.dp)
                                 .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { TODO() })
+                                .clickable(onClick = { navController.popBackStack() })
                         ) {
                             Text(
                                 text = "취소",

@@ -1,5 +1,7 @@
 package com.example.dodum_android.feature.profile
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +36,7 @@ fun ChangePwScreen(
     navController: NavController,
     profileId: String
 ){
+
     var password by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var passwordCheck by remember { mutableStateOf("") }
@@ -128,7 +131,7 @@ fun ChangePwScreen(
                                 .weight(firstWeight)
                                 .height(35.dp)
                                 .background(MainColor, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { TODO() })
+                                .clickable(onClick = { Log.d(TAG, "ChangePwScreen: 비밀번호 변경 클릭됨") })
                         ) {
                             Text(
                                 text = "비밀번호 변경",
@@ -144,7 +147,7 @@ fun ChangePwScreen(
                                 .weight(secondWeight)
                                 .height(35.dp)
                                 .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { TODO() })
+                                .clickable(onClick = { navController.popBackStack() })
                         ) {
                             Text(
                                 text = "취소",
