@@ -3,7 +3,6 @@ package com.example.dodum_android.feature.profile
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.dodum_android.ui.components.AnimatedClickableBox
 import com.example.dodum_android.ui.components.CustomTextField
 import com.example.dodum_android.ui.components.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
@@ -125,35 +125,33 @@ fun ChangePwScreen(
                         val firstWeight = 124f / totalWeight
                         val secondWeight = 103f / totalWeight
 
-                        Box(
+                        AnimatedClickableBox (
+                            onClick = { Log.d(TAG, "ChangePwScreen: 비밀번호 변경 클릭됨") },
                             modifier = Modifier
                                 .padding(start = 69.dp)
                                 .weight(firstWeight)
                                 .height(35.dp)
                                 .background(MainColor, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { Log.d(TAG, "ChangePwScreen: 비밀번호 변경 클릭됨") })
                         ) {
                             Text(
                                 text = "비밀번호 변경",
                                 fontSize = 19.sp,
                                 color = Color.White,
-                                modifier = Modifier.align(Alignment.Center)
                             )
                         }
 
-                        Box(
+                        AnimatedClickableBox (
+                            onClick = { navController.popBackStack() },
                             modifier = Modifier
                                 .padding(end = 72.dp)
                                 .weight(secondWeight)
                                 .height(35.dp)
                                 .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { navController.popBackStack() })
                         ) {
                             Text(
                                 text = "취소",
                                 fontSize = 19.sp,
                                 color = Color.White,
-                                modifier = Modifier.align(Alignment.Center)
                             )
                         }
                     }

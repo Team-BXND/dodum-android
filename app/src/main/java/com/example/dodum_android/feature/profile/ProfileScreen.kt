@@ -1,7 +1,6 @@
 package com.example.dodum_android.feature.profile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.dodum_android.ui.components.AnimatedClickableBox
 import com.example.dodum_android.ui.components.MyPostItem
 import com.example.dodum_android.ui.components.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
@@ -52,7 +52,8 @@ fun ProfileScreen(
     Column {
         TopAppBar(navController, profileId)
 
-        Box(
+        AnimatedClickableBox(
+            onClick = { navController.navigate("MyInform/${profileId}") },
             modifier = Modifier
                 .padding(horizontal = 32.dp)
                 .padding(vertical = 17.dp)
@@ -60,24 +61,25 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
-                .clickable(onClick = { navController.navigate("MyInform/${profileId}") })
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(end = 11.dp, top = 11.dp)
-                    .width(98.dp)
-                    .height(28.dp)
-                    .align(Alignment.TopEnd)
-                    .background(MainColor, RoundedCornerShape(8.dp))
-            ) {
-                Text(
-                    "나의 정보",
-                    fontSize = 17.sp,
-                    color = Color.White,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            Box(modifier = Modifier.fillMaxSize()) { // 루트 Box
 
+                Box(
+                    modifier = Modifier
+                        .padding(end = 11.dp, top = 11.dp)
+                        .width(98.dp)
+                        .height(28.dp)
+                        .background(MainColor, RoundedCornerShape(8.dp))
+                        .align(Alignment.TopEnd)
+                ) {
+                    Text(
+                        "나의 정보",
+                        fontSize = 17.sp,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
             Column {
                 Row(horizontalArrangement = Arrangement.Start) {
                     Box(
@@ -92,8 +94,10 @@ fun ProfileScreen(
                         modifier = Modifier
                             .padding(top = 34.dp, start = 20.dp)
                     ) {
-                        Text(text = profile?.username ?: "",
-                            fontSize = 29.sp)
+                        Text(
+                            text = profile?.username ?: "",
+                            fontSize = 29.sp
+                        )
                         Column(Modifier.padding(top = 8.dp)) {
                             Text(text = profile?.email ?: "")
                             Text(text = "${profile?.grade ?: 0}학년 ${profile?.class_no ?: 0}반 ${profile?.student_no ?: 0}번")
@@ -136,7 +140,7 @@ fun ProfileScreen(
                                 imageVector = Icons.AutoMirrored.Filled.Comment,
                                 contentDescription = "내가 쓴 댓글",
 
-                            )
+                                )
                             Spacer(Modifier.padding(5.dp))
                             Text(text = "내가 쓴 댓글", fontSize = 17.sp)
                         }
@@ -146,42 +150,45 @@ fun ProfileScreen(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .padding(top = 17.dp, bottom = 69.dp)
-                .fillMaxSize()
-                .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
-                .background(Color.White, RoundedCornerShape(16.dp))
+        AnimatedClickableBox(
+            onClick = { navController.navigate("myposts/${profileId}") },
         ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 28.dp)
-                        .padding(top = 24.dp)
-                        .fillMaxWidth()
-                        .clickable(onClick = { navController.navigate("myposts/${profileId}") }),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "내가 쓴 글",
-                        fontSize = 24.sp
-                    )
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = "arrow forward",
-                    )
-                }
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .padding(top = 17.dp, bottom = 69.dp)
+                    .fillMaxSize()
+                    .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
+                    .background(Color.White, RoundedCornerShape(16.dp))
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 28.dp)
+                            .padding(top = 24.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "내가 쓴 글",
+                            fontSize = 24.sp
+                        )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "arrow forward",
+                        )
+                    }
 
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    items(posts.take(2)) { post ->
-                        MyPostItem(post)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        items(posts.take(2)) { post ->
+                            MyPostItem(post)
+                        }
                     }
                 }
             }

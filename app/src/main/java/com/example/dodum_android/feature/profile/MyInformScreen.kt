@@ -3,7 +3,6 @@ package com.example.dodum_android.feature.profile
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.dodum_android.ui.components.AnimatedClickableBox
 import com.example.dodum_android.ui.components.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
@@ -127,35 +127,33 @@ fun MyInformScreen(
                     val firstWeight = 124f / totalWeight
                     val secondWeight = 103f / totalWeight
 
-                    Box(
+                    AnimatedClickableBox(
+                        onClick = { navController.navigate("changeinform/${profileId}") },
                         modifier = Modifier
                             .padding(start = 69.dp)
                             .weight(firstWeight)
                             .height(35.dp)
                             .background(MainColor, shape = RoundedCornerShape(8.dp))
-                            .clickable(onClick = { navController.navigate("changeinform/${profileId}") })
                     ) {
                         Text(
                             text = "내 정보 수정",
                             fontSize = 19.sp,
                             color = Color.White,
-                            modifier = Modifier.align(Alignment.Center)
                         )
                     }
 
-                    Box(
+                    AnimatedClickableBox (
+                        onClick = { Log.d(TAG, "MyInformScreen: 로그아웃 클릭") },
                         modifier = Modifier
                             .padding(end = 72.dp)
                             .weight(secondWeight)
                             .height(35.dp)
                             .background(Color.Red, shape = RoundedCornerShape(8.dp))
-                            .clickable(onClick = { Log.d(TAG, "MyInformScreen: 로그아웃 클릭") })
                     ) {
                         Text(
                             text = "로그아웃",
                             fontSize = 19.sp,
                             color = Color.White,
-                            modifier = Modifier.align(Alignment.Center)
                         )
                     }
                 }
