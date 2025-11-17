@@ -1,34 +1,34 @@
 package com.example.dodum_android.network
 
+import com.example.dodum_android.BuildConfig
 import com.example.dodum_android.network.profile.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import okhttp3.OkHttpClient
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class) // 앱 전체 싱글톤
 object NetworkModule {
 
-    private const val BASE_URL = "https://example.com" // 서버 주소
+    private val base_url = BuildConfig.BASE_URL
 
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
 
-    @Provides
     @Singleton
+    @Provides
     fun provideRetrofit(Client: OkHttpClient): Retrofit=
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(base_url)
             .addConverterFactory(GsonConverterFactory.create())
             .client(Client)
             .build()
-
 
     @Singleton
     @Provides
