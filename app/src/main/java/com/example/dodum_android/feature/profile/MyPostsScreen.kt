@@ -33,7 +33,7 @@ fun MypostsScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     profileId: Int
 ) {
-    LaunchedEffect(Unit) { viewModel.loadMockData() }
+    LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val posts by viewModel.myPosts.collectAsState()
 
     Column {
