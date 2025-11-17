@@ -17,10 +17,10 @@ fun AppNavGraph(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController, startDestination = "${Screens.Profile.route}/1" // 시작 스크린
+        navController = navController, startDestination = "${Screens.Profile.route}/3" // 시작 스크린
     ) {
         composable("${Screens.MyInform.route}/{id}") { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             MyInformScreen(
                 navController = navController,
@@ -29,16 +29,19 @@ fun AppNavGraph(
             )
         }
 
-        composable("${Screens.ChangeInform.route}/{id}") { backstackEnrty ->
-            val id = backstackEnrty.arguments?.getString("id") ?: ""
+        composable("${Screens.ChangeInform.route}/{id}") { backStackEnrty ->
+            val id = backStackEnrty.arguments?.getString("id")?.toIntOrNull() ?: 0
+            val viewModel: ProfileViewModel = hiltViewModel()
+
             ChangeInformScreen(
                 navController = navController,
+                viewModel = viewModel,
                 profileId = id
             )
         }
 
-        composable("${Screens.ChangePw.route}/{id}") { backstackEnrty ->
-            val id = backstackEnrty.arguments?.getString("id") ?: ""
+        composable("${Screens.ChangePw.route}/{id}") { backStackEnrty ->
+            val id = backStackEnrty.arguments?.getString("id")?.toIntOrNull() ?: 0
             ChangePwScreen(
                 navController = navController,
                 profileId = id
@@ -46,7 +49,7 @@ fun AppNavGraph(
         }
 
         composable("${Screens.Profile.route}/{id}"){backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             ProfileScreen(
                 navController = navController,
@@ -56,7 +59,7 @@ fun AppNavGraph(
         }
 
         composable("${Screens.MyPosts.route}/{id}"){backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             MypostsScreen(
                 navController = navController,

@@ -23,16 +23,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.ui.components.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
 fun MyInformScreen(
-    navController: NavController, viewModel: ProfileViewModel, profileId: String
+    navController: NavController, viewModel: ProfileViewModel= hiltViewModel(), profileId: Int
 ) {
 
-    LaunchedEffect(Unit) { viewModel.loadMockData() }
+    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
     val profile = viewModel.profile.value
 
     Box(
@@ -59,12 +60,6 @@ fun MyInformScreen(
                         .background(Color.Gray, shape = CircleShape)
                         .align(Alignment.CenterHorizontally)
                 )
-                if (profile != null) {
-                    Text(
-                        text = profile.username, // 이름
-                        fontSize = 33.sp, modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 32.dp)
@@ -74,61 +69,51 @@ fun MyInformScreen(
                         Text(
                             text = "아이디", fontSize = 19.sp
                         )
-                        if (profile != null) {
                             Text(
-                                text = profile.studentId, fontSize = 29.sp
+                                text = profile?.username ?: "", fontSize = 29.sp
 
                             )
-                        }
                     }
 
                     Column(modifier = Modifier.padding(top = 12.dp)) { // 학번
                         Text(
                             text = "학번", fontSize = 19.sp
                         )
-                        if (profile != null) {
                             Text(
-                                text = profile.grade + profile.class_no + profile.student_no,
+                                text = "${ profile?.grade ?: 0 }${ profile?.class_no ?: 0 }${ profile?.student_no ?: 0}",
                                 fontSize = 29.sp
 
                             )
-                        }
                     }
 
                     Column(modifier = Modifier.padding(top = 12.dp)) { // 전화번호
                         Text(
                             text = "전화번호", fontSize = 19.sp
                         )
-                        if (profile != null) {
                             Text(
-                                text = profile.phone, fontSize = 29.sp
+                                text = profile?.phone ?: "", fontSize = 29.sp
 
                             )
-                        }
                     }
 
                     Column(modifier = Modifier.padding(top = 12.dp)) { // 이메일 주소
                         Text(
                             text = "이메일 주소", fontSize = 19.sp
                         )
-                        if (profile != null) {
                             Text(
-                                text = profile.email, fontSize = 29.sp
+                                text = profile?.email ?: "", fontSize = 29.sp
 
                             )
-                        }
                     }
 
                     Column(modifier = Modifier.padding(top = 12.dp)) { // 동아리
                         Text(
                             text = "동아리", fontSize = 19.sp
                         )
-                        if (profile != null) {
                             Text(
-                                text = profile.club, fontSize = 29.sp
+                                text = profile?.club ?: "", fontSize = 29.sp
 
                             )
-                        }
                     }
                 }
 

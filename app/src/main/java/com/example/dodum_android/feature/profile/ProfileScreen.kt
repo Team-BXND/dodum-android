@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,9 +42,10 @@ import com.example.dodum_android.ui.theme.MainColor
 fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel(),
-    profileId: String
+    profileId: Int
 ) {
-    LaunchedEffect(Unit) { viewModel.loadMockData() }
+    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
+    LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val profile = viewModel.profile.value
     val posts by viewModel.myPosts.collectAsState()
 
@@ -59,6 +60,7 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
+                .clickable(onClick = { navController.navigate("MyInform/${profileId}") })
         ) {
             Box(
                 modifier = Modifier
@@ -90,36 +92,12 @@ fun ProfileScreen(
                         modifier = Modifier
                             .padding(top = 34.dp, start = 20.dp)
                     ) {
-                        if (profile != null) {
-                            Text(
-                                text = profile.username,
-                                fontSize = 29.sp,
-                                modifier = Modifier.align(Alignment.Start)
-                            )
-                        }
-
+                        Text(text = profile?.username ?: "",
+                            fontSize = 29.sp)
                         Column(Modifier.padding(top = 8.dp)) {
-                            if (profile != null) {
-                                Text(
-                                    text = profile.email,
-                                    fontSize = 14.sp,
-                                    color = Color.Gray
-                                )
-                            }
-                            if (profile != null) {
-                                Text(
-                                    text = "${profile.grade}학년 ${profile.class_no}반 ${profile.student_no}번",
-                                    fontSize = 14.sp,
-                                    color = Color.Gray
-                                )
-                            }
-                            if (profile != null) {
-                                Text(
-                                    text = profile.club,
-                                    fontSize = 14.sp,
-                                    color = Color.Gray
-                                )
-                            }
+                            Text(text = profile?.email ?: "")
+                            Text(text = "${profile?.grade ?: 0}학년 ${profile?.class_no ?: 0}반 ${profile?.student_no ?: 0}번")
+                            Text(text = profile?.club ?: "")
                         }
                     }
                 }
@@ -139,6 +117,7 @@ fun ProfileScreen(
                                 imageVector = Icons.Filled.Archive,
                                 contentDescription = "내가 쓴 글"
                             )
+                            Spacer(Modifier.padding(5.dp))
                             Text(text = "내가 쓴 글", fontSize = 17.sp)
                         }
                         Text("${62}개")
@@ -154,9 +133,11 @@ fun ProfileScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Row {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Chat,
-                                contentDescription = "내가 쓴 댓글"
+                                imageVector = Icons.AutoMirrored.Filled.Comment,
+                                contentDescription = "내가 쓴 댓글",
+
                             )
+                            Spacer(Modifier.padding(5.dp))
                             Text(text = "내가 쓴 댓글", fontSize = 17.sp)
                         }
                         Text("${310}개")
@@ -179,7 +160,7 @@ fun ProfileScreen(
                         .padding(horizontal = 28.dp)
                         .padding(top = 24.dp)
                         .fillMaxWidth()
-                        .clickable(onClick ={navController.navigate("myposts/${profileId}")}),
+                        .clickable(onClick = { navController.navigate("myposts/${profileId}") }),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

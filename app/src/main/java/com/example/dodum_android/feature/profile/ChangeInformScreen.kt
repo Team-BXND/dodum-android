@@ -28,8 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.R
+import com.example.dodum_android.network.profile.Profile
 import com.example.dodum_android.ui.components.ClubDropDownMenu
 import com.example.dodum_android.ui.components.CustomTextField
 import com.example.dodum_android.ui.components.TopAppBar
@@ -37,15 +39,24 @@ import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
 fun ChangeInformScreen(
-    navController: NavController, profileId: String
+    navController: NavController, viewModel: ProfileViewModel= hiltViewModel(), profileId: Int
 ) {
-    var studentId by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     var grade by remember { mutableStateOf<Int?>(null) }
     var classNo by remember { mutableStateOf<Int?>(null) }
     var studentNo by remember { mutableStateOf<Int?>(null) }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var selectedClub by remember { mutableStateOf("NONE") }
+    val isFormValid = remember(username, grade, classNo, studentNo, phone, email, selectedClub) {
+        username.isNotBlank()
+                && grade != null
+                && classNo != null
+                && studentNo != null
+                && phone.isNotBlank()
+                && email.isNotBlank()
+                && selectedClub != "NONE"
+    }
 
 
     Box(
@@ -92,8 +103,8 @@ fun ChangeInformScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             CustomTextField(
-                                text = studentId,
-                                onTextChange = { studentId = it },
+                                text = username,
+                                onTextChange = { username = it },
                                 placeholderText = "아이디"
                             )
                         }
@@ -196,7 +207,23 @@ fun ChangeInformScreen(
                                 .weight(secondWeight)
                                 .height(43.dp)
                                 .background(MainColor, shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = { Log.d(TAG, "ChangeInformScreen: 수정 완료 클릭") })
+                                .clickable(enabled = isFormValid) {
+                                    viewModel.updateProfile(
+                                        profileId = profileId,
+                                        updatedProfile = Profile(
+                                            username = username,
+                                            grade =  grade ?: 0,
+                                            class_no = classNo ?: 0,
+                                            student_no = studentNo ?: 0,
+                                            phone = phone,
+                                            email = email,
+                                            club = selectedClub
+                                        )
+                                    ) { success ->
+                                        if(success) Log.d(TAG, "프로필 수정 성공")
+                                        else Log.d(TAG, "프로필 수정 실패")
+                                    }
+                                }
                         ) {
                             Text(
                                 text = "수정 완료",

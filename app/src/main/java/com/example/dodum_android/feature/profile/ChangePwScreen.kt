@@ -34,7 +34,7 @@ import com.example.dodum_android.ui.theme.MainColor
 @Composable
 fun ChangePwScreen(
     navController: NavController,
-    profileId: String
+    profileId: Int
 ){
 
     var password by remember { mutableStateOf("") }

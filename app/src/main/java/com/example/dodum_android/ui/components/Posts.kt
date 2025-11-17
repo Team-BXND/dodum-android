@@ -63,9 +63,9 @@ fun MyPostItem(post: MyPost) {
 
 private fun formatDate(dateString: String): String {
     return try {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateTime = LocalDateTime.parse(dateString, formatter)
-        dateTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+        dateTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
     } catch (e: Exception) {
         dateString
     }

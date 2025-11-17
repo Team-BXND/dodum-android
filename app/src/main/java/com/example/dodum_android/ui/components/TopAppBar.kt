@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import com.example.dodum_android.R
 
 @Composable
-fun TopAppBar(navController: NavController, profileId: String) {
+fun TopAppBar(navController: NavController, profileId: Int) {
     Row(
         modifier = Modifier
             .padding(horizontal = 13.dp)

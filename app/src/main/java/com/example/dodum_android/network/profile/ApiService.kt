@@ -8,14 +8,15 @@ import retrofit2.http.Path
 
 interface ApiService {
     @GET("profile/{id}")
-    suspend fun getProfile(@Path("id") id: String): Response<Profile>
+    suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
 
-    @PUT("/profile/{id}")
+
+    @PUT("profile/{id}")
     suspend fun updateProfile(
-        @Path("id") id: String,
+        @Path("id") id: Int,
         @Body profile: Profile
     ): Response<UpdateProfileResponse>
 
-    @GET("/profile")
+    @GET("profile")
     suspend fun getMyPosts(): Response<MyPostResponse>
 }
