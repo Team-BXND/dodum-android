@@ -8,12 +8,12 @@ class ProfileRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun fetchProfile(id: String): Profile? {
+    suspend fun fetchProfile(id: Int): Profile? {
         val response = apiService.getProfile(id)
-        return if (response.isSuccessful) response.body() else null
+        return if (response.isSuccessful) response.body()?.data else null
     }
 
-    suspend fun updateProfile(id: String, profile: Profile): Boolean {
+    suspend fun updateProfile(id: Int, profile: Profile): Boolean {
         val response = apiService.updateProfile(id, profile)
         return response.isSuccessful && response.body()?.success == true
     }
