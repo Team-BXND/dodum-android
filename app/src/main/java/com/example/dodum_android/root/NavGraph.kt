@@ -17,9 +17,9 @@ fun NavGraph(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController, startDestination = "${Screens.Profile.route}/3" // 시작 스크린
+        navController = navController, startDestination = "${NavGroup.Profile}/3" // 시작 스크린
     ) {
-        composable("${Screens.MyInform.route}/{id}") { backStackEntry ->
+        composable("${NavGroup.MyInform}/{id}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             MyInformScreen(
@@ -29,7 +29,7 @@ fun NavGraph(
             )
         }
 
-        composable("${Screens.ChangeInform.route}/{id}") { backStackEnrty ->
+        composable("${NavGroup.ChangeInform}/{id}") { backStackEnrty ->
             val id = backStackEnrty.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
 
@@ -40,7 +40,7 @@ fun NavGraph(
             )
         }
 
-        composable("${Screens.ChangePw.route}/{id}") { backStackEnrty ->
+        composable("${NavGroup.ChangePw}/{id}") { backStackEnrty ->
             val id = backStackEnrty.arguments?.getString("id")?.toIntOrNull() ?: 0
             ChangePwScreen(
                 navController = navController,
@@ -48,7 +48,7 @@ fun NavGraph(
             )
         }
 
-        composable("${Screens.Profile.route}/{id}"){backStackEntry ->
+        composable("${NavGroup.Profile}/{id}"){backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             ProfileScreen(
@@ -58,7 +58,7 @@ fun NavGraph(
             )
         }
 
-        composable("${Screens.MyPosts.route}/{id}"){backStackEntry ->
+        composable("${NavGroup.MyPosts}/{id}"){backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             val viewModel: ProfileViewModel = hiltViewModel()
             MypostsScreen(
