@@ -13,7 +13,7 @@ import com.example.dodum_android.feature.profile.ProfileScreen
 import com.example.dodum_android.feature.profile.ProfileViewModel
 
 @Composable
-fun AppNavGraph(
+fun NavGraph(
     navController: NavHostController,
 ) {
     NavHost(
