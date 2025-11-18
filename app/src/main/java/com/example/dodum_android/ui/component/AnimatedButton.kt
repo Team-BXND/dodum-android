@@ -1,4 +1,4 @@
-package com.example.dodum_android.ui.components
+package com.example.dodum_android.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable

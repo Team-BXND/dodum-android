@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.components.AnimatedClickableBox
-import com.example.dodum_android.ui.components.TopAppBar
+import com.example.dodum_android.ui.component.AnimatedClickableBox
+import com.example.dodum_android.ui.component.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable

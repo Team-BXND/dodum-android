@@ -1,7 +1,6 @@
-package com.example.dodum_android.ui.components
+package com.example.dodum_android.ui.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,13 +26,17 @@ fun TopAppBar(navController: NavController, profileId: Int) {
                 .height(55.33.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
-        Image(
-            painterResource(R.drawable.account_circle),
-            contentDescription = "profile Icon",
+        AnimatedClickableBox(
+            onClick = { navController.navigate("myinform/${profileId}") },
             modifier = Modifier
-                .padding(horizontal = 7.66.dp)
-                .fillMaxHeight()
-                .clickable(onClick = { navController.navigate("myinform/${profileId}") })
-        )
+            .padding(horizontal = 7.66.dp)
+            .fillMaxHeight()
+        ) {
+            Image(
+                painterResource(R.drawable.account_circle),
+                contentDescription = "profile Icon",
+                modifier = Modifier.fillMaxHeight()
+            )
+        }
     }
 }

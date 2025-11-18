@@ -32,10 +32,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.R
 import com.example.dodum_android.network.profile.Profile
-import com.example.dodum_android.ui.components.AnimatedClickableBox
-import com.example.dodum_android.ui.components.ClubDropDownMenu
-import com.example.dodum_android.ui.components.CustomTextField
-import com.example.dodum_android.ui.components.TopAppBar
+import com.example.dodum_android.ui.component.AnimatedClickableBox
+import com.example.dodum_android.ui.component.ClubDropDownMenu
+import com.example.dodum_android.ui.component.CustomTextField
+import com.example.dodum_android.ui.component.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable

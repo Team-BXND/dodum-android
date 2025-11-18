@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.components.MyPostItem
-import com.example.dodum_android.ui.components.TopAppBar
+import com.example.dodum_android.ui.component.MyPostItem
+import com.example.dodum_android.ui.component.TopAppBar
 
 @Composable
 fun MypostsScreen(

@@ -33,9 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.components.AnimatedClickableBox
-import com.example.dodum_android.ui.components.MyPostItem
-import com.example.dodum_android.ui.components.TopAppBar
+import com.example.dodum_android.root.NavGroup
+import com.example.dodum_android.ui.component.AnimatedClickableBox
+import com.example.dodum_android.ui.component.MyPostItem
+import com.example.dodum_android.ui.component.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
@@ -151,8 +152,8 @@ fun ProfileScreen(
         }
 
         AnimatedClickableBox(
-            onClick = { navController.navigate("myposts/${profileId}") },
-        ) {
+            onClick = { navController.navigate("${NavGroup.MyPosts}/{profileId}") },
+            ) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)

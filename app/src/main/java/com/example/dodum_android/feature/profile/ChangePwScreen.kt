@@ -26,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.components.AnimatedClickableBox
-import com.example.dodum_android.ui.components.CustomTextField
-import com.example.dodum_android.ui.components.TopAppBar
+import com.example.dodum_android.ui.component.AnimatedClickableBox
+import com.example.dodum_android.ui.component.CustomTextField
+import com.example.dodum_android.ui.component.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
