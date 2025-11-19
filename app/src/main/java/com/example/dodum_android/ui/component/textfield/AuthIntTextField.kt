@@ -1,0 +1,87 @@
+package com.example.dodum_android.ui.component.textfield
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.dodum_android.ui.theme.ErrorColor
+import com.example.dodum_android.ui.theme.FontGray
+//import androidx.compose.ui.text.input.KeyboardOptions
+//import androidx.compose.ui.text.input.KeyboardType
+
+
+@Composable
+fun AuthIntField(
+    fieldname: String = "",
+    placename: String,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    iserror: Boolean,
+    errortext: String? = null
+) {
+    Column(modifier = Modifier.width(110.dp)) {
+
+        Text(
+            text = fieldname,
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        OutlinedTextField(
+            value = value.toString(),
+            onValueChange = { input ->
+                val onlyDigits = input.filter { it.isDigit() }
+                val normalized = onlyDigits.trimStart('0')
+                val intValue = if (normalized.isEmpty()) 0 else normalized.toInt()
+                onValueChange(intValue)
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                errorBorderColor = ErrorColor,
+                errorTextColor = ErrorColor,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            ),
+            placeholder = {
+                Text(
+                    text = placename,
+                    color = FontGray,
+                    fontSize = 12.sp
+                )
+            },
+            isError = iserror,
+//            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+//                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
+//            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+        )
+
+        if (iserror && errortext != null) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = errortext,
+                color = ErrorColor,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Start
+            )
+        }
+    }
+}
