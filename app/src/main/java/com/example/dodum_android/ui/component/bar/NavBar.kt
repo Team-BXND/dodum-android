@@ -9,17 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.dodum_android.root.NavGroup
 
 @Composable
-fun HomeNavBar(
-    navController: NavHostController,
+fun NavBar(
+    navController: NavController,
     thisScreen: String
 ) {
     val isContestCheck = if (thisScreen == "Contest" ) true else false
     val isArchiveCheck = if (thisScreen == "Archive") true else false
-    val isProfileCheck = if (thisScreen == NavGroup.Profile) true else false
 
     Column(modifier = Modifier
         .height(90.dp)
