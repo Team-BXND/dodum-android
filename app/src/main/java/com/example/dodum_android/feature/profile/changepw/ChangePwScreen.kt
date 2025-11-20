@@ -38,11 +38,11 @@ fun ChangePwScreen(
     navController: NavController
 ){
     val profileId: Int = 3
-    val viewModel: ChangeInfoViewModel = hiltViewModel()
+    val viewModel: ChangePwViewModel = hiltViewModel()
 
     var password by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
-    var passwordCheck by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
 
     Box(
@@ -111,8 +111,8 @@ fun ChangePwScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             CustomTextField(
-                                text = passwordCheck,
-                                onTextChange = { passwordCheck = it },
+                                text = confirmPassword,
+                                onTextChange = { confirmPassword = it },
                                 placeholderText = "새 비밀번호 확인"
                             )
                         }
@@ -129,7 +129,12 @@ fun ChangePwScreen(
                         val secondWeight = 103f / totalWeight
 
                         AnimatedClickableBox (
-                            onClick = { Log.d(TAG, "ChangePwScreen: 비밀번호 변경 클릭됨") },
+                            onClick = { viewModel.changePassword(
+                                oldPwd = password,
+                                newPwd = newPassword,
+                                checkPwd = confirmPassword
+                            )
+                            },
                             modifier = Modifier
                                 .padding(start = 69.dp)
                                 .weight(firstWeight)
