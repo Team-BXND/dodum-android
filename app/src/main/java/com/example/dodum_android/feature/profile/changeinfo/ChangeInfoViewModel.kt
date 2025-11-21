@@ -23,7 +23,6 @@ class ChangeInfoViewModel @Inject constructor(
 
 
     fun updateProfile(
-        id: Int,
         grade: Int,
         classNo: Int,
         studentNo: Int,
@@ -41,7 +40,7 @@ class ChangeInfoViewModel @Inject constructor(
                     email = email,
                     club = club
                 )
-                val response = myInfoService.updateProfile(id, request)
+                val response = myInfoService.updateProfile(request)
 
                 if (response.isSuccessful) {
                     val message = response.body()?.data ?: "수정 성공"
@@ -57,10 +56,10 @@ class ChangeInfoViewModel @Inject constructor(
         }
     }
 
-    fun refreshProfile(id: Int) {
+    fun refreshProfile() {
         viewModelScope.launch {
             try {
-                val response = myInfoService.getProfile(id)
+                val response = myInfoService.getProfile()
                 if (response.isSuccessful) {
                     _profile.value = response.body()?.data
                 }

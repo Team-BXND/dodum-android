@@ -33,11 +33,10 @@ import com.example.dodum_android.ui.theme.MainColor
 fun MyInformScreen(
     navController: NavController
 ) {
-    val profileId: Int = 3
 
     val viewModel: MyInfoViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
+    LaunchedEffect(Unit) { viewModel.loadProfile() }
     val profile = viewModel.profile.value
 
     Box(
@@ -49,7 +48,7 @@ fun MyInformScreen(
             modifier = Modifier.fillMaxSize()
         ) {
 
-            TopAppBar(navController,profileId)
+            TopAppBar(navController)
 
 
             Column(
@@ -132,7 +131,7 @@ fun MyInformScreen(
                     val secondWeight = 103f / totalWeight
 
                     AnimatedClickableBox(
-                        onClick = { navController.navigate(NavGroup.ChangeInform) },
+                        onClick = { navController.navigate(NavGroup.ChangeInfo) },
                         modifier = Modifier
                             .padding(start = 69.dp)
                             .weight(firstWeight)
