@@ -6,11 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.start.email.EmailCheckRequest
+import com.example.dodum_android.network.start.email.EmailSendErrorResponse
 import com.example.dodum_android.network.start.email.EmailSendRequest
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signup.SignupRequest
 import com.example.dodum_android.network.start.signup.SignupResponse
 import com.example.dodum_android.network.start.signup.SignupService
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.HttpException
 import java.io.IOException
@@ -151,8 +153,11 @@ class SignupViewModel @Inject constructor (
                 emailSuccess = true
                 true
             } else {
-                val errorBody = response.errorBody()?.string()
-                println("이메일 전송 실패: $errorBody")
+                val errorJson = response.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorJson, EmailSendErrorResponse::class.java)
+
+                println("이메일 전송 실패: code=${errorResponse.error.code}, message=${errorResponse.error.message}")
+
                 emailSuccess = false
                 false
             }
