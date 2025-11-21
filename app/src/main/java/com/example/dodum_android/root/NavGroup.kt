@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.dodum_android.feature.major.RecommendMajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
@@ -17,8 +18,8 @@ import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
 
 object NavGroup {
-    const val MyInform = "myinform"
-    const val ChangeInform = "changeinform"
+    const val MyInfo = "myinfo"
+    const val ChangeInfo = "changeinfo"
     const val ChangePw = "changepw"
     const val Profile = "profile"
     const val MyPosts = "myposts"
@@ -29,6 +30,8 @@ object NavGroup {
     const val SignupIdPw = "signupIdPw"
     const val SignupInfo = "signupInfo"
     const val SignupEmail = "signupEmail"
+
+    const val RecommendMajor = "recommendmajor"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -46,9 +49,15 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
     navigation(startDestination = NavGroup.Profile, route = "profile_graph"){
         composable(NavGroup.Profile) { ProfileScreen(navController)}
-        composable(NavGroup.MyInform) { MyInformScreen(navController)}
-        composable(NavGroup.ChangeInform) { ChangeInformScreen(navController) }
+        composable(NavGroup.MyInfo) { MyInformScreen(navController)}
+        composable(NavGroup.ChangeInfo) { ChangeInformScreen(navController) }
         composable(NavGroup.ChangePw) { ChangePwScreen(navController) }
         composable(NavGroup.MyPosts) { MypostScreen(navController)}
+    }
+}
+
+fun NavGraphBuilder.majorNavGroup(navController: NavHostController) {
+    navigation(startDestination = NavGroup.RecommendMajor, route = "major_graph"){
+        composable(NavGroup.RecommendMajor) { RecommendMajorScreen(navController)}
     }
 }

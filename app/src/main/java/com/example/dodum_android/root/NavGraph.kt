@@ -8,9 +8,10 @@ import androidx.navigation.compose.NavHost
 fun AppNavHost(
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = "auth_graph") { // ← NavGraph
-        authNavGraph(navController)   // NavGroup 호출
-//        mainNavGraph(navController)   // NavGroup 호출
+    NavHost(navController = navController, startDestination = "profile_graph") { // ← NavGraph
+        majorNavGroup(navController)
         profileNavGroup(navController)
+        authNavGraph(navController)
+//        mainNavGraph(navController)   // NavGroup 호출
     }
 }
