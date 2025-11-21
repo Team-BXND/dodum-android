@@ -1,5 +1,8 @@
 package com.example.dodum_android.network
 
+import com.example.dodum_android.network.profile.myinfo.MyInfoService
+import com.example.dodum_android.network.profile.mypost.MyPostService
+import com.example.dodum_android.network.profile.password.PwService
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
 import com.example.dodum_android.network.start.signup.SignupService
@@ -49,4 +52,33 @@ object EmailModule {
     @Singleton
     fun provideEmailService(retrofit: Retrofit): EmailService =
         retrofit.create(EmailService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object InfoModule {
+
+    @Singleton
+    @Provides
+    fun provideInfoService(retrofit: Retrofit): MyInfoService =
+        retrofit.create(MyInfoService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object PostModule {
+
+    @Singleton
+    @Provides
+    fun provideMypostService(retrofit: Retrofit): MyPostService =
+        retrofit.create(MyPostService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object PwModule {
+    @Singleton
+    @Provides
+    fun providePwService(retrofit: Retrofit): PwService =
+        retrofit.create(PwService::class.java)
 }
