@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,8 +66,8 @@ fun SignupInfoScreen(
                 var selectedGrade by remember { mutableStateOf("") }
                 var selectedClub by remember { mutableStateOf("") }
 
-                var class_no by remember { mutableIntStateOf(0) }
-                var student_no by remember { mutableIntStateOf(0) }
+                var classNo by remember { mutableIntStateOf(0) }
+                var studentNo by remember { mutableIntStateOf(0) }
                 var phone by remember { mutableStateOf("") }
 
                 var isError by remember { mutableStateOf(false) }
@@ -95,8 +94,8 @@ fun SignupInfoScreen(
 
                     AuthIntField(
                         placename = "반",
-                        value = class_no,
-                        onValueChange = { class_no = it },
+                        value = classNo,
+                        onValueChange = { classNo = it },
                         iserror = isError
                     )
 
@@ -104,8 +103,8 @@ fun SignupInfoScreen(
 
                     AuthIntField(
                         placename = "번호",
-                        value = student_no,
-                        onValueChange = { student_no = it },
+                        value = studentNo,
+                        onValueChange = { studentNo = it },
                         iserror = isError
                     )
                 }
@@ -137,7 +136,7 @@ fun SignupInfoScreen(
                 AuthButton(
                     buttonname = "다음",
                     onClick = {
-                        val hasError = selectedGrade.isEmpty() || class_no == 0 || student_no == 0 ||
+                        val hasError = selectedGrade.isEmpty() || classNo == 0 || studentNo == 0 ||
                                 phone.isEmpty() || selectedClub.isEmpty()
                         isError = hasError
 
@@ -149,8 +148,8 @@ fun SignupInfoScreen(
                                     "3학년" -> 3
                                     else -> null
                                 },
-                                classNo = class_no,
-                                studentNo = student_no,
+                                classNo = classNo,
+                                studentNo = studentNo,
                                 phone = phone,
                                 club = selectedClub.ifBlank { null }
                             )

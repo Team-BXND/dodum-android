@@ -115,14 +115,15 @@ fun SigninScreen (
                 AuthButton(
                     buttonname = "로그인",
                     onClick = {
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
-                            signinViewModel.signin(username = username, password = password)
-                            if ( signinViewModel.signinSuccess == true ) {
-                                navController.navigate("profile")
-                            }
-                        } else {
-                            isError = true
-                        }
+                        navController.navigate("contest") //test
+//                        if (username.isNotEmpty() && password.isNotEmpty()) {
+//                            signinViewModel.signin(username = username, password = password)
+//                            if ( signinViewModel.signinSuccess == true ) {
+//                                navController.navigate("profile")
+//                            }
+//                        } else {
+//                            isError = true
+//                        }
                     })
             }
         }

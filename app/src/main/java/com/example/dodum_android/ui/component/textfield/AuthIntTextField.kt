@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dodum_android.ui.theme.ErrorColor
 import com.example.dodum_android.ui.theme.FontGray
-//import androidx.compose.ui.text.input.KeyboardOptions
-//import androidx.compose.ui.text.input.KeyboardType
 
 
 @Composable

@@ -26,6 +26,8 @@ fun ContestScreen(
         HomeTopBar(navController = navController)
 
 
+        
+
         Box (modifier = Modifier
             .align(Alignment.BottomEnd)){
             HomeNavBar(navController = navController, thisScreen = "contest")
