@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="dodum-Android.app">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2025-11-05T07:38:17.478998Z">
           <Target type="DEFAULT_BOOT">
@@ -12,6 +12,9 @@
           </Target>
         </DropdownSelection>
         <DialogSelection />
+      </SelectionState>
+      <SelectionState runConfigName="android_dodum.app">
+        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>
