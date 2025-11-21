@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.textfield.AuthTextField
 import com.example.dodum_android.ui.theme.FontGray
@@ -117,7 +118,7 @@ fun SigninScreen (
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
                             if ( signinViewModel.signinSuccess == true ) {
-                                navController.navigate("/* 써야 함 */")
+                                navController.navigate(NavGroup.Profile)
                             }
                         } else {
                             isError = true
