@@ -9,13 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.dodum_android.ui.component.navbar.HomeNavBar
-import com.example.dodum_android.ui.component.navbar.HomeTopBar
+import com.example.dodum_android.ui.component.bar.NavBar
+import com.example.dodum_android.ui.component.bar.TopAppBar
+import com.example.dodum_android.data.datastore.UserRepository
 
 @Composable
 fun ContestScreen(
     navController: NavHostController
 ) {
+    profileId =
 //    val contestViewModel: ContestViewModel = hiltViewModel()
 
     Box(modifier = Modifier
@@ -23,14 +25,14 @@ fun ContestScreen(
 //        .background(Color.Black)
     ) {
 
-        HomeTopBar(navController = navController)
+        TopAppBar(navController = navController, )
 
 
         
 
         Box (modifier = Modifier
             .align(Alignment.BottomEnd)){
-            HomeNavBar(navController = navController, thisScreen = "contest")
+            NavBar(navController = navController, thisScreen = "contest")
         }
     }
 

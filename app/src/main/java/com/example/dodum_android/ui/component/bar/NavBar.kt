@@ -1,4 +1,4 @@
-package com.example.dodum_android.ui.component.navbar
+package com.example.dodum_android.ui.component.bar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
