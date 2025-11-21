@@ -33,7 +33,7 @@ class ProfileViewModel @Inject constructor(
     fun loadProfile(id: Int) {
         viewModelScope.launch {
             try {
-                val response = myInfoService.getProfile(id)
+                val response = myInfoService.getProfile()
                 if (response.isSuccessful) {
                     _profile.value = response.body()?.data  // ProfileResponse -> Profile
                 } else {
