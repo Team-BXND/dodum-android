@@ -17,4 +17,10 @@ object DodumUrl {
         const val SEND = "${EMAIL}send"
         const val CHECK = "${EMAIL}check"
     }
+
+    object Profile {
+        const val GET_PROFILE = "profile/{id}"
+        const val UPDATE_PROFILE = "profile/{id}"
+        const val MYPOST = "profile"
+    }
 }
