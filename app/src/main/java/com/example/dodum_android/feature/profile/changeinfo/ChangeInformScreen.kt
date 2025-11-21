@@ -43,7 +43,6 @@ import com.example.dodum_android.ui.theme.MainColor
 fun ChangeInformScreen(
     navController: NavController
 ) {
-    val profileId: Int = 3 // 임시값
     val viewModel: ChangeInfoViewModel = hiltViewModel()
 
     var username by remember { mutableStateOf("") }
@@ -53,16 +52,6 @@ fun ChangeInformScreen(
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var selectedClub by remember { mutableStateOf("NONE") }
-    val isFormValid = remember(username, grade, classNo, studentNo, phone, email, selectedClub) {
-        username.isNotBlank()
-                && grade != null
-                && classNo != null
-                && studentNo != null
-                && phone.isNotBlank()
-                && email.isNotBlank()
-                && selectedClub != "NONE"
-    }
-
 
     Box(
         modifier = Modifier
@@ -72,7 +61,7 @@ fun ChangeInformScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAppBar(navController,profileId)
+            TopAppBar(navController)
 
             Column(
                 modifier = Modifier
@@ -209,7 +198,6 @@ fun ChangeInformScreen(
                         AnimatedClickableBox(
                             onClick = {
                                 viewModel.updateProfile(
-                                    id = profileId,
                                     grade = grade ?: 0,
                                     classNo = classNo ?: 0,
                                     studentNo = studentNo ?: 0,
