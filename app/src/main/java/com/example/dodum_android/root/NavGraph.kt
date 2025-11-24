@@ -12,5 +12,6 @@ fun AppNavHost(
         authNavGraph(navController)   // NavGroup 호출
 //        mainNavGraph(navController)   // NavGroup 호출
         profileNavGroup(navController)
+        majorNavGraph(navController)
     }
 }

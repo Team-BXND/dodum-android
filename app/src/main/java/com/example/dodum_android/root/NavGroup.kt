@@ -30,6 +30,8 @@ object NavGroup {
     const val SignupIdPw = "signupIdPw"
     const val SignupInfo = "signupInfo"
     const val SignupEmail = "signupEmail"
+
+    const val MajorRecommend = "majorRecommend"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
