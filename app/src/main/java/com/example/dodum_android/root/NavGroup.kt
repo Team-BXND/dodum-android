@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.dodum_android.feature.major.RecommendMajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
@@ -17,11 +18,11 @@ import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
 
 object NavGroup {
-    const val MyInform = "myinform"
-    const val ChangeInform = "changeinform"
-    const val ChangePw = "changepw"
+    const val MyInfo = "myInfo"
+    const val ChangeInfo = "changeInfo"
+    const val ChangePw = "changePw"
     const val Profile = "profile"
-    const val MyPosts = "myposts"
+    const val MyPosts = "myPost"
 
     const val Splash = "splash"
     const val Welcome = "welcome"
@@ -46,9 +47,15 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
     navigation(startDestination = NavGroup.Profile, route = "profile_graph"){
         composable(NavGroup.Profile) { ProfileScreen(navController)}
-        composable(NavGroup.MyInform) { MyInformScreen(navController)}
-        composable(NavGroup.ChangeInform) { ChangeInformScreen(navController) }
+        composable(NavGroup.MyInfo) { MyInformScreen(navController)}
+        composable(NavGroup.ChangeInfo) { ChangeInformScreen(navController) }
         composable(NavGroup.ChangePw) { ChangePwScreen(navController) }
         composable(NavGroup.MyPosts) { MypostScreen(navController)}
+    }
+}
+
+fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
+    navigation(startDestination = NavGroup.MajorRecommend, route = "major_graph"){
+        composable(NavGroup.MajorRecommend) { RecommendMajorScreen(navController)}
     }
 }
