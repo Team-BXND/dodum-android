@@ -39,7 +39,7 @@ fun MypostScreen(
     val posts by viewModel.myPosts.collectAsState()
 
     Column {
-        TopAppBar(navController, profileId)
+        TopAppBar(navController)
         Box(
             modifier = Modifier
                 .padding(horizontal = 32.dp)

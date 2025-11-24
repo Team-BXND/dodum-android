@@ -30,10 +30,10 @@ class ProfileViewModel @Inject constructor(
     val myPosts: StateFlow<List<MyPost>> = _myPosts
 
 
-    fun loadProfile(id: Int) {
+    fun loadProfile() {
         viewModelScope.launch {
             try {
-                val response = myInfoService.getProfile(id)
+                val response = myInfoService.getProfile()
                 if (response.isSuccessful) {
                     _profile.value = response.body()?.data  // ProfileResponse -> Profile
                 } else {
