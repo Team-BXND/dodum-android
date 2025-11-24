@@ -9,12 +9,11 @@ import retrofit2.http.Path
 
 interface MyInfoService {
     @GET(DodumUrl.Profile.GET_PROFILE)
-    suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
+    suspend fun getProfile(): Response<ProfileResponse>
 
 
     @PUT(DodumUrl.Profile.UPDATE_PROFILE)
     suspend fun updateProfile(
-        @Path("id") id: Int,
         @Body request: UpdateProfileRequest
     ): Response<UpdateProfileResponse>
 }

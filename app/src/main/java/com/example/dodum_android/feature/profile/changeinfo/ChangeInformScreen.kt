@@ -72,7 +72,7 @@ fun ChangeInformScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAppBar(navController,profileId)
+            TopAppBar(navController)
 
             Column(
                 modifier = Modifier

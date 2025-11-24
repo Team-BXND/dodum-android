@@ -19,8 +19,12 @@ object DodumUrl {
     }
 
     object Profile {
-        const val GET_PROFILE = "profile/{id}"
-        const val UPDATE_PROFILE = "profile/{id}"
+        const val GET_PROFILE = "profile"
+        const val UPDATE_PROFILE = "profile"
         const val MYPOST = "profile"
+    }
+
+    object Major {
+        const val Major = "major-recommend"
     }
 }

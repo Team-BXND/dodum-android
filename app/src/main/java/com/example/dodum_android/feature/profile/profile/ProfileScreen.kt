@@ -44,17 +44,15 @@ fun ProfileScreen(
     navController: NavController
 ) {
 
-    val profileId: Int = 3
-
     val viewModel: ProfileViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
+    LaunchedEffect(Unit) { viewModel.loadProfile() }
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val profile = viewModel.profile.value
     val posts by viewModel.myPosts.collectAsState()
 
     Column {
-        TopAppBar(navController, profileId)
+        TopAppBar(navController)
 
         AnimatedClickableBox(
             onClick = { navController.navigate("MyInform") },

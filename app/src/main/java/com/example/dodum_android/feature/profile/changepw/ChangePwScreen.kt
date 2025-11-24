@@ -1,7 +1,5 @@
 package com.example.dodum_android.feature.profile.changepw
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.feature.profile.changeinfo.ChangeInfoViewModel
 import com.example.dodum_android.ui.component.button.AnimatedClickableBox
 import com.example.dodum_android.ui.component.textfield.CustomTextField
 import com.example.dodum_android.ui.component.bar.TopAppBar
@@ -53,7 +50,7 @@ fun ChangePwScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAppBar(navController, profileId)
+            TopAppBar(navController)
 
             Column(
                 modifier = Modifier
