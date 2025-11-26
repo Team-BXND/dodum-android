@@ -57,11 +57,11 @@ object EmailModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object InfoModule {
+object MyInfoModule {
 
     @Singleton
     @Provides
-    fun provideInfoService(retrofit: Retrofit): MyInfoService =
+    fun provideMyInfoService(retrofit: Retrofit): MyInfoService =
         retrofit.create(MyInfoService::class.java)
 }
 

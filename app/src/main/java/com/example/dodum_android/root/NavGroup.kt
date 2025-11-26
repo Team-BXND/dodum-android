@@ -1,9 +1,11 @@
 package com.example.dodum_android.root
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.dodum_android.feature.info.InfoScreen
 import com.example.dodum_android.feature.major.RecommendMajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
@@ -32,6 +34,8 @@ object NavGroup {
     const val SignupEmail = "signupEmail"
 
     const val MajorRecommend = "majorRecommend"
+
+    const val Info = "info"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -60,4 +64,11 @@ fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
     navigation(startDestination = NavGroup.MajorRecommend, route = "major_graph"){
         composable(NavGroup.MajorRecommend) { RecommendMajorScreen(navController)}
     }
+}
+
+fun NavGraphBuilder.infoNavGroup(navController: NavHostController){
+    navigation(startDestination = NavGroup.Info, route = "info_graph"){
+        composable(NavGroup.Info){ InfoScreen(navController)}
+    }
+
 }
