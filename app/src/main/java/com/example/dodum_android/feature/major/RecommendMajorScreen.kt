@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.component.major.Answer
 import com.example.dodum_android.ui.component.major.Multiple
