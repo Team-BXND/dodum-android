@@ -55,7 +55,7 @@ fun ProfileScreen(
         TopAppBar(navController)
 
         AnimatedClickableBox(
-            onClick = { navController.navigate("MyInform") },
+            onClick = { navController.navigate(NavGroup.Profile) },
             modifier = Modifier
                 .padding(horizontal = 32.dp)
                 .padding(vertical = 17.dp)
