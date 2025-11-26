@@ -23,7 +23,6 @@ class ChangeInfoViewModel @Inject constructor(
 
 
     fun updateProfile(
-        id: Int,
         grade: Int,
         classNo: Int,
         studentNo: Int,

@@ -34,7 +34,6 @@ import com.example.dodum_android.ui.theme.MainColor
 fun ChangePwScreen(
     navController: NavController
 ){
-    val profileId: Int = 3
     val viewModel: ChangePwViewModel = hiltViewModel()
 
     var password by remember { mutableStateOf("") }
