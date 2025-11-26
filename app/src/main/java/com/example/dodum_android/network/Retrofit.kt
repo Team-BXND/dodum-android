@@ -1,6 +1,5 @@
 package com.example.dodum_android.network
 
-import com.example.dodum_android.network.major.MajorService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
@@ -82,13 +81,4 @@ object PwModule {
     @Provides
     fun providePwService(retrofit: Retrofit): PwService =
         retrofit.create(PwService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object MajorModule {
-    @Singleton
-    @Provides
-    fun provideMajorService(retrofit: Retrofit): MajorService =
-        retrofit.create(MajorService::class.java)
 }
