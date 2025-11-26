@@ -30,8 +30,6 @@ object NavGroup {
     const val SignupIdPw = "signupIdPw"
     const val SignupInfo = "signupInfo"
     const val SignupEmail = "signupEmail"
-
-    const val RecommendMajor = "recommendmajor"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -56,8 +54,3 @@ fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.majorNavGroup(navController: NavHostController) {
-    navigation(startDestination = NavGroup.RecommendMajor, route = "major_graph"){
-        composable(NavGroup.RecommendMajor) { RecommendMajorScreen(navController)}
-    }
-}
