@@ -1,8 +1,10 @@
 package com.example.dodum_android.ui.component.info
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +23,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.dodum_android.network.info.InfoListData
 
 @Composable
-fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
+fun CategoryListItem(
+    item: InfoListData,
+    onClick: () -> Unit = {}
+) {
 
     Column(
         modifier = Modifier
@@ -34,21 +40,24 @@ fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
             .clickable { onClick() }
             .background(Color.White)
     ) {
-        // 상단 구분선
         Divider(color = Color(0xFFE3E3E3), thickness = 1.dp)
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+
+                // 🔶 category가 있을 경우에만 Figma 스타일 배지 보여주기
+                item.category?.let { category ->
+                    CategoryBadge(category)
+                }
 
                 Text(
                     text = item.title,
@@ -67,7 +76,6 @@ fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
                         color = Color(0xFFADADAD)
                     )
 
-                    // 좋아요 아이콘 + 숫자
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -93,16 +101,14 @@ fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
                 }
             }
 
-            item.image.let { url ->
-                AsyncImage(
-                    model = url,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(width = 54.dp, height = 44.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            AsyncImage(
+                model = item.image,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(width = 54.dp, height = 44.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Divider(color = Color(0xFFE3E3E3), thickness = 1.dp)

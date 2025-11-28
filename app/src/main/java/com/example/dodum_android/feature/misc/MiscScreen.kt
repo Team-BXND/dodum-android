@@ -1,6 +1,5 @@
-package com.example.dodum_android.feature.info.share
+package com.example.dodum_android.feature.misc
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,16 +11,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.dodum_android.feature.info.share.ShareViewModel
 import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.component.indicator.PageIndicator
-import com.example.dodum_android.ui.component.info.InfoListItem
+import com.example.dodum_android.ui.component.info.CategoryListItem
+
 
 @Composable
-fun ShareScreen(
+fun MiscScreen(
     navController: NavController
-) {
-
+){
     val viewModel: ShareViewModel = hiltViewModel()
 
     val list = viewModel.infoList
@@ -49,7 +49,7 @@ fun ShareScreen(
                 .padding(padding)
         ) {
             items(list) { item ->
-                InfoListItem(item) {
+                CategoryListItem(item) {
                     navController.navigate(NavGroup.Info)
                 }
             }
