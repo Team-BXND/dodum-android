@@ -4,7 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.dodum_android.feature.major.RecommendMajorScreen
+import com.example.dodum_android.feature.info.information.InfoScreen
+import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
@@ -30,6 +31,9 @@ object NavGroup {
     const val SignupIdPw = "signupIdPw"
     const val SignupInfo = "signupInfo"
     const val SignupEmail = "signupEmail"
+
+    const val Info = "info"
+    const val Share = "share"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -54,3 +58,9 @@ fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
     }
 }
 
+fun NavGraphBuilder.infoNavGroup(navController: NavHostController) {
+    navigation(startDestination = NavGroup.Share, route = "info_graph") {
+        composable(NavGroup.Share) { ShareScreen(navController) }
+        composable(NavGroup.Info) { InfoScreen(navController)}
+    }
+}
