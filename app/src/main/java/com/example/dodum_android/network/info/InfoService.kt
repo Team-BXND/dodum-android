@@ -1,5 +1,6 @@
 package com.example.dodum_android.network.info
 
+import com.example.dodum_android.network.DodumUrl
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -11,57 +12,58 @@ import retrofit2.http.Query
 
 interface InfoService {
 
-    @GET("/info")
+    @GET(DodumUrl.Info.GET_INFO)
     suspend fun getInfoList(
         @Query("page") page: Int
     ): InfoListResponse
 
-    @GET("/info/{category}")
+
+    @GET(DodumUrl.Info.INFO_CATEGORY)
     suspend fun getInfoByCategory(
         @Path("category") category: String,
         @Query("search") search: String,
         @Query("page") page: Int
     ): InfoCategoryResponse
 
-    @POST("/info")
+
+    @POST(DodumUrl.Info.GET_INFO)
     suspend fun postInfo(
         @Body body: InfoPostRequest
     ): InfoPostResponse
 
-    @DELETE("/info/{id}")
+
+    @DELETE(DodumUrl.Info.INFO_ID)
     suspend fun deleteInfo(
         @Path("id") id: Int,
         @Header("Authorization") token: String
     ): InfoDeleteResponse
 
-    @PUT("/info/{id}")
+
+    @PUT(DodumUrl.Info.INFO_ID)
     suspend fun putInfo(
         @Path("id") id: Int,
         @Body body: InfoPutRequest
     ): InfoPutResponse
 
-    @GET("/info/{id}")
+
+    @GET(DodumUrl.Info.INFO_ID)
     suspend fun getInfoDetail(
         @Path("id") id: Int
     ): InfoDetailResponse
 
-    @POST("/info/{id}/comments")
-    suspend fun postComment(
-        @Path("id") id: Int,
-        @Body body: InfoCommentRequest
-    ): InfoCommentResponse
-
-    @POST("/info/{id}/like")
+    @POST(DodumUrl.Info.LIKE)
     suspend fun postLike(
         @Path("id") id: Int
     ): InfoLikeResponse
 
-    @POST("/info/{id}/approve")
+
+    @POST(DodumUrl.Info.APPROVE)
     suspend fun approveInfo(
         @Path("id") id: Int
     ): InfoApproveResponse
 
-    @POST("/info/{id}/disapprove")
+
+    @POST(DodumUrl.Info.DISAPPROVE)
     suspend fun disapproveInfo(
         @Path("id") id: Int
     ): InfoDisapproveResponse
