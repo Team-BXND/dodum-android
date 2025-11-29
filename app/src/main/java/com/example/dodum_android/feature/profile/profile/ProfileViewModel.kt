@@ -1,5 +1,6 @@
 package com.example.dodum_android.feature.profile.profile
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -35,22 +36,31 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val token = userRepository.getAccessTokenSnapshot()  // 저장된 토큰 가져오기
-            _userRole.value = token?.let { GetRole(it) }
+            try {
+                val token = userRepository.getAccessTokenSnapshot()  // 저장된 토큰 가져오기
+                _userRole.value = token?.let { GetRole(it) }
+                Log.d("ProfileViewModel", "사용자 역할 로드 완료: ${_userRole.value}")
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "사용자 역할 로드 중 오류 발생", e)
+            }
         }
     }
 
     fun loadProfile() {
         viewModelScope.launch {
             try {
+                Log.d("ProfileViewModel", "프로필 불러오기 시작...")
                 val response = myInfoService.getProfile()
                 if (response.isSuccessful) {
-                    _profile.value = response.body()?.data  // ProfileResponse -> Profile
+                    _profile.value = response.body()?.data
+                    Log.d("ProfileViewModel", "프로필 불러오기 성공: ${_profile.value}")
                 } else {
                     _profile.value = null
+                    Log.e("ProfileViewModel", "프로필 불러오기 실패: ${response.code()} ${response.message()}")
                 }
             } catch (e: Exception) {
                 _profile.value = null
+                Log.e("ProfileViewModel", "프로필 불러오기 중 예외 발생", e)
             }
         }
     }
@@ -58,21 +68,24 @@ class ProfileViewModel @Inject constructor(
     fun loadMyPosts() {
         viewModelScope.launch {
             try {
-                val response = myPostService.getMyPosts()  // MyPostService에서 가져온 Response
+                Log.d("ProfileViewModel", "내 게시글 불러오기 시작...")
+                val response = myPostService.getMyPosts()
                 val posts = if (response.isSuccessful) {
-                    response.body()?.data ?: emptyList()  // MyPostResponse에서 data 추출
+                    response.body()?.data ?: emptyList()
                 } else {
-                    emptyList()  // 실패 시 빈 리스트
+                    Log.e("ProfileViewModel", "내 게시글 불러오기 실패: ${response.code()} ${response.message()}")
+                    emptyList()
                 }
                 _myPosts.value = posts.sortedByDescending { post ->
-                    parseDate(post.date ?: "")  // 안전한 날짜 처리
+                    parseDate(post.date ?: "")
                 }
+                Log.d("ProfileViewModel", "내 게시글 불러오기 완료: ${_myPosts.value.size}개 게시글")
             } catch (e: Exception) {
-                _myPosts.value = emptyList()  // 예외 발생 시 빈 리스트
+                _myPosts.value = emptyList()
+                Log.e("ProfileViewModel", "내 게시글 불러오기 중 예외 발생", e)
             }
         }
     }
-
 
     private fun parseDate(dateString: String): Long {
         return try {
@@ -80,8 +93,8 @@ class ProfileViewModel @Inject constructor(
             val localDateTime = LocalDateTime.parse(dateString, formatter)
             localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         } catch (e: Exception) {
+            Log.e("ProfileViewModel", "날짜 파싱 실패: $dateString", e)
             0L
         }
     }
-
 }

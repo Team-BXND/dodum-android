@@ -54,6 +54,9 @@ android {
 
 dependencies {
 
+    implementation (libs.androidx.lifecycle.livedata.ktx) // LiveData
+    implementation (libs.androidx.runtime.livedata) // observeAsState
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 

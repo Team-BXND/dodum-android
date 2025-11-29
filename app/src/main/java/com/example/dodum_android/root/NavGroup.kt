@@ -4,9 +4,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.dodum_android.feature.major.RecommendMajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
+import com.example.dodum_android.feature.profile.falsepost.FalsPostScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
 import com.example.dodum_android.feature.profile.mypost.MypostScreen
 import com.example.dodum_android.feature.profile.profile.ProfileScreen
@@ -23,6 +23,7 @@ object NavGroup {
     const val ChangePw = "changepw"
     const val Profile = "profile"
     const val MyPosts = "myposts"
+    const val FalsePost = "falsepost"
 
     const val Splash = "splash"
     const val Welcome = "welcome"
@@ -53,11 +54,6 @@ fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
         composable(NavGroup.ChangeInfo) { ChangeInformScreen(navController) }
         composable(NavGroup.ChangePw) { ChangePwScreen(navController) }
         composable(NavGroup.MyPosts) { MypostScreen(navController)}
-    }
-}
-
-fun NavGraphBuilder.majorNavGroup(navController: NavHostController) {
-    navigation(startDestination = NavGroup.RecommendMajor, route = "major_graph"){
-        composable(NavGroup.RecommendMajor) { RecommendMajorScreen(navController)}
+        composable(NavGroup.FalsePost) { FalsPostScreen(navController)}
     }
 }

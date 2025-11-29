@@ -1,11 +1,12 @@
 package com.example.dodum_android.network.profile.password
 
-import retrofit2.Response;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
+import com.example.dodum_android.network.DodumUrl
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.PUT
 
 interface PwService {
-    @POST("/auth/pwchage")
+    @PUT(DodumUrl.Auth.PW)
     suspend fun changePassword(
         @Body request: PwChangeRequest
     ): Response<PwChangeResponse>
