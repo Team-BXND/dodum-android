@@ -45,7 +45,6 @@ fun ChangeInformScreen(
 ) {
     val viewModel: ChangeInfoViewModel = hiltViewModel()
 
-    var username by remember { mutableStateOf("") }
     var grade by remember { mutableStateOf<Int?>(null) }
     var classNo by remember { mutableStateOf<Int?>(null) }
     var studentNo by remember { mutableStateOf<Int?>(null) }
@@ -89,21 +88,6 @@ fun ChangeInformScreen(
                         .padding(top = 45.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 아이디
-                        Text(
-                            text = "아이디", fontSize = 19.sp
-                        )
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CustomTextField(
-                                text = username,
-                                onTextChange = { username = it },
-                                placeholderText = "아이디"
-                            )
-                        }
-                    }
-
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 학번
                         Text(
                             text = "학번", fontSize = 19.sp
