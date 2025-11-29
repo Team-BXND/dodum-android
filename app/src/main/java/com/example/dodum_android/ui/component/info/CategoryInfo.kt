@@ -27,10 +27,11 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.dodum_android.network.info.InfoListData
+import com.example.dodum_android.network.misc.MiscItemList
 
 @Composable
 fun CategoryListItem(
-    item: InfoListData,
+    item: MiscItemList,
     onClick: () -> Unit = {}
 ) {
 
@@ -53,11 +54,6 @@ fun CategoryListItem(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-
-                // 🔶 category가 있을 경우에만 Figma 스타일 배지 보여주기
-                item.category?.let { category ->
-                    CategoryBadge(category)
-                }
 
                 Text(
                     text = item.title,
