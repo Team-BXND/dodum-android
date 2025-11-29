@@ -1,6 +1,8 @@
 package com.example.dodum_android.network
 
 import com.example.dodum_android.data.datastore.UserRepository
+import com.example.dodum_android.network.profile.falsepost.FalsePostResponse
+import com.example.dodum_android.network.profile.falsepost.FalsePostService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
@@ -99,4 +101,13 @@ object PwModule {
     @Provides
     fun providePwService(retrofit: Retrofit): PwService =
         retrofit.create(PwService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object FalseModule {
+    @Singleton
+    @Provides
+    fun provideFalseService(retrofit: Retrofit): FalsePostService =
+        retrofit.create(FalsePostService::class.java)
 }

@@ -50,8 +50,8 @@ fun ProfileScreen(
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val profile = viewModel.profile.value
     val posts by viewModel.myPosts.collectAsState()
-//    val userRole = viewModel.userRole.value
-    val userRole = "ADMIN"
+    val userRole = viewModel.userRole.value
+//    val userRole = "ADMIN"
 
     Column {
         TopAppBar(navController)
