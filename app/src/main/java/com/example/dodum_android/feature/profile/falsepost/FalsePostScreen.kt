@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.feature.profile.mypost.MyPostViewModel
+import com.example.dodum_android.network.profile.falsepost.FalsePost
 import com.example.dodum_android.ui.component.bar.TopAppBar
+import com.example.dodum_android.ui.component.profile.FalsePostItem
 import com.example.dodum_android.ui.component.profile.MyPostItem
 
 @Composable
@@ -66,7 +68,7 @@ fun FalsPostScreen(
                         .padding(16.dp)
                 ) {
                     items(posts) { post ->
-                        MyPostItem(post)
+                        FalsePostItem(post)
                     }
                 }
             }

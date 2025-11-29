@@ -5,6 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dodum_android.network.profile.falsepost.FalsePost
+import com.example.dodum_android.network.profile.falsepost.FalsePostService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.myinfo.Profile
 import com.example.dodum_android.network.profile.mypost.MyPost
@@ -20,22 +22,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FalsePostViewModel @Inject constructor(
-    private val myPostService: MyPostService
+    private val myPostService: FalsePostService
 ): ViewModel() {
 
-    private val _myPosts = MutableStateFlow<List<MyPost>>(emptyList())
-    val myPosts: StateFlow<List<MyPost>> = _myPosts
+    private val _myPosts = MutableStateFlow<List<FalsePost>>(emptyList())
+    val myPosts: StateFlow<List<FalsePost>> = _myPosts
 
     fun loadMyPosts() {
         viewModelScope.launch {
             try {
-                Log.d("MyPostViewModel", "내 게시글 불러오기 시작...")
-                val response = myPostService.getMyPosts()  // MyPostService에서 가져온 Response
+                Log.d("FalsePostViewModel", "내 게시글 불러오기 시작...")
+                val response = myPostService.getFalsePosts()  // MyPostService에서 가져온 Response
                 val posts = if (response.isSuccessful) {
                     response.body()?.data ?: emptyList()  // MyPostResponse에서 data 추출
                 } else {
                     Log.e(
-                        "MyPostViewModel",
+                        "FalsePostViewModel",
                         "내 게시글 불러오기 실패: ${response.code()} ${response.message()}"
                     )
                     emptyList()  // 실패 시 빈 리스트
@@ -43,10 +45,10 @@ class FalsePostViewModel @Inject constructor(
                 _myPosts.value = posts.sortedByDescending { post ->
                     parseDate(post.date ?: "")  // 안전한 날짜 처리
                 }
-                Log.d("MyPostViewModel", "내 게시글 불러오기 완료: ${_myPosts.value.size}개 게시글")
+                Log.d("FalsePostViewModel", "내 게시글 불러오기 완료: ${_myPosts.value.size}개 게시글")
             } catch (e: Exception) {
                 _myPosts.value = emptyList()  // 예외 발생 시 빈 리스트
-                Log.e("MyPostViewModel", "내 게시글 불러오기 중 예외 발생", e)
+                Log.e("FalsePostViewModel", "내 게시글 불러오기 중 예외 발생", e)
             }
         }
     }
@@ -57,7 +59,7 @@ class FalsePostViewModel @Inject constructor(
             val localDateTime = LocalDateTime.parse(dateString, formatter)
             localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         } catch (e: Exception) {
-            Log.e("MyPostViewModel", "날짜 파싱 실패: $dateString", e)
+            Log.e("FalsePostViewModel", "날짜 파싱 실패: $dateString", e)
             0L
         }
     }
