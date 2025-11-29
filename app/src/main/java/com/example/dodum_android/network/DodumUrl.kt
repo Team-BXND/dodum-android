@@ -11,6 +11,8 @@ object DodumUrl {
     object Auth {
         const val SIGNIN = "${AUTH}signin"
         const val SIGNUP = "${AUTH}signup"
+        const val PW = "${AUTH}pwchange"
+        const val SIGNOUT = "${AUTH}signout"
     }
 
     object Email {
@@ -22,5 +24,6 @@ object DodumUrl {
         const val GET_PROFILE = "profile"
         const val UPDATE_PROFILE = "profile"
         const val MYPOST = "profile/write"
+        const val FALSEPOST = "info/false"
     }
 }

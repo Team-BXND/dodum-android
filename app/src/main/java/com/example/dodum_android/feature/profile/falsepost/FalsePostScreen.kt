@@ -1,4 +1,4 @@
-package com.example.dodum_android.feature.profile.mypost
+package com.example.dodum_android.feature.profile.falsepost
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,14 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.component.profile.MyPostItem
+import com.example.dodum_android.feature.profile.mypost.MyPostViewModel
 import com.example.dodum_android.ui.component.bar.TopAppBar
+import com.example.dodum_android.ui.component.profile.MyPostItem
 
 @Composable
-fun MypostScreen(
+fun FalsPostScreen(
     navController: NavController
 ) {
-    val viewModel: MyPostViewModel = hiltViewModel()
+    val viewModel: FalsePostViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val posts by viewModel.myPosts.collectAsState()
@@ -53,7 +54,7 @@ fun MypostScreen(
                 verticalArrangement = Arrangement.Top,
             ) {
                 Text(
-                    text = "내가 쓴 글",
+                    text = "미승인 글",
                     fontSize = 24.sp,
                     modifier = Modifier.padding(start = 28.dp)
                 )
@@ -71,4 +72,5 @@ fun MypostScreen(
             }
         }
     }
+
 }

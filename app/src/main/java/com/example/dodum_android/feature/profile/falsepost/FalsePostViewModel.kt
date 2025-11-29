@@ -1,8 +1,12 @@
-package com.example.dodum_android.feature.profile.mypost
+package com.example.dodum_android.feature.profile.falsepost
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dodum_android.network.profile.myinfo.MyInfoService
+import com.example.dodum_android.network.profile.myinfo.Profile
 import com.example.dodum_android.network.profile.mypost.MyPost
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPostViewModel @Inject constructor(
+class FalsePostViewModel @Inject constructor(
     private val myPostService: MyPostService
 ): ViewModel() {
 
@@ -30,7 +34,10 @@ class MyPostViewModel @Inject constructor(
                 val posts = if (response.isSuccessful) {
                     response.body()?.data ?: emptyList()  // MyPostResponse에서 data 추출
                 } else {
-                    Log.e("MyPostViewModel", "내 게시글 불러오기 실패: ${response.code()} ${response.message()}")
+                    Log.e(
+                        "MyPostViewModel",
+                        "내 게시글 불러오기 실패: ${response.code()} ${response.message()}"
+                    )
                     emptyList()  // 실패 시 빈 리스트
                 }
                 _myPosts.value = posts.sortedByDescending { post ->

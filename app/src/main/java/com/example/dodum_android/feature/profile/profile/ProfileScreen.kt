@@ -50,12 +50,13 @@ fun ProfileScreen(
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val profile = viewModel.profile.value
     val posts by viewModel.myPosts.collectAsState()
+//    val userRole = viewModel.userRole.value
+    val userRole = "ADMIN"
 
     Column {
         TopAppBar(navController)
 
-        AnimatedClickableBox(
-            onClick = { navController.navigate(NavGroup.MyInfo) },
+        Box(
             modifier = Modifier
                 .padding(horizontal = 32.dp)
                 .padding(vertical = 17.dp)
@@ -64,22 +65,45 @@ fun ProfileScreen(
                 .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
-            Box(modifier = Modifier.fillMaxSize()) { // 루트 Box
 
-                Box(
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                AnimatedClickableBox(
+                    onClick = { navController.navigate(NavGroup.MyInfo) },
                     modifier = Modifier
                         .padding(end = 11.dp, top = 11.dp)
                         .width(98.dp)
                         .height(28.dp)
                         .background(MainColor, RoundedCornerShape(8.dp))
-                        .align(Alignment.TopEnd)
+                        .align(Alignment.End)
                 ) {
                     Text(
                         "나의 정보",
                         fontSize = 17.sp,
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+                }
+
+                // 2️⃣ 역할 기반 미승인 글 버튼
+                if (userRole == "TEACHER" || userRole == "ADMIN") {
+                    AnimatedClickableBox(
+                        onClick = { navController.navigate(NavGroup.FalsePost) },
+                        modifier = Modifier
+                            .padding(end = 11.dp, top = 11.dp)
+                            .width(98.dp)
+                            .height(28.dp)
+                            .background(MainColor, RoundedCornerShape(8.dp))
+                            .align(Alignment.End)
+                    ) {
+                        Text(
+                            "미승인 글",
+                            fontSize = 17.sp,
+                            color = Color.White,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
                 }
             }
             Column {
@@ -151,10 +175,9 @@ fun ProfileScreen(
                 }
             }
         }
-
         AnimatedClickableBox(
             onClick = { navController.navigate(NavGroup.MyPosts) },
-            ) {
+        ) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
