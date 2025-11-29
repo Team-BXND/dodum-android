@@ -19,7 +19,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -29,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.feature.info.share.ShareViewModel
 import com.example.dodum_android.ui.component.bar.TopBar
 
 @Composable
@@ -37,7 +40,7 @@ fun InfoScreen(
     navController: NavController,
 ) {
 
-    val viewModel: ShareViewModel = hiltViewModel()
+    val viewModel: InfoViewModel = hiltViewModel()
 
     var menuOpen by remember { mutableStateOf(false) }
 
