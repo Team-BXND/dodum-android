@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +47,11 @@ fun InfoScreen(
 
     var menuOpen by remember { mutableStateOf(false) }
 
+    val density = LocalDensity.current
+
+    var menuXdp by remember { mutableStateOf(0.dp) }
+    var menuYdp by remember { mutableStateOf(0.dp) }
+
     val title = "해커톤 행사 건"
     val userName = "3101 홍길동"
     val date = "2025.11.25"
@@ -53,21 +61,16 @@ fun InfoScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        /** 메인 콘텐츠 */
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+
             TopBar(navController)
 
             Column(
                 modifier = Modifier
                     .padding(16.dp)
+                    .fillMaxSize()
+                    .shadow(elevation = 8.dp, RoundedCornerShape(16.dp))
                     .background(Color.White, RoundedCornerShape(16.dp))
-                    .shadow(
-                        elevation = 4.dp,
-                        spotColor = Color(0x0D000000),
-                        ambientColor = Color(0x0D000000)
-                    )
                     .padding(24.dp)
             ) {
 
@@ -84,7 +87,15 @@ fun InfoScreen(
 
                     Column(
                         modifier = Modifier
-                            .clickable { menuOpen = true }
+                            .onGloballyPositioned { coordinates ->
+                                val pos = coordinates.positionInWindow()
+                                menuXdp = with(density) { pos.x.toDp() }
+                                menuYdp = with(density) { pos.y.toDp() }
+                            }
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { menuOpen = true }
                             .padding(end = 4.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
@@ -111,16 +122,8 @@ fun InfoScreen(
                     )
 
                     Column {
-                        Text(
-                            text = userName,
-                            fontSize = 12.sp,
-                            color = Color(0xFF1B1B1B)
-                        )
-                        Text(
-                            text = date,
-                            fontSize = 12.sp,
-                            color = Color(0xFFADADAD)
-                        )
+                        Text(userName, fontSize = 12.sp, color = Color(0xFF1B1B1B))
+                        Text(date, fontSize = 12.sp, color = Color(0xFFADADAD))
                     }
                 }
 
@@ -148,10 +151,9 @@ fun InfoScreen(
             }
         }
 
-        /** 팝업은 Box의 형제로 분리! */
         if (menuOpen) {
 
-            // 바깥 클릭 → 닫기
+            // 바깥 클릭 시 닫기 (이펙트 제거 포함)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -161,42 +163,49 @@ fun InfoScreen(
                     ) { menuOpen = false }
             )
 
-            // 실제 팝업
+            val popupWidth = 85.dp
+            val popupHeight = 48.dp
+            val hGap = 8.dp
+            val vGap = 6.dp
+
             Box(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .offset(x = (-20).dp, y = 110.dp) // TopBar 기준 정확한 위치 조절
-                    .size(width = 65.dp, height = 41.dp)
+                    .absoluteOffset(
+                        x = menuXdp - popupWidth - hGap,
+                        y = menuYdp + vGap
+                    )
+                    .size(popupWidth, popupHeight)
                     .background(Color.White, RoundedCornerShape(12.dp))
                     .border(1.dp, Color(0xFFADADAD), RoundedCornerShape(12.dp))
                     .padding(vertical = 6.dp)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.SpaceEvenly
                 ) {
-
                     Text(
-                        text = "수정",
-                        fontSize = 12.sp,
-                        color = Color(0xFFADADAD),
+                        "수정",
+                        fontSize = 13.sp,
+                        color = Color(0xFF1B1B1B),
                         modifier = Modifier
-                            .padding(start = 10.dp)
-                            .clickable {
-                                menuOpen = false
-                                // 수정 클릭 로직
-                            }
+                            .padding(start = 12.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { menuOpen = false }
                     )
 
+                    Divider(color = Color(0xFFE3E3E3), thickness = 1.dp)
+
                     Text(
-                        text = "삭제",
-                        fontSize = 12.sp,
-                        color = Color(0xFFADADAD),
+                        "삭제",
+                        fontSize = 13.sp,
+                        color = Color(0xFF1B1B1B),
                         modifier = Modifier
-                            .padding(start = 10.dp)
-                            .clickable {
-                                menuOpen = false
-                                // 삭제 클릭 로직
-                            }
+                            .padding(start = 12.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { menuOpen = false }
                     )
                 }
             }

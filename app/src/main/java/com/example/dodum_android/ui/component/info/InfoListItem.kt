@@ -93,7 +93,7 @@ fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
                 }
             }
 
-            item.image?.let { url ->
+            item.image.let { url ->
                 AsyncImage(
                     model = url,
                     contentDescription = null,
