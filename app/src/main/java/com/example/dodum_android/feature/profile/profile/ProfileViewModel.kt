@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.myinfo.Profile
 import com.example.dodum_android.network.profile.mypost.MyPost
@@ -21,14 +22,23 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val myInfoService: MyInfoService,
     private val myPostService: MyPostService,
+    private val userRepository: UserRepository
 ): ViewModel() {
 
     private val _profile = mutableStateOf<Profile?>(null)
     private val _myPosts = MutableStateFlow<List<MyPost>>(emptyList())
+    private val _userRole = mutableStateOf<String?>(null)
 
     val profile: State<Profile?> = _profile
     val myPosts: StateFlow<List<MyPost>> = _myPosts
+    val userRole: State<String?> = _userRole
 
+    init {
+        viewModelScope.launch {
+            val token = userRepository.getAccessTokenSnapshot()  // 저장된 토큰 가져오기
+            _userRole.value = token?.let { GetRole(it) }
+        }
+    }
 
     fun loadProfile() {
         viewModelScope.launch {
