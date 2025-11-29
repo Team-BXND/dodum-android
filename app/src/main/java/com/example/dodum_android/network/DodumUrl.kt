@@ -8,7 +8,7 @@ object DodumUrl {
     const val AUTH = "${BASE_URL}auth/"
     const val EMAIL = "${AUTH}email/"
     const val INFO = "${BASE_URL}info/"
-    const val MISC = "${BASE_URL}misc"
+    const val MISC = "${BASE_URL}misc/"
 
     object Auth {
         const val SIGNIN = "${AUTH}signin"
