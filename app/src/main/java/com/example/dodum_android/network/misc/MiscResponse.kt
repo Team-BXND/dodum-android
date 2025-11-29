@@ -23,10 +23,10 @@ data class MiscListResponse(
 )
 
 data class MiscListData(
-    val infos: List<MiscItemDto>
+    val infos: List<MiscItemList>
 )
 
-data class MiscItemDto(
+data class MiscItemList(
     val id: Int,
     val title: String,
     val content: String,
