@@ -1,12 +1,11 @@
 package com.example.dodum_android.root
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.dodum_android.feature.info.InfoScreen
-import com.example.dodum_android.feature.major.RecommendMajorScreen
+import com.example.dodum_android.feature.major.result.MajorResultScreen
+import com.example.dodum_android.feature.major.select.MajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
@@ -34,6 +33,7 @@ object NavGroup {
     const val SignupEmail = "signupEmail"
 
     const val MajorRecommend = "majorRecommend"
+    const val MajorResult = "majorResult"
 
     const val Info = "info"
 }
@@ -61,14 +61,8 @@ fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
-    navigation(startDestination = NavGroup.MajorRecommend, route = "major_graph"){
-        composable(NavGroup.MajorRecommend) { RecommendMajorScreen(navController)}
+    navigation(startDestination = NavGroup.MajorResult, route = "major_graph"){
+        composable(NavGroup.MajorRecommend) { MajorScreen(navController) }
+        composable(NavGroup.MajorResult) { MajorResultScreen(navController)}
     }
-}
-
-fun NavGraphBuilder.infoNavGroup(navController: NavHostController){
-    navigation(startDestination = NavGroup.Info, route = "info_graph"){
-        composable(NavGroup.Info){ InfoScreen(navController)}
-    }
-
 }
