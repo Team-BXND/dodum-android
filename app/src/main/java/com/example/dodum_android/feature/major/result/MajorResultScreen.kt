@@ -38,17 +38,17 @@ fun MajorResultScreen(
     val viewModel: MajorViewModel = hiltViewModel()
     val majorResponse = viewModel.result.collectAsState().value
 
-//    val majorkey = majorResponse?.majorkey
-//    val major = majorResponse?.major
-    val major = "웹 개발자"
-    val majorkey = "web"
+    val majorkey = majorResponse?.majorkey
+    val major = majorResponse?.major
+//    val major = "웹 개발자"
+//    val majorkey = "web"
     val majorInfo = majors[majorkey?.lowercase() ?: ""]
-    val testGraph = Graph(
-        web = 80,
-        server = 60,
-        iOS = 70,
-        android = 90
-    )
+//    val testGraph = Graph(
+//        web = 80,
+//        server = 60,
+//        iOS = 70,
+//        android = 90
+//    )
 
 
 
@@ -174,11 +174,10 @@ fun MajorResultScreen(
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
-//            majorResponse?.graph?.let { graph ->
-//                MajorGraphChart(graph)
-//                Spacer(modifier = Modifier.height(20.dp))
-//            }
-                MajorGraphChart(testGraph)
+            majorResponse?.graph?.let { graph ->
+                MajorGraphChart(graph)
+            }
+//                MajorGraphChart(testGraph)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
