@@ -6,6 +6,7 @@ import com.example.dodum_android.network.info.InfoService
 import com.example.dodum_android.network.misc.MiscService
 import android.content.Context
 import com.example.dodum_android.data.datastore.SurveyDataStore
+import com.example.dodum_android.network.major.MajorService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
@@ -120,12 +121,6 @@ object PwModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FalseModule {
-    @Singleton
-    @Provides
-    fun provideFalseService(retrofit: Retrofit): FalsePostService =
-        retrofit.create(FalsePostService::class.java)
-}
 object InfoModule {
     @Singleton
     @Provides
@@ -140,6 +135,15 @@ object MiscModule {
     @Provides
     fun provideMiscService(retrofit: Retrofit): MiscService =
         retrofit.create(MiscService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object MajorModule {
+    @Singleton
+    @Provides
+    fun provideMajorService(retrofit: Retrofit): MajorService =
+        retrofit.create(MajorService::class.java)
 }
 
 

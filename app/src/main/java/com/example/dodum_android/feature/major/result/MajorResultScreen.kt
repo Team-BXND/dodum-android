@@ -94,6 +94,7 @@ fun MajorResultScreen(
         Box(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
+                .fillMaxWidth()
                 .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
@@ -133,6 +134,7 @@ fun MajorResultScreen(
         Box(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
+                .fillMaxWidth()
                 .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
@@ -160,6 +162,7 @@ fun MajorResultScreen(
         Box(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
+                .fillMaxWidth()
                 .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
