@@ -7,6 +7,7 @@ import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
+import com.example.dodum_android.network.start.signout.SignOutService
 import com.example.dodum_android.network.start.signup.SignupService
 
 import dagger.Module
@@ -44,6 +45,11 @@ object AuthModule {
     @Singleton
     fun provideSignupService(retrofit: Retrofit): SignupService =
         retrofit.create(SignupService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSignOutService(retrofit: Retrofit): SignOutService =
+        retrofit.create(SignOutService::class.java)
 }
 
 @Module
@@ -99,7 +105,7 @@ object InfoModule {
 object MiscModule {
     @Singleton
     @Provides
-    fun provideInfoService(retrofit: Retrofit): MiscService =
+    fun provideMiscService(retrofit: Retrofit): MiscService =
         retrofit.create(MiscService::class.java)
 }
 

@@ -13,6 +13,7 @@ object DodumUrl {
     object Auth {
         const val SIGNIN = "${AUTH}signin"
         const val SIGNUP = "${AUTH}signup"
+        const val SIGNOUT = "${AUTH}signout"
     }
 
     object Email {
@@ -24,6 +25,8 @@ object DodumUrl {
         const val GET_PROFILE = "profile"
         const val UPDATE_PROFILE = "profile"
         const val MYPOST = "profile/write"
+        const val FALSEPOST = "info/false"
+
     }
 
     object Info {
@@ -33,6 +36,10 @@ object DodumUrl {
         const val LIKE = "${INFO}{id}/like"
         const val APPROVE = "${INFO}{id}/approve"
         const val DISAPPROVE = "${INFO}{id}/disapprove"
+    }
+
+    object Major {
+        const val Major = "major-recommend"
     }
 
     object Misc {

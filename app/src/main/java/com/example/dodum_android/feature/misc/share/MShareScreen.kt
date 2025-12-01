@@ -22,9 +22,9 @@ import com.example.dodum_android.ui.component.info.CategoryListItem
 fun MShareScreen(
     navController: NavController
 ){
-    val viewModel: ShareViewModel = hiltViewModel()
+    val viewModel: MShareViewModel = hiltViewModel()
 
-    val list = viewModel.infoList
+    val list = viewModel.miscList
     val currentPage = viewModel.currentPage
     val totalPages = viewModel.totalPages
 
