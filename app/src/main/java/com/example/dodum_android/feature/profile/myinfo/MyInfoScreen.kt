@@ -146,7 +146,16 @@ fun MyInformScreen(
                     }
 
                     AnimatedClickableBox (
-                        onClick = { Log.d(TAG, "MyInformScreen: 로그아웃 클릭") },
+                        onClick = { viewModel.SignOut { success, message ->
+                            if (success) {
+                                Log.d(TAG, "로그아웃 성공: $message")
+                                navController.navigate(NavGroup.Signin) {
+                                    popUpTo(0)
+                                }
+                            } else {
+                                Log.d(TAG, "로그아웃 실패: $message")
+                            }
+                        } },
                         modifier = Modifier
                             .padding(end = 72.dp)
                             .weight(secondWeight)
