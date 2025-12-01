@@ -1,0 +1,40 @@
+package com.example.dodum_android.network.misc
+
+data class CommonSuccessResponse(
+    val success: Boolean
+)
+
+data class MiscDetailResponse(
+    val success: Boolean,
+    val data: MiscDetailDto?
+)
+
+data class MiscDetailDto(
+    val id: Long,
+    val title: String,
+    val content: String,
+    val likes: Int,
+    val category: String,
+    val isApproved: Boolean,
+    val author: String
+)
+
+data class MiscListResponse(
+    val success: Boolean,
+    val data: MiscListData?
+)
+
+data class MiscListData(
+    val infos: List<MiscItemList>
+)
+
+data class MiscItemList(
+    val id: Long,
+    val title: String,
+    val content: String,
+    val likes: Int,
+    val category: String,
+    val isApproved: Boolean,
+    val author: String
+)
+
