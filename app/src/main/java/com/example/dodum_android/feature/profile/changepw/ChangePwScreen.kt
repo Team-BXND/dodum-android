@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.feature.profile.changeinfo.ChangeInfoViewModel
 import com.example.dodum_android.ui.component.button.AnimatedClickableBox
 import com.example.dodum_android.ui.component.textfield.CustomTextField
 import com.example.dodum_android.ui.component.bar.TopAppBar

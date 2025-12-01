@@ -87,6 +87,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+
     private fun parseDate(dateString: String): Long {
         return try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -97,4 +98,5 @@ class ProfileViewModel @Inject constructor(
             0L
         }
     }
+
 }

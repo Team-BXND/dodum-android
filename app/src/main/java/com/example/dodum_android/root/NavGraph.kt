@@ -13,6 +13,6 @@ fun AppNavHost(
         profileNavGroup(navController)
         authNavGraph(navController)
         miscNavGroup(navController)
-//        mainNavGraph(navController)   // NavGroup 호출
+        majorNavGraph(navController)
     }
 }
