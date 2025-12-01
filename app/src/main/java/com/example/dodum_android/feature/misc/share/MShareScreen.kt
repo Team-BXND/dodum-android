@@ -1,4 +1,4 @@
-package com.example.dodum_android.feature.misc
+package com.example.dodum_android.feature.misc.share
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,7 @@ import com.example.dodum_android.ui.component.info.CategoryListItem
 
 
 @Composable
-fun MiscScreen(
+fun MShareScreen(
     navController: NavController
 ){
     val viewModel: ShareViewModel = hiltViewModel()

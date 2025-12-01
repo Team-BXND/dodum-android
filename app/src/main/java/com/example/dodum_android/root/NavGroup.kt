@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
+import com.example.dodum_android.feature.misc.share.MShareScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.myinfo.MyInformScreen
@@ -34,6 +35,9 @@ object NavGroup {
 
     const val Info = "info"
     const val Share = "share"
+
+    const val MISC = "misc"
+    const val MSHARE = "miscShare"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -62,5 +66,12 @@ fun NavGraphBuilder.infoNavGroup(navController: NavHostController) {
     navigation(startDestination = NavGroup.Share, route = "info_graph") {
         composable(NavGroup.Share) { ShareScreen(navController) }
         composable(NavGroup.Info) { InfoScreen(navController)}
+    }
+}
+
+fun NavGraphBuilder.miscNavGroup(navController: NavHostController) {
+    navigation(startDestination = NavGroup.MISC, route = "misc_graph") {
+        composable(NavGroup.MSHARE) { MShareScreen(navController) }
+        composable(NavGroup.MISC) { MShareScreen(navController) }
     }
 }
