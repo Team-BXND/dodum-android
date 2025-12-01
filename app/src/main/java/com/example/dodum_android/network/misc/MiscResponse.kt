@@ -27,10 +27,11 @@ data class MiscListData(
 )
 
 data class MiscItemList(
-    val id: Int,
+    val id: Long,
     val title: String,
     val content: String,
     val likes: Int,
-    val images: List<String>,
-    val createdAt: String
+    val category: String,
+    val isApproved: Boolean
 )
+
