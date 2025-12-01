@@ -7,6 +7,8 @@ import androidx.navigation.navigation
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
+import com.example.dodum_android.feature.major.result.MajorResultScreen
+import com.example.dodum_android.feature.major.select.MajorScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.falsepost.FalsPostScreen
@@ -21,12 +23,12 @@ import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
 
 object NavGroup {
-    const val MyInfo = "myinfo"
-    const val ChangeInfo = "changeinfo"
-    const val ChangePw = "changepw"
+    const val MyInfo = "myInfo"
+    const val ChangeInfo = "changeInfo"
+    const val ChangePw = "changePw"
     const val Profile = "profile"
-    const val MyPosts = "myposts"
-    const val FalsePost = "falsepost"
+    const val MyPosts = "myPost"
+    const val FalsePost = "falsePost"
 
     const val Splash = "splash"
     const val Welcome = "welcome"
@@ -34,6 +36,9 @@ object NavGroup {
     const val SignupIdPw = "signupIdPw"
     const val SignupInfo = "signupInfo"
     const val SignupEmail = "signupEmail"
+
+    const val MajorRecommend = "majorRecommend"
+    const val MajorResult = "majorResult"
 
     const val Info = "info"
     const val Share = "share"
@@ -76,5 +81,12 @@ fun NavGraphBuilder.miscNavGroup(navController: NavHostController) {
     navigation(startDestination = NavGroup.MISC, route = "misc_graph") {
         composable(NavGroup.MSHARE) { MShareScreen(navController) }
         composable(NavGroup.MISC) { MShareScreen(navController) }
+    }
+}
+
+fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
+    navigation(startDestination = NavGroup.MajorResult, route = "major_graph"){
+        composable(NavGroup.MajorRecommend) { MajorScreen(navController) }
+        composable(NavGroup.MajorResult) { MajorResultScreen(navController)}
     }
 }

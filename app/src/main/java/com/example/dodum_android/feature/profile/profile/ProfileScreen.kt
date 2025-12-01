@@ -44,6 +44,8 @@ fun ProfileScreen(
     navController: NavController
 ) {
 
+    val profileId: Int = 3
+
     val viewModel: ProfileViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) { viewModel.loadProfile() }
@@ -86,7 +88,6 @@ fun ProfileScreen(
                     )
                 }
 
-                // 2️⃣ 역할 기반 미승인 글 버튼
                 if (userRole == "TEACHER" || userRole == "ADMIN") {
                     AnimatedClickableBox(
                         onClick = { navController.navigate(NavGroup.FalsePost) },
@@ -175,6 +176,7 @@ fun ProfileScreen(
                 }
             }
         }
+
         AnimatedClickableBox(
             onClick = { navController.navigate(NavGroup.MyPosts) },
         ) {

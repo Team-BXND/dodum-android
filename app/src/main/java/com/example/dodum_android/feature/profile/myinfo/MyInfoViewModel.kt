@@ -20,6 +20,7 @@ class MyInfoViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _profile = mutableStateOf<Profile?>(null)
+
     val profile: State<Profile?> = _profile
 
     fun SignOut(onResult: (Boolean, String?) -> Unit) {

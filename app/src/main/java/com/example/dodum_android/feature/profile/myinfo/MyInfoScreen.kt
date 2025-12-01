@@ -33,6 +33,7 @@ import com.example.dodum_android.ui.theme.MainColor
 fun MyInformScreen(
     navController: NavController
 ) {
+    val profileId: Int = 3
 
     val viewModel: MyInfoViewModel = hiltViewModel()
 
