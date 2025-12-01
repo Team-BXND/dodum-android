@@ -1,5 +1,8 @@
 package com.example.dodum_android.network
 
+import com.example.dodum_android.data.datastore.UserRepository
+import com.example.dodum_android.network.profile.falsepost.FalsePostResponse
+import com.example.dodum_android.network.profile.falsepost.FalsePostService
 import com.example.dodum_android.network.info.InfoService
 import com.example.dodum_android.network.misc.MiscService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
@@ -14,6 +17,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -24,9 +28,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideOkHttpClient(userRepository: UserRepository): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor { userRepository.getCachedAccessToken() })
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(DodumUrl.BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -45,7 +58,6 @@ object AuthModule {
     @Singleton
     fun provideSignupService(retrofit: Retrofit): SignupService =
         retrofit.create(SignupService::class.java)
-
     @Provides
     @Singleton
     fun provideSignOutService(retrofit: Retrofit): SignOutService =
@@ -93,6 +105,12 @@ object PwModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
+object FalseModule {
+    @Singleton
+    @Provides
+    fun provideFalseService(retrofit: Retrofit): FalsePostService =
+        retrofit.create(FalsePostService::class.java)
+}
 object InfoModule {
     @Singleton
     @Provides
@@ -108,4 +126,3 @@ object MiscModule {
     fun provideMiscService(retrofit: Retrofit): MiscService =
         retrofit.create(MiscService::class.java)
 }
-
