@@ -7,6 +7,8 @@ object DodumUrl {
 
     const val AUTH = "${BASE_URL}auth/"
     const val EMAIL = "${AUTH}email/"
+    const val INFO = "${BASE_URL}info/"
+    const val MISC = "${BASE_URL}misc/"
 
     object Auth {
         const val SIGNIN = "${AUTH}signin"
@@ -25,5 +27,27 @@ object DodumUrl {
         const val UPDATE_PROFILE = "profile"
         const val MYPOST = "profile/write"
         const val FALSEPOST = "info/false"
+
+    }
+
+    object Info {
+        const val GET_INFO = INFO
+        const val INFO_ID = "${INFO}{id}"
+        const val INFO_CATEGORY = "${INFO}{category}"
+        const val LIKE = "${INFO}{id}/like"
+        const val APPROVE = "${INFO}{id}/approve"
+        const val DISAPPROVE = "${INFO}{id}/disapprove"
+    }
+
+    object Major {
+        const val Major = "major-recommend"
+    }
+
+    object Misc {
+        const val BASE = "${MISC}"
+        const val MISC_ID = "${MISC}{id}"
+        const val MISC_LIKE = "${MISC}{id}/like"
+        const val MISC_APPROVE = "${MISC}{id}/approve"
+        const val MISC_DISAPPROVE = "${MISC}{id}/disapprove"
     }
 }

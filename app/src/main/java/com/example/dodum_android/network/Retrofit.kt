@@ -3,6 +3,8 @@ package com.example.dodum_android.network
 import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.profile.falsepost.FalsePostResponse
 import com.example.dodum_android.network.profile.falsepost.FalsePostService
+import com.example.dodum_android.network.info.InfoService
+import com.example.dodum_android.network.misc.MiscService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
@@ -56,11 +58,9 @@ object AuthModule {
     @Singleton
     fun provideSignupService(retrofit: Retrofit): SignupService =
         retrofit.create(SignupService::class.java)
-
-
     @Provides
     @Singleton
-    fun providesSignOutService(retrofit: Retrofit): SignOutService =
+    fun provideSignOutService(retrofit: Retrofit): SignOutService =
         retrofit.create(SignOutService::class.java)
 }
 
@@ -76,11 +76,11 @@ object EmailModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object InfoModule {
+object MyInfoModule {
 
     @Singleton
     @Provides
-    fun provideInfoService(retrofit: Retrofit): MyInfoService =
+    fun provideMyInfoService(retrofit: Retrofit): MyInfoService =
         retrofit.create(MyInfoService::class.java)
 }
 
@@ -110,4 +110,19 @@ object FalseModule {
     @Provides
     fun provideFalseService(retrofit: Retrofit): FalsePostService =
         retrofit.create(FalsePostService::class.java)
+}
+object InfoModule {
+    @Singleton
+    @Provides
+    fun provideInfoService(retrofit: Retrofit): InfoService =
+        retrofit.create(InfoService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object MiscModule {
+    @Singleton
+    @Provides
+    fun provideMiscService(retrofit: Retrofit): MiscService =
+        retrofit.create(MiscService::class.java)
 }
