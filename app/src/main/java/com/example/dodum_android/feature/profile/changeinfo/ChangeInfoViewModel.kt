@@ -44,7 +44,6 @@ class ChangeInfoViewModel @Inject constructor(
 
                 if (response.isSuccessful) {
                     val message = response.body()?.data ?: "수정 성공"
-                    // 필요하면 메시지를 LiveData/StateFlow로 노출
                     Log.d("ProfileUpdate", "성공: $message")
                 } else {
                     Log.e("ProfileUpdate", "실패: ${response.code()}")

@@ -55,7 +55,9 @@ android {
 
 dependencies {
 
-    implementation (libs.kotlinx.serialization.json)
+    implementation (libs.androidx.lifecycle.livedata.ktx) // LiveData
+    implementation (libs.androidx.runtime.livedata) // observeAsState
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
