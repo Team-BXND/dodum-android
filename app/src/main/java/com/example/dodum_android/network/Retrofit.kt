@@ -1,11 +1,13 @@
 package com.example.dodum_android.network
 
-import com.example.dodum_android.network.major.MajorService
+import com.example.dodum_android.network.info.InfoService
+import com.example.dodum_android.network.misc.MiscService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
+import com.example.dodum_android.network.start.signout.SignOutService
 import com.example.dodum_android.network.start.signup.SignupService
 
 import dagger.Module
@@ -43,6 +45,11 @@ object AuthModule {
     @Singleton
     fun provideSignupService(retrofit: Retrofit): SignupService =
         retrofit.create(SignupService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSignOutService(retrofit: Retrofit): SignOutService =
+        retrofit.create(SignOutService::class.java)
 }
 
 @Module
@@ -57,11 +64,11 @@ object EmailModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object InfoModule {
+object MyInfoModule {
 
     @Singleton
     @Provides
-    fun provideInfoService(retrofit: Retrofit): MyInfoService =
+    fun provideMyInfoService(retrofit: Retrofit): MyInfoService =
         retrofit.create(MyInfoService::class.java)
 }
 
@@ -86,9 +93,19 @@ object PwModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object MajorModule {
+object InfoModule {
     @Singleton
     @Provides
-    fun provideMajorService(retrofit: Retrofit): MajorService =
-        retrofit.create(MajorService::class.java)
+    fun provideInfoService(retrofit: Retrofit): InfoService =
+        retrofit.create(InfoService::class.java)
 }
+
+@Module
+@InstallIn(SingletonComponent::class)
+object MiscModule {
+    @Singleton
+    @Provides
+    fun provideMiscService(retrofit: Retrofit): MiscService =
+        retrofit.create(MiscService::class.java)
+}
+
