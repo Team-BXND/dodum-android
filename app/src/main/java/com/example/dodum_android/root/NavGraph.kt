@@ -14,5 +14,6 @@ fun AppNavHost(
         authNavGraph(navController)
         miscNavGroup(navController)
         majorNavGraph(navController)
+        archiveNavGraph(navController)
     }
 }
