@@ -9,7 +9,7 @@ fun AppNavHost(
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = "profile_graph") { // ← NavGraph
-        majorNavGroup(navController)
+//        majorNavGroup(navController)
         profileNavGroup(navController)
         authNavGraph(navController)
 //        mainNavGraph(navController)   // NavGroup 호출

@@ -17,7 +17,7 @@ data class DodumTypography(
     val TileSubtitle: TextStyle
 )
 
-val DodumTypographySet = DodumTypography(
+val DodumTypographySet =  DodumTypography(
     Display = TextStyle(
         fontSize = 64.sp,
         fontWeight = FontWeight.SemiBold

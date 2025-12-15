@@ -26,16 +26,12 @@ import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
 fun AuthEmailTextField(
-//    fieldname: String,
     value: String,
     onValueChange: (String) -> Unit,
-//    placeholder: String,
-    isError: Boolean,   // 에러 여부
+    isError: Boolean,
     ischeck: Int,
     modifier: Modifier = Modifier,
-//    textColor: Color = Color.Black,
-//    placeholderColor: Color = Color.Gray,
-    errortext: String? = null,    // 기본값 = null
+    errortext: String? = null,
     onclick: () -> Unit
 ) {
     Column (modifier = Modifier
@@ -68,12 +64,9 @@ fun AuthEmailTextField(
                         fontSize = 14.sp
                     )
                 },
-                isError = isError,  // 에러 상태 반영
+                isError = isError,
                 modifier = modifier
                     .width(224.dp)
-//                    .fillMaxWidth()
-//                .fillMaxSize()
-//            .padding(vertical = 4.dp)
             )
 
             Spacer(modifier .width(8.dp))
@@ -93,7 +86,6 @@ fun AuthEmailTextField(
                 Box(modifier
                     .width(88.dp)
                     .height(42.dp)
-//                    .align(Alignment.CenterVertically)
                 ){
                     Text(text = "인증",
                         fontSize = 16.sp,

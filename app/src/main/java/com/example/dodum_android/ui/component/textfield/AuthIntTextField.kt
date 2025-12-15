@@ -64,9 +64,6 @@ fun AuthIntField(
                 )
             },
             isError = iserror,
-//            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
-//                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
-//            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)

@@ -94,4 +94,5 @@ dependencies {
     implementation(libs.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.text)
+
 }
