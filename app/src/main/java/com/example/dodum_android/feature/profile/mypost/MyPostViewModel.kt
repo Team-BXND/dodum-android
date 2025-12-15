@@ -1,11 +1,8 @@
 package com.example.dodum_android.feature.profile.mypost
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dodum_android.network.profile.myinfo.MyInfoService
-import com.example.dodum_android.network.profile.myinfo.Profile
 import com.example.dodum_android.network.profile.mypost.MyPost
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,28 +20,29 @@ class MyPostViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _myPosts = MutableStateFlow<List<MyPost>>(emptyList())
-
     val myPosts: StateFlow<List<MyPost>> = _myPosts
-
 
     fun loadMyPosts() {
         viewModelScope.launch {
             try {
+                Log.d("MyPostViewModel", "내 게시글 불러오기 시작...")
                 val response = myPostService.getMyPosts()  // MyPostService에서 가져온 Response
                 val posts = if (response.isSuccessful) {
                     response.body()?.data ?: emptyList()  // MyPostResponse에서 data 추출
                 } else {
+                    Log.e("MyPostViewModel", "내 게시글 불러오기 실패: ${response.code()} ${response.message()}")
                     emptyList()  // 실패 시 빈 리스트
                 }
                 _myPosts.value = posts.sortedByDescending { post ->
                     parseDate(post.date ?: "")  // 안전한 날짜 처리
                 }
+                Log.d("MyPostViewModel", "내 게시글 불러오기 완료: ${_myPosts.value.size}개 게시글")
             } catch (e: Exception) {
                 _myPosts.value = emptyList()  // 예외 발생 시 빈 리스트
+                Log.e("MyPostViewModel", "내 게시글 불러오기 중 예외 발생", e)
             }
         }
     }
-
 
     private fun parseDate(dateString: String): Long {
         return try {
@@ -52,8 +50,8 @@ class MyPostViewModel @Inject constructor(
             val localDateTime = LocalDateTime.parse(dateString, formatter)
             localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         } catch (e: Exception) {
+            Log.e("MyPostViewModel", "날짜 파싱 실패: $dateString", e)
             0L
         }
     }
 }
-

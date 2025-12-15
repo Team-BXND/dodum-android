@@ -2,6 +2,7 @@ package com.example.dodum_android.feature.profile.changepw
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,106 +17,61 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.feature.profile.changeinfo.ChangeInfoViewModel
 import com.example.dodum_android.ui.component.button.AnimatedClickableBox
 import com.example.dodum_android.ui.component.textfield.CustomTextField
 import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
-fun ChangePwScreen(
-    navController: NavController
-){
+fun ChangePwScreen(navController: NavController) {
     val viewModel: ChangePwViewModel = hiltViewModel()
-
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
+    val result by viewModel.passwordChangeResult.observeAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+    result?.let { message ->
+        LaunchedEffect(message) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Column(modifier = Modifier.fillMaxSize()) {
             TopAppBar(navController)
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 21.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 21.dp),
             ) {
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Box(
-                        modifier = Modifier
-                            .size(120.dp)
-                            .background(Color.Gray, shape = CircleShape)
+                        modifier = Modifier.size(120.dp).background(Color.Gray, shape = CircleShape)
                     )
                 }
+
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 32.dp)
-                        .padding(top = 45.dp),
+                    modifier = Modifier.padding(horizontal = 32.dp).padding(top = 45.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 아이디
-                        Text(
-                            text = "기존 비밀번호", fontSize = 19.sp
-                        )
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CustomTextField(
-                                text = password,
-                                onTextChange = { password = it },
-                                placeholderText = "기존 비밀번호"
-                            )
-                        }
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 아이디
-                        Text(
-                            text = "새 비밀번호", fontSize = 19.sp
-                        )
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CustomTextField(
-                                text = newPassword,
-                                onTextChange = { newPassword = it },
-                                placeholderText = "새 비밀번호"
-                            )
-                        }
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 아이디
-                        Text(
-                            text = "새 비밀번호 확인", fontSize = 19.sp
-                        )
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CustomTextField(
-                                text = confirmPassword,
-                                onTextChange = { confirmPassword = it },
-                                placeholderText = "새 비밀번호 확인"
-                            )
-                        }
-                    }
+                    CustomTextField(text = email, onTextChange = { email = it }, placeholderText = "이메일")
+                    CustomTextField(text = newPassword, onTextChange = { newPassword = it }, placeholderText = "새 비밀번호")
+                    CustomTextField(text = confirmPassword, onTextChange = { confirmPassword = it }, placeholderText = "새 비밀번호 확인")
 
                     Row(
                         modifier = Modifier
@@ -129,7 +85,7 @@ fun ChangePwScreen(
 
                         AnimatedClickableBox (
                             onClick = { viewModel.changePassword(
-                                oldPwd = password,
+                                email = email,
                                 newPwd = newPassword,
                                 checkPwd = confirmPassword
                             )

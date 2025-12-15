@@ -33,6 +33,7 @@ import com.example.dodum_android.ui.theme.MainColor
 fun MyInformScreen(
     navController: NavController
 ) {
+    val profileId: Int = 3
 
     val viewModel: MyInfoViewModel = hiltViewModel()
 
@@ -146,7 +147,16 @@ fun MyInformScreen(
                     }
 
                     AnimatedClickableBox (
-                        onClick = { Log.d(TAG, "MyInformScreen: 로그아웃 클릭") },
+                        onClick = { viewModel.SignOut { success, message ->
+                            if (success) {
+                                Log.d(TAG, "로그아웃 성공: $message")
+                                navController.navigate(NavGroup.Signin) {
+                                    popUpTo(0)
+                                }
+                            } else {
+                                Log.d(TAG, "로그아웃 실패: $message")
+                            }
+                        } },
                         modifier = Modifier
                             .padding(end = 72.dp)
                             .weight(secondWeight)
