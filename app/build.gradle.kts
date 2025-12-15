@@ -4,13 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-
-    kotlin("plugin.serialization") version "2.2.0"
+    kotlin("kapt")
 }
 
 val localProperties = gradleLocalProperties(rootDir,project.providers)
@@ -103,5 +97,8 @@ dependencies {
     implementation(libs.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.text)
+
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.compiler.v2511)
 
 }
