@@ -6,6 +6,7 @@ import com.example.dodum_android.network.info.InfoService
 import com.example.dodum_android.network.misc.MiscService
 import android.content.Context
 import com.example.dodum_android.data.datastore.SurveyDataStore
+import com.example.dodum_android.network.archive.ArchiveService
 import com.example.dodum_android.network.major.MajorService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
@@ -154,4 +155,13 @@ object FalsePostModule {
     @Provides
     fun provideFalsePostService(retrofit: Retrofit): FalsePostService =
         retrofit.create(FalsePostService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object ArchiveModule {
+    @Singleton
+    @Provides
+    fun provideArchiveService(retrofit: Retrofit): ArchiveService =
+        retrofit.create(ArchiveService::class.java)
 }

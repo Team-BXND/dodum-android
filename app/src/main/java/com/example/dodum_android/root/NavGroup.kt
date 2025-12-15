@@ -45,6 +45,10 @@ object NavGroup {
 
     const val MISC = "misc"
     const val MSHARE = "miscShare"
+
+    const val ArchiveList = "archiveList"
+    const val ArchiveDetail = "archiveDetail/{archiveId}"
+    const val ArchiveWrite = "archiveWrite"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -88,5 +92,37 @@ fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
     navigation(startDestination = NavGroup.MajorResult, route = "major_graph"){
         composable(NavGroup.MajorRecommend) { MajorScreen(navController) }
         composable(NavGroup.MajorResult) { MajorResultScreen(navController)}
+    }
+}
+
+fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
+    navigation(startDestination = NavGroup.ArchiveList, route = "archive_graph")
+    {
+        // 아카이브 목록 화면
+        composable(NavGroup.ArchiveList) {
+            ArchiveScreen(navController)
+        }
+
+        // 아카이브 상세 화면
+        // archiveId 값을 Long 타입 argument로 전달받음
+        composable(
+            route = NavGroup.ArchiveDetail,
+            arguments = listOf(
+                navArgument("archiveId") {
+                    type = NavType.LongType // 전달되는 archiveId의 타입 지정
+                }
+            )
+        ) { backStackEntry ->
+            // 전달받은 archiveId를 꺼냄 (없으면 0L 사용)
+            val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
+
+            // 상세 화면으로 이동하면서 archiveId 전달
+            ArchiveDetailScreen(navController, archiveId)
+        }
+
+        // 아카이브 작성 화면
+        composable(NavGroup.ArchiveWrite) {
+            ArchiveWriteScreen(navController)
+        }
     }
 }
