@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.textfield.AuthTextField
 import com.example.dodum_android.ui.theme.FontGray
@@ -94,7 +95,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate("/* 추가해야 함 */")
+                                navController.navigate(NavGroup.ChangePw)
                             }
                             .align(Alignment.CenterStart)
                     )
@@ -103,7 +104,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate("signupIdPw")
+                                navController.navigate(NavGroup.SignupIdPw)
                             }
                             .align(Alignment.CenterEnd)
                     )
@@ -112,12 +113,12 @@ fun SigninScreen (
                 Spacer(modifier = Modifier .height(35.dp))
 
                 AuthButton(
-                    buttonname = "로그인",
+                    buttonName = "로그인",
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             signinViewModel.signin(username = username, password = password)
                             if ( signinViewModel.signinSuccess == true ) {
-                                navController.navigate("/* 써야 함 */")
+                                navController.navigate(NavGroup.Profile)
                             }
                         } else {
                             isError = true

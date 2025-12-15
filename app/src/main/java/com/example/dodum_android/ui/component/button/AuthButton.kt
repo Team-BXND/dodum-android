@@ -17,7 +17,7 @@ import com.example.dodum_android.ui.theme.ButtonHover
 
 @Composable
 fun AuthButton(
-    buttonname: String,
+    buttonName: String,
     onClick: () -> Unit
 ) {
     Button(
@@ -32,7 +32,7 @@ fun AuthButton(
         )
     ) {
         Text(
-            text = buttonname,
+            text = buttonName,
             fontSize = 20.sp,
             fontWeight = FontWeight.Black
         )

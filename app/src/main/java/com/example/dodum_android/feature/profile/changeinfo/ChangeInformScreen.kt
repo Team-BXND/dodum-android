@@ -237,9 +237,9 @@ fun ChangeInformScreen(
                 }
 
             }
+            //navController.navigate(NavGroup.Signin)
 
-            NavBar(navController = navController,NavGroup.ChangePw)
-
+            NavBar(navController, "ChangePw")
 
         }
 

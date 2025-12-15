@@ -95,7 +95,7 @@ fun SignupIdPwScreen(
                 Spacer(modifier = Modifier .height(35.dp))
 
                 AuthButton(
-                    buttonname = "다음",
+                    buttonName = "다음",
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordcheck.isNotEmpty() ) {
                             if (password == passwordcheck) {
