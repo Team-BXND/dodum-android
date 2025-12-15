@@ -80,9 +80,11 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
     implementation (libs.androidx.material.icons.extended)
     implementation (libs.androidx.navigation.compose)
     implementation (libs.retrofit)
@@ -97,8 +99,5 @@ dependencies {
     implementation(libs.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.text)
-
-    implementation(libs.hilt.android.v2511)
-    kapt(libs.hilt.compiler.v2511)
 
 }
