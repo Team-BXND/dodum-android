@@ -11,7 +11,8 @@ data class ArchiveItem(
     val title: String,
     val teamname: String,
     val category: String,
-    val thumbnail: String? // 이미지 URL
+    val logoUrl: String? = null,
+    val description: String = ""
 )
 
 // 상세 조회 응답
