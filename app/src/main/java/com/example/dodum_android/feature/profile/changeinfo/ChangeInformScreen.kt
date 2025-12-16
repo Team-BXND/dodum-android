@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.dodum_android.R
 import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.NavBar
@@ -41,7 +42,7 @@ import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
 fun ChangeInformScreen(
-    navController: NavController
+    navController: NavHostController
 ) {
     val viewModel: ChangeInfoViewModel = hiltViewModel()
 
@@ -223,7 +224,7 @@ fun ChangeInformScreen(
             }
             //navController.navigate(NavGroup.Signin)
 
-            NavBar(navController, "ChangePw")
+            NavBar(navController = navController, thisScreen = "contest")
 
         }
 

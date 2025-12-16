@@ -2,8 +2,11 @@ package com.example.dodum_android.root
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.dodum_android.feature.archive.ArchiveScreen
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
@@ -98,31 +101,17 @@ fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
 fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
     navigation(startDestination = NavGroup.ArchiveList, route = "archive_graph")
     {
-        // 아카이브 목록 화면
-        composable(NavGroup.ArchiveList) {
-            ArchiveScreen(navController)
-        }
+        composable(NavGroup.ArchiveList) { ArchiveScreen(navController) }
 
-        // 아카이브 상세 화면
-        // archiveId 값을 Long 타입 argument로 전달받음
-        composable(
-            route = NavGroup.ArchiveDetail,
-            arguments = listOf(
-                navArgument("archiveId") {
-                    type = NavType.LongType // 전달되는 archiveId의 타입 지정
-                }
-            )
+        composable( route = NavGroup.ArchiveDetail, arguments = listOf(
+                navArgument("archiveId") { type = NavType.LongType } )
         ) { backStackEntry ->
-            // 전달받은 archiveId를 꺼냄 (없으면 0L 사용)
             val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
-
-            // 상세 화면으로 이동하면서 archiveId 전달
-            ArchiveDetailScreen(navController, archiveId)
+//            ArchiveDetailScreen(navController, archiveId)
         }
-
         // 아카이브 작성 화면
         composable(NavGroup.ArchiveWrite) {
-            ArchiveWriteScreen(navController)
+//            ArchiveWriteScreen(navController)
         }
     }
 }
