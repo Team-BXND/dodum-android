@@ -8,11 +8,12 @@ interface ArchiveService {
     @GET(DodumUrl.Archive.ALL)
     suspend fun getArchiveList(
         @Query("category") category: String
-    ): Response<List<ArchiveItem>> // 문서상 Array? -> List로 처리
+    ): Response<List<ArchiveItem>>
 
+    // [수정] Path 파라미터 id로 변경
     @GET(DodumUrl.Archive.DETAIL)
     suspend fun getArchiveDetail(
-        @Path("archiveId") archiveId: Long
+        @Path("id") id: Long
     ): Response<ArchiveDetailData>
 
     @POST(DodumUrl.Archive.WRITE)

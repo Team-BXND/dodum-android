@@ -9,10 +9,12 @@ data class ArchiveListResponse(
 data class ArchiveItem(
     val id: Long,
     val title: String,
+    val subtitle: String?,
     val teamname: String,
+    val content: String, // description 대신 content 사용
     val category: String,
-    val logoUrl: String? = null,
-    val description: String = ""
+    val createdAt: String, // Instant는 통신 시 String으로 옴
+    val thumbnail: String? = null // 목록에 썸네일이 있다면
 )
 
 // 상세 조회 응답
@@ -26,8 +28,8 @@ data class ArchiveDetailData(
     val subtitle: String,
     val teamname: String,
     val content: String,
-    val createdAt: String,
-    val logoUrl: String? = null
+    val createdAt: String, // Instant
+    val thumbnail: String? = null, // 상세 조회 시 이미지
 )
 
 

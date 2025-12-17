@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.R
-import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.theme.MainColor
 
@@ -106,7 +105,7 @@ fun ArchiveDetailScreen(
                         }
 
                         Text(
-                            text = "TEAM - ${data.teamname}",
+                            text = data.teamname,
                             fontSize = 14.sp,
                             color = Color(0xFFADADAD),
                             fontWeight = FontWeight.Medium
