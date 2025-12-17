@@ -81,7 +81,6 @@ class SignupViewModel @Inject constructor (
 //    }
 
     var form by mutableStateOf(SignupForm())
-        internal set
 
     var signupSuccess by mutableStateOf<Boolean?>(null)
         private set

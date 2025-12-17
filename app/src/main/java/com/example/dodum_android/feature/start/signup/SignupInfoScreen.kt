@@ -136,8 +136,7 @@ fun SignupInfoScreen(
                 AuthButton(
                     buttonName = "다음",
                     onClick = {
-                        val hasError = selectedGrade.isEmpty() || classNo == 0 || studentNo == 0 ||
-                                phone.isEmpty() || selectedClub.isEmpty()
+                        val hasError = selectedGrade.isEmpty() || phone.isEmpty()
                         isError = hasError
 
                         if (!hasError) {
@@ -151,7 +150,7 @@ fun SignupInfoScreen(
                                 classNo = classNo,
                                 studentNo = studentNo,
                                 phone = phone,
-                                club = selectedClub.ifBlank { null }
+                                club = selectedClub
                             )
 
                             navController.navigate("signupEmail")

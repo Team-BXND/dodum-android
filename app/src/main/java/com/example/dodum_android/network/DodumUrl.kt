@@ -55,7 +55,7 @@ object DodumUrl {
     object Archive {
         const val WRITE = "${ARCHIVE}write"
         const val ALL = "${ARCHIVE}all"
-        const val DETAIL = "${ARCHIVE}{archiveId}"
+        const val DETAIL = "${ARCHIVE}{id}"
         const val MODIFY = "${ARCHIVE}"
         const val DELETE = "${ARCHIVE}"
     }

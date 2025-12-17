@@ -2,7 +2,6 @@ package com.example.dodum_android.network.archive
 
 // 작성 요청
 data class ArchiveWriteRequest(
-    val userId: String,
     val title: String,
     val subtitle: String,
     val content: String,

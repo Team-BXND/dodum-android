@@ -71,8 +71,8 @@ fun VerifyEmailScreen (
             val coroutineScope = rememberCoroutineScope()
 
             AuthEmailTextField(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+//                modifier = Modifier
+//                    .align(Alignment.CenterHorizontally),
                 value = email,
                 onValueChange = { email = it },
                 isError = isEmailerror,
