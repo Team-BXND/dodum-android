@@ -99,7 +99,7 @@ fun ContestCard(
 
                 // 본문 미리보기 (간략히)
                 Text(
-                    text = item.subTitle,
+                    text = item.content,
                     fontSize = 16.sp,
                     color = Color.Black,
                     maxLines = 3,

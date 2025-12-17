@@ -87,7 +87,7 @@ fun ArchiveCard(
                     Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
-                        text = item.teamname,
+                        text = item.teamname.toString(),
                         fontSize = 16.sp,
                         color = Color.Gray,
                         maxLines = 1
