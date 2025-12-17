@@ -59,4 +59,10 @@ object DodumUrl {
         const val MODIFY = "${ARCHIVE}"
         const val DELETE = "${ARCHIVE}"
     }
+
+    object Contest {
+        const val BASE = "${BASE_URL}contest"
+        const val ID = "${BASE}/{id}"
+        const val ACTIVE = "${ID}/active"
+    }
 }
