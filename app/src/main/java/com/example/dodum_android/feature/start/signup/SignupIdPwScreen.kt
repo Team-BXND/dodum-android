@@ -104,10 +104,10 @@ fun SignupIdPwScreen(
                                     username = username,
                                     password = password
                                 )
-//                                if (signupViewModel.signupSuccess.value == true) {
+//                                if (signupViewModel.signupSuccess == true) {
 //                                    navController.navigate("signupInfo")
 //                                }
-                                navController.navigate("signupInfo") //테스트용
+                                navController.navigate("signupInfo")
                             }
                         } else {
                             isError = true

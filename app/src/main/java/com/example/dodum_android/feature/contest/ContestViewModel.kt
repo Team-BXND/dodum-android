@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 data class ContestEditUiState(
     val title: String,
-    val content: String,
+    val subTitle: String,
     val email: String,
     val phone: String,
     val time: String,
@@ -60,7 +60,7 @@ class ContestViewModel @Inject constructor(
                     if (data != null) {
                         _editUiState.value = ContestEditUiState(
                             title = data.title,
-                            content = data.content,
+                            subTitle = data.subTitle,
                             email = data.email,
                             phone = data.phone,
                             time = data.time,
@@ -187,7 +187,7 @@ class ContestViewModel @Inject constructor(
         }
     }
 
-    fun deleteContest(id: Int, onSuccess: () -> Unit) {
+    fun deleteContest(id: Long, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 val response = contestService.deleteContest(id)
@@ -203,7 +203,7 @@ class ContestViewModel @Inject constructor(
         }
     }
 
-    fun toggleAlert(id: Int) {
+    fun toggleAlert(id: Long) {
         viewModelScope.launch {
             try {
                 val response = contestService.toggleContestAlert(id)

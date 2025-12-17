@@ -28,11 +28,11 @@ interface ContestService {
 
     @DELETE(DodumUrl.Contest.ID)
     suspend fun deleteContest(
-        @Path("id") id: Int
+        @Path("id") id: Long
     ): Response<ContestCommonResponse>
 
     @POST(DodumUrl.Contest.ACTIVE)
     suspend fun toggleContestAlert(
-        @Path("id") id: Int
+        @Path("id") id: Long
     ): Response<ContestActiveResponse>
 }

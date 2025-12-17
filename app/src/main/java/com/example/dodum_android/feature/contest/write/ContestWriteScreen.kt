@@ -62,7 +62,7 @@ fun ContestWriteScreen(
     LaunchedEffect(editState) {
         editState?.let { state ->
             title = state.title
-            content = state.content
+            state.subTitle
             email = state.email
             phone = state.phone
             time = state.time
