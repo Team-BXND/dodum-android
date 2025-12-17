@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 data class ContestEditUiState(
     val title: String,
-    val subTitle: String,
+    val subTitle: String?, // ★ 수정 시 subtitle은 null일 수 있으므로 nullable
     val email: String,
     val phone: String,
     val time: String,
@@ -40,41 +40,12 @@ class ContestViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    // [추가됨] 수정 화면을 위한 UI State
     private val _editUiState = MutableStateFlow<ContestEditUiState?>(null)
     val editUiState = _editUiState.asStateFlow()
 
     init {
         loadUserRole()
         loadContestList()
-    }
-
-    // 수정 화면 진입 시 데이터 로드
-    fun loadContestForEdit(id: Int) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val response = contestService.getContestDetail(id)
-                if (response.isSuccessful) {
-                    val data = response.body()?.data
-                    if (data != null) {
-                        _editUiState.value = ContestEditUiState(
-                            title = data.title,
-                            subTitle = data.subTitle,
-                            email = data.email,
-                            phone = data.phone,
-                            time = data.time,
-                            place = data.place,
-                            imageUrl = data.image
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("ContestVM", "Load edit data error", e)
-            } finally {
-                _isLoading.value = false
-            }
-        }
     }
 
     private fun loadUserRole() {
@@ -84,7 +55,7 @@ class ContestViewModel @Inject constructor(
         }
     }
 
-
+    // ★ 수정: Int 타입 적용
     fun loadContestList() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -103,6 +74,7 @@ class ContestViewModel @Inject constructor(
         }
     }
 
+    // ★ 수정: Int 타입 적용
     fun loadContestDetail(id: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -110,17 +82,44 @@ class ContestViewModel @Inject constructor(
                 val response = contestService.getContestDetail(id)
                 if (response.isSuccessful) {
                     _contestDetail.value = response.body()?.data
-                } else {
-                    Log.e("ContestVM", "Load detail failed: ${response.code()}")
                 }
             } catch (e: Exception) {
-                Log.e("ContestVM", "Load detail error", e)
+                e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
+    // ★ 수정: Int 타입 적용
+    fun loadContestForEdit(id: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = contestService.getContestDetail(id)
+                if (response.isSuccessful) {
+                    val data = response.body()?.data
+                    if (data != null) {
+                        _editUiState.value = ContestEditUiState(
+                            title = data.title,
+                            subTitle = null, // 상세 조회에는 subtitle이 없음
+                            email = data.email,
+                            phone = data.phone,
+                            time = data.time,
+                            place = data.place,
+                            imageUrl = data.image
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // ★ 수정: Int 타입 적용
     fun submitContest(
         contestId: Int?,
         title: String,
@@ -140,12 +139,14 @@ class ContestViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                // TODO: 실제 이미지 업로드 로직 필요
                 val imageUrl = ""
 
                 if (contestId == null) {
+                    // *** 작성 (POST) ***
                     val request = ContestCreateRequest(
                         title = title,
-                        subtitle = "",
+                        subtitle = "", // 명세에 있음
                         content = content,
                         email = email,
                         phone = phone,
@@ -161,6 +162,7 @@ class ContestViewModel @Inject constructor(
                         onError("등록 실패: ${response.code()}")
                     }
                 } else {
+                    // *** 수정 (PUT) ***
                     val request = ContestUpdateRequest(
                         title = title,
                         content = content,
@@ -187,23 +189,23 @@ class ContestViewModel @Inject constructor(
         }
     }
 
-    fun deleteContest(id: Long, onSuccess: () -> Unit) {
+    // ★ 수정: Int 타입 적용
+    fun deleteContest(id: Int, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 val response = contestService.deleteContest(id)
                 if (response.isSuccessful) {
                     onSuccess()
                     loadContestList()
-                } else {
-                    Log.e("ContestVM", "Delete failed: ${response.code()}")
                 }
             } catch (e: Exception) {
-                Log.e("ContestVM", "Delete error", e)
+                e.printStackTrace()
             }
         }
     }
 
-    fun toggleAlert(id: Long) {
+    // ★ 수정: Int 타입 적용
+    fun toggleAlert(id: Int) {
         viewModelScope.launch {
             try {
                 val response = contestService.toggleContestAlert(id)
@@ -214,7 +216,7 @@ class ContestViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("ContestVM", "Toggle alert error", e)
+                e.printStackTrace()
             }
         }
     }
