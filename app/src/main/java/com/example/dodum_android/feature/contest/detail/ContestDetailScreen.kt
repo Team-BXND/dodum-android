@@ -165,7 +165,7 @@ fun ContestDetailScreen(
 
                     // 본문
                     Text(
-                        text = data.subTitle,
+                        text = data.content,
                         fontSize = 18.sp,
                         color = Color(0xFF1B1B1B),
                         lineHeight = 26.sp
