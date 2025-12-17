@@ -30,6 +30,8 @@ data class ArchiveDetailData(
     val logoUrl: String? = null
 )
 
+
+
 // 작성/수정 응답
 data class ArchiveWriteResponse(
     val status: Int,
