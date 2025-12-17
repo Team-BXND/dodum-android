@@ -62,6 +62,7 @@ object NavGroup {
     const val ContestList = "contestList"
     const val ContestWrite = "contestWrite"
     const val ContestDetail = "contestDetail/{contestId}"
+    const val ContestModify = "contestModify/{contestId}"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -133,7 +134,21 @@ fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
 fun NavGraphBuilder.contestNavGraph(navController: NavHostController) {
     navigation(startDestination = NavGroup.ContestList, route = "contest_graph") {
         composable(NavGroup.ContestList) { ContestScreen(navController) }
-        composable(NavGroup.ContestWrite) { ContestWriteScreen(navController) }
+
+        // 작성 (새 글)
+        composable(NavGroup.ContestWrite) {
+            ContestWriteScreen(navController) // contestId = null
+        }
+
+        // 수정 (기존 글)
+        composable(
+            route = NavGroup.ContestModify,
+            arguments = listOf(navArgument("contestId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("contestId")
+            ContestWriteScreen(navController, contestId = id) // ID 전달
+        }
+
         composable(
             route = NavGroup.ContestDetail,
             arguments = listOf(navArgument("contestId") { type = NavType.IntType })
