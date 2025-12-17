@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.archive.ArchiveScreen
+import com.example.dodum_android.feature.archive.write.ArchiveWriteScreen
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
@@ -111,7 +112,7 @@ fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
         }
         // 아카이브 작성 화면
         composable(NavGroup.ArchiveWrite) {
-//            ArchiveWriteScreen(navController)
+            ArchiveWriteScreen(navController)
         }
     }
 }
