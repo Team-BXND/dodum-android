@@ -7,35 +7,37 @@ data class ContestDetailResponse(
 
 data class ContestListResponse(
     val status: Int,
-    val data: List<ContestData> // 문서상 data: { ... } 이지만 목록이므로 List로 가정
+    val data: List<ContestData>
 )
 
 data class ContestData(
-    val id: Long = 0, // id 추가 (목록/상세 공통 사용 위함)
+    val id: Int = 0, // ★ Long -> Int 변경
     val title: String,
-    val subTitle: String,
+    val content: String,
     val email: String,
     val phone: String,
-    val time: String, // Date -> String (yyyy-MM-dd 등 포맷팅된 문자열로 처리 가정)
+    val time: String,
     val place: String,
     val image: String,
-    val isAlertActive: Boolean = false // 알림 상태 (API에는 명시되지 않았으나 UI 상태 관리용)
+    val isAlertActive: Boolean = false
 )
 
+// 등록, 수정, 삭제용 응답 (success: String)
 data class ContestCommonResponse(
     val status: Int,
-    val data: SuccessData
+    val data: SuccessDataString
 )
 
-data class SuccessData(
-    val success: String // or Boolean based on API spec
+data class SuccessDataString(
+    val success: String
 )
 
+// 알림 토글용 응답 (success: Boolean)
 data class ContestActiveResponse(
     val status: Int,
-    val data: ActiveData
+    val data: ActiveDataBoolean
 )
 
-data class ActiveData(
+data class ActiveDataBoolean(
     val success: Boolean
 )

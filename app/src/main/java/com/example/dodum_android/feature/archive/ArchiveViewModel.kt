@@ -61,8 +61,6 @@ class ArchiveViewModel @Inject constructor(
         }
     }
 
-    // (submitArchive 함수는 ArchiveWriteViewModel에 있는 것이 더 일반적이지만,
-    // 질문의 코드 맥락상 여기에 포함된 것으로 간주하고 유지 및 수정합니다.)
     fun submitArchive(
         archiveId: Long?,
         title: String,
@@ -131,7 +129,6 @@ class ArchiveViewModel @Inject constructor(
         }
     }
 
-    // 더미 데이터 (주석 유지)
 //    private fun loadMockData(category: String) {
 //        val mockData = when (category) {
 //            "동아리" -> listOf(

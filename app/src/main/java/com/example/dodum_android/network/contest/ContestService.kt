@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface ContestService {
     @GET(DodumUrl.Contest.ID)
     suspend fun getContestDetail(
-        @Path("id") id: Int
+        @Path("id") id: Int // ★ Int
     ): Response<ContestDetailResponse>
 
     @GET(DodumUrl.Contest.BASE)
@@ -22,17 +22,17 @@ interface ContestService {
 
     @PUT(DodumUrl.Contest.ID)
     suspend fun updateContest(
-        @Path("id") id: Int,
+        @Path("id") id: Int, // ★ Int
         @Body request: ContestUpdateRequest
     ): Response<ContestCommonResponse>
 
     @DELETE(DodumUrl.Contest.ID)
     suspend fun deleteContest(
-        @Path("id") id: Long
+        @Path("id") id: Int // ★ Int (Long -> Int 수정)
     ): Response<ContestCommonResponse>
 
     @POST(DodumUrl.Contest.ACTIVE)
     suspend fun toggleContestAlert(
-        @Path("id") id: Long
+        @Path("id") id: Int // ★ Int (Long -> Int 수정)
     ): Response<ContestActiveResponse>
 }
