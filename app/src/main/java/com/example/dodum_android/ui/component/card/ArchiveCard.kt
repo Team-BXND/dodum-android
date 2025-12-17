@@ -101,7 +101,7 @@ fun ArchiveCard(
                 // 설명글
                 Text(
                     text = item.description.ifEmpty { "설명이 없습니다." },
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     color = Color(0xFF8E8E93),
                     lineHeight = 16.sp,
                     maxLines = 3,

@@ -27,7 +27,7 @@ data class ArchiveDetailData(
     val teamname: String,
     val content: String,
     val createdAt: String,
-    val thumbnail: String?
+    val logoUrl: String? = null
 )
 
 // 작성/수정 응답
