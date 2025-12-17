@@ -24,8 +24,8 @@ fun SplashScreen (
 ) {
     LaunchedEffect(Unit) {
         delay(3000)
-//        navController.navigate("welcome")
-        navController.navigate(NavGroup.ContestList)
+        navController.navigate("welcome")
+//        navController.navigate(NavGroup.ContestList)
         {
             popUpTo("splash") { inclusive = true }
         }

@@ -46,10 +46,10 @@ class ArchiveWriteViewModel @Inject constructor(
                     if (data != null) {
                         _editUiState.value = ArchiveEditUiState(
                             title = data.title,
-                            subtitle = data.subtitle,
+                            subtitle = data.subtitle.toString(),
                             content = data.content,
                             category = "동아리", // API 응답에 category가 없다면 별도 처리 필요
-                            teamName = data.teamname,
+                            teamName = data.teamname.toString(),
                             imageUrl = data.thumbnail // thumbnail 매핑
                         )
                     }
@@ -110,7 +110,9 @@ class ArchiveWriteViewModel @Inject constructor(
                         title = title,
                         subtitle = subtitle,
                         content = content,
-                        category = category
+                        category = category,
+                        thumbnail = null,
+                        teamname = teamName
                     )
 
                     // [수정] 서버 통신 활성화

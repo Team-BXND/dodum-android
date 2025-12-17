@@ -94,7 +94,7 @@ fun ArchiveDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        if (data.subtitle.isNotEmpty()) {
+                        if (data.subtitle?.isNotEmpty() == true) {
                             Text(
                                 text = data.subtitle,
                                 fontSize = 14.sp,
@@ -105,7 +105,7 @@ fun ArchiveDetailScreen(
                         }
 
                         Text(
-                            text = data.teamname,
+                            text = data.teamname.toString(),
                             fontSize = 14.sp,
                             color = Color(0xFFADADAD),
                             fontWeight = FontWeight.Medium

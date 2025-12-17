@@ -15,44 +15,48 @@ class TokenAuthenticator @Inject constructor(
     private val userRepository: UserRepository,
     private val signinService: Provider<SigninService>
 ) : Authenticator {
+
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.responseCount > 3) return null
+        // 재시도 3회 초과 시 중단
+        if (response.retryCount() > 3) return null
 
         val newToken = runBlocking {
             val username = userRepository.getPublicIdSnapshot()
             val refreshToken = userRepository.getRefreshTokenSnapshot()
 
-            if (username != null && refreshToken != null) {
-                try {
-                    val refreshResponse = signinService.get().refreshToken(
-                        RefreshTokenRequest(username, refreshToken)
-                    )
+            if (username == null || refreshToken == null) return@runBlocking null
 
-                    if (refreshResponse.isSuccessful && refreshResponse.body()?.status == 200) {
-                        val newAccessToken = refreshResponse.body()?.data?.accessToken
-                        if (newAccessToken != null) {
-                            userRepository.saveUserData(accessToken = newAccessToken)
-                            newAccessToken
-                        } else {
-                            null
-                        }
-                    } else {
-                        null
+            try {
+                val refreshResponse = signinService.get().refreshToken(
+                    RefreshTokenRequest(username, refreshToken)
+                )
+
+                if (refreshResponse.isSuccessful && refreshResponse.body()?.status == 200) {
+                    refreshResponse.body()?.data?.accessToken?.also { token ->
+                        userRepository.saveUserData(accessToken = token)
                     }
-                } catch (e: Exception) {
+                } else {
                     null
                 }
-            } else {
+            } catch (e: Exception) {
                 null
             }
         }
 
-        return if (newToken != null) {
+        return newToken?.let {
             response.request.newBuilder()
-                .header("Authorization", "Bearer $newToken")
+                .header("Authorization", "Bearer $it")
                 .build()
-        } else {
-            null
         }
     }
+}
+
+private fun Response.retryCount(): Int {
+    var count = 1
+    var prior = priorResponse
+    while (prior != null) {
+        count++
+        prior = prior.priorResponse
+    }
+    return count
 }

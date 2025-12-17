@@ -72,7 +72,7 @@ fun ContestWriteScreen(
             phone = state.phone
             time = state.time
             placeInput = state.place
-            content = TextFieldValue(state.subTitle) // 초기값 설정
+            content = TextFieldValue(state.subTitle.toString()) // 초기값 설정
             // 이미지는 URL 처리 필요 (여기선 생략)
         }
     }

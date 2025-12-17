@@ -38,7 +38,7 @@ fun ContestScreen(
         ContestData(
             id = 1,
             title = "2025 전국 고등학생 해커톤",
-            subTitle = "전국 고등학생을 대상으로 하는 해커톤 대회입니다. 팀 단위 참가이며 소프트웨어, AI, 모바일 앱 등 자유 주제로 진행됩니다.",
+            content = "전국 고등학생을 대상으로 하는 해커톤 대회입니다. 팀 단위 참가이며 소프트웨어, AI, 모바일 앱 등 자유 주제로 진행됩니다.",
             email = "hackathon@contest.kr",
             phone = "02-1234-5678",
             time = "2025.01.10 ~ 2025.01.12",
@@ -49,7 +49,7 @@ fun ContestScreen(
         ContestData(
             id = 2,
             title = "AI 창의 아이디어 공모전",
-            subTitle = "AI 기술을 활용한 창의적인 아이디어를 공모합니다. 개인 및 팀 참가 가능하며 우수작은 시상합니다.",
+            content = "AI 기술을 활용한 창의적인 아이디어를 공모합니다. 개인 및 팀 참가 가능하며 우수작은 시상합니다.",
             email = "ai@idea.or.kr",
             phone = "02-9876-5432",
             time = "2025.02.01 ~ 2025.02.28",
@@ -60,7 +60,7 @@ fun ContestScreen(
         ContestData(
             id = 3,
             title = "청소년 앱 개발 경진대회",
-            subTitle = "청소년 대상 모바일 앱 개발 대회입니다. 실사용 가능한 앱을 기준으로 평가합니다.",
+            content = "청소년 대상 모바일 앱 개발 대회입니다. 실사용 가능한 앱을 기준으로 평가합니다.",
             email = "app@devcontest.com",
             phone = "031-222-3333",
             time = "2025.03.15",
