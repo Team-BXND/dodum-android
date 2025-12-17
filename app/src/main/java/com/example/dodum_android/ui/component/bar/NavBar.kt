@@ -41,7 +41,7 @@ fun NavBar(
         Triple("info", "정보공유", NavGroup.Share),     // 아이콘: share_icon
         Triple("archive", "아카이브", NavGroup.ArchiveList), // 아이콘: archive_icon
         Triple("major", "전공선택", NavGroup.MajorRecommend), // 아이콘: major_icon
-//        Triple("contest", "대회정보", NavGroup.Contest),   // 아이콘: contest_icon
+        Triple("contest", "대회정보", NavGroup.ContestList),   // 아이콘: contest_icon
         Triple("misc", "기타정보", NavGroup.MSHARE)       // 아이콘: misc_icon
     )
 
@@ -65,7 +65,7 @@ fun NavBar(
                 val isSelected = thisScreen == id
 
                 // 색상 설정
-                val contentColor = if (isSelected) MainColor else unselectedColor
+                val contentHeight = if (isSelected) 42.dp else 38.dp
 
                 // 아이콘 리소스 설정 (규칙: [id]_icon / [id]_check_icon)
                 val iconRes = when (id) {
@@ -80,8 +80,8 @@ fun NavBar(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .width(27.dp)
-                        .height(38.dp)
+                        .width(32.dp)
+                        .height(contentHeight)
                         .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null // 리플 효과 제거

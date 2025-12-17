@@ -15,5 +15,6 @@ fun AppNavHost(
         miscNavGroup(navController)
         majorNavGraph(navController)
         archiveNavGraph(navController)
+        contestNavGraph(navController)
     }
 }

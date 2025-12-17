@@ -9,6 +9,9 @@ import androidx.navigation.navigation
 import com.example.dodum_android.feature.archive.ArchiveScreen
 import com.example.dodum_android.feature.archive.write.ArchiveWriteScreen
 import com.example.dodum_android.feature.archive.detail.ArchiveDetailScreen
+import com.example.dodum_android.feature.contest.ContestScreen
+import com.example.dodum_android.feature.contest.write.ContestWriteScreen
+import com.example.dodum_android.feature.contest.detail.ContestDetailScreen
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
@@ -55,13 +58,16 @@ object NavGroup {
     const val ArchiveDetail = "archiveDetail/{archiveId}"
     const val ArchiveWrite = "archiveWrite"
     const val ArchiveModify = "archiveModify/{archiveId}"
+
+    const val ContestList = "contestList"
+    const val ContestWrite = "contestWrite"
+    const val ContestDetail = "contestDetail/{contestId}"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(startDestination = NavGroup.Splash, route = "auth_graph") {
         composable(NavGroup.Splash) { SplashScreen(navController) }
         composable(NavGroup.Welcome) { WelcomeSigninScreen(navController) }
-
         composable(NavGroup.Signin) { SigninScreen(navController) }
         composable(NavGroup.SignupIdPw) { SignupIdPwScreen(navController) }
         composable(NavGroup.SignupInfo) { SignupInfoScreen(navController) }
@@ -102,37 +108,38 @@ fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
 }
 
 fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
-    navigation(startDestination = NavGroup.ArchiveList, route = "archive_graph")
-    {
+    navigation(startDestination = NavGroup.ArchiveList, route = "archive_graph") {
         composable(NavGroup.ArchiveList) { ArchiveScreen(navController) }
-
-        composable( route = NavGroup.ArchiveDetail, arguments = listOf(
-                navArgument("archiveId") { type = NavType.LongType } )
-        ) { backStackEntry ->
-            val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
-            ArchiveDetailScreen(navController, archiveId)
-        }
-        // 작성 화면 (새 글)
-        composable(NavGroup.ArchiveWrite) {
-            ArchiveWriteScreen(navController) // archiveId = null
-        }
-
-        // 수정 화면 (기존 글 수정)
-        composable(
-            route = NavGroup.ArchiveModify, // "archiveModify/{archiveId}"
-            arguments = listOf(navArgument("archiveId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val archiveId = backStackEntry.arguments?.getLong("archiveId")
-            ArchiveWriteScreen(navController, archiveId = archiveId) // ID 전달
-        }
-
-        // 상세 화면
         composable(
             route = NavGroup.ArchiveDetail,
             arguments = listOf(navArgument("archiveId") { type = NavType.LongType })
         ) { backStackEntry ->
             val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
             ArchiveDetailScreen(navController, archiveId)
+        }
+        composable(NavGroup.ArchiveWrite) {
+            ArchiveWriteScreen(navController)
+        }
+        composable(
+            route = NavGroup.ArchiveModify,
+            arguments = listOf(navArgument("archiveId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val archiveId = backStackEntry.arguments?.getLong("archiveId")
+            ArchiveWriteScreen(navController, archiveId = archiveId)
+        }
+    }
+}
+
+fun NavGraphBuilder.contestNavGraph(navController: NavHostController) {
+    navigation(startDestination = NavGroup.ContestList, route = "contest_graph") {
+        composable(NavGroup.ContestList) { ContestScreen(navController) }
+        composable(NavGroup.ContestWrite) { ContestWriteScreen(navController) }
+        composable(
+            route = NavGroup.ContestDetail,
+            arguments = listOf(navArgument("contestId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("contestId") ?: 0
+            ContestDetailScreen(navController, id)
         }
     }
 }
