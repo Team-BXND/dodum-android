@@ -31,7 +31,6 @@ data class ArchiveDetailData(
 )
 
 
-
 // 작성/수정 응답
 data class ArchiveWriteResponse(
     val status: Int,
@@ -41,6 +40,5 @@ data class ArchiveWriteResponse(
 // 삭제 응답
 data class ArchiveDeleteResponse(
     val status: Int,
-    val message: String
+   val message: String
 )
-

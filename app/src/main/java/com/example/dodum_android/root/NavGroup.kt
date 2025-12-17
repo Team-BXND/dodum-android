@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.archive.ArchiveScreen
 import com.example.dodum_android.feature.archive.write.ArchiveWriteScreen
+import com.example.dodum_android.feature.archive.detail.ArchiveDetailScreen
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
@@ -53,6 +54,7 @@ object NavGroup {
     const val ArchiveList = "archiveList"
     const val ArchiveDetail = "archiveDetail/{archiveId}"
     const val ArchiveWrite = "archiveWrite"
+    const val ArchiveModify = "archiveModify/{archiveId}"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -108,11 +110,29 @@ fun NavGraphBuilder.archiveNavGraph(navController: NavHostController) {
                 navArgument("archiveId") { type = NavType.LongType } )
         ) { backStackEntry ->
             val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
-//            ArchiveDetailScreen(navController, archiveId)
+            ArchiveDetailScreen(navController, archiveId)
         }
-        // 아카이브 작성 화면
+        // 작성 화면 (새 글)
         composable(NavGroup.ArchiveWrite) {
-            ArchiveWriteScreen(navController)
+            ArchiveWriteScreen(navController) // archiveId = null
+        }
+
+        // 수정 화면 (기존 글 수정)
+        composable(
+            route = NavGroup.ArchiveModify, // "archiveModify/{archiveId}"
+            arguments = listOf(navArgument("archiveId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val archiveId = backStackEntry.arguments?.getLong("archiveId")
+            ArchiveWriteScreen(navController, archiveId = archiveId) // ID 전달
+        }
+
+        // 상세 화면
+        composable(
+            route = NavGroup.ArchiveDetail,
+            arguments = listOf(navArgument("archiveId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val archiveId = backStackEntry.arguments?.getLong("archiveId") ?: 0L
+            ArchiveDetailScreen(navController, archiveId)
         }
     }
 }
