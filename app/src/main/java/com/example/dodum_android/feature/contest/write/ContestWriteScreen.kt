@@ -1,6 +1,11 @@
 package com.example.dodum_android.feature.contest.write
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
 import com.example.dodum_android.feature.contest.ContestViewModel
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.theme.MainColor
@@ -27,18 +34,47 @@ import com.example.dodum_android.ui.theme.MainColor
 @Composable
 fun ContestWriteScreen(
     navController: NavController,
-    viewModel: ContestViewModel = hiltViewModel()
+    viewModel: ContestViewModel = hiltViewModel(),
+    contestId: Int? = null // 수정 시 ID 받음
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val editState by viewModel.editUiState.collectAsState()
 
     // 입력 상태
     var title by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
-    var place by remember { mutableStateOf("") }
+    var placeInput by remember { mutableStateOf("") } // 이름 변경 (place -> placeInput)
     var content by remember { mutableStateOf("") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) } // 이미지
+
+    // 수정 모드 초기화
+    LaunchedEffect(contestId) {
+        if (contestId != null) {
+            viewModel.loadContestForEdit(contestId)
+        }
+    }
+
+    // 데이터 로드 완료 시 UI 반영
+    LaunchedEffect(editState) {
+        editState?.let { state ->
+            title = state.title
+            content = state.content
+            email = state.email
+            phone = state.phone
+            time = state.time
+            placeInput = state.place
+            // 이미지는 URL 처리 필요 (여기선 생략)
+        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> selectedImageUri = uri }
+
 
     Scaffold(
         topBar = { TopBar(navController) },
@@ -49,14 +85,13 @@ fun ContestWriteScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            // 입력 폼 (스크롤 가능)
+            // 입력 폼
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 25.dp, vertical = 20.dp)
                     .verticalScroll(scrollState)
             ) {
-                // 제목
                 CustomInput(
                     value = title,
                     onValueChange = { title = it },
@@ -68,18 +103,16 @@ fun ContestWriteScreen(
 
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
-                // 정보 필드들
                 CustomInput(value = email, onValueChange = { email = it }, placeholder = "이메일을 입력하세요")
                 Spacer(modifier = Modifier.height(12.dp))
                 CustomInput(value = phone, onValueChange = { phone = it }, placeholder = "전화번호를 입력하세요")
                 Spacer(modifier = Modifier.height(12.dp))
                 CustomInput(value = time, onValueChange = { time = it }, placeholder = "일시를 입력하세요")
                 Spacer(modifier = Modifier.height(12.dp))
-                CustomInput(value = place, onValueChange = { place = it }, placeholder = "장소를 입력하세요")
+                CustomInput(value = placeInput, onValueChange = { placeInput = it }, placeholder = "장소를 입력하세요")
 
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
-                // 본문
                 Box(modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp)) {
                     if (content.isEmpty()) {
                         Text("본문을 입력하세요", fontSize = 16.sp, color = Color.LightGray)
@@ -91,57 +124,69 @@ fun ContestWriteScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+
+                // 이미지 미리보기
+                if (selectedImageUri != null) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Image(
+                        painter = rememberAsyncImagePainter(selectedImageUri),
+                        contentDescription = "Selected Image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clickable { selectedImageUri = null },
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
 
-            // 하단 툴바 및 버튼
+            // 하단 툴바
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp, vertical = 10.dp)
             ) {
-                // 마크다운 툴바 (UI Mockup)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("B", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Gray)
-                    Text("I", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, fontSize = 20.sp, color = Color.Gray)
-                    Text("U", style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline), fontSize = 20.sp, color = Color.Gray)
-                    Icon(Icons.Outlined.Image, contentDescription = "Image", tint = Color.Gray)
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // 버튼
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        onClick = {
-                            viewModel.createContest(title, email, phone, time, place, content,
-                                onSuccess = {
-                                    Toast.makeText(context, "등록되었습니다.", Toast.LENGTH_SHORT).show()
-                                    navController.popBackStack()
-                                },
-                                onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.width(100.dp).height(40.dp)
-                    ) {
-                        Text("게시", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                        Text("B", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Gray)
+                        Text("I", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, fontSize = 20.sp, color = Color.Gray)
+                        Text("U", style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline), fontSize = 20.sp, color = Color.Gray)
+                        Icon(Icons.Outlined.Image, contentDescription = "Image", tint = Color.Gray, modifier = Modifier.clickable { galleryLauncher.launch("image/*") })
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.width(100.dp).height(40.dp)
-                    ) {
-                        Text("취소", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+
+                    Row(horizontalArrangement = Arrangement.End) {
+                        Button(
+                            onClick = {
+                                viewModel.submitContest(
+                                    contestId, title, email, phone, time, placeInput, content,
+                                    onSuccess = {
+                                        val msg = if (contestId == null) "등록되었습니다." else "수정되었습니다."
+                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                                        navController.popBackStack()
+                                    },
+                                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
+                                )
+                            },
+                            enabled = !isLoading,
+                            colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.width(100.dp).height(40.dp)
+                        ) {
+                            Text(if(contestId == null) "게시" else "수정", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(
+                            onClick = { navController.popBackStack() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.width(100.dp).height(40.dp)
+                        ) {
+                            Text("취소", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }

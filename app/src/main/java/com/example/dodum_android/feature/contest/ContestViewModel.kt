@@ -12,6 +12,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class ContestEditUiState(
+    val title: String,
+    val content: String,
+    val email: String,
+    val phone: String,
+    val time: String,
+    val place: String,
+    val imageUrl: String
+)
+
 @HiltViewModel
 class ContestViewModel @Inject constructor(
     private val contestService: ContestService,
@@ -30,9 +40,41 @@ class ContestViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    // [추가됨] 수정 화면을 위한 UI State
+    private val _editUiState = MutableStateFlow<ContestEditUiState?>(null)
+    val editUiState = _editUiState.asStateFlow()
+
     init {
         loadUserRole()
         loadContestList()
+    }
+
+    // 수정 화면 진입 시 데이터 로드
+    fun loadContestForEdit(id: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = contestService.getContestDetail(id)
+                if (response.isSuccessful) {
+                    val data = response.body()?.data
+                    if (data != null) {
+                        _editUiState.value = ContestEditUiState(
+                            title = data.title,
+                            content = data.content,
+                            email = data.email,
+                            phone = data.phone,
+                            time = data.time,
+                            place = data.place,
+                            imageUrl = data.image
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("ContestVM", "Load edit data error", e)
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
     private fun loadUserRole() {
@@ -42,11 +84,11 @@ class ContestViewModel @Inject constructor(
         }
     }
 
+
     fun loadContestList() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // 페이지네이션이 있다면 page 파라미터 관리 필요. 일단 1페이지 고정.
                 val response = contestService.getContestList(page = 1)
                 if (response.isSuccessful) {
                     _contestList.value = response.body()?.data ?: emptyList()
@@ -79,7 +121,8 @@ class ContestViewModel @Inject constructor(
         }
     }
 
-    fun createContest(
+    fun submitContest(
+        contestId: Int?,
         title: String,
         email: String,
         phone: String,
@@ -97,23 +140,44 @@ class ContestViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // TODO: 이미지 업로드 로직 필요 (현재는 빈 문자열)
-                val request = ContestCreateRequest(
-                    title = title,
-                    subtitle = "", // UI에 없으므로 빈값 처리
-                    content = content,
-                    email = email,
-                    phone = phone,
-                    time = time, // Date 형식 변환 필요시 처리
-                    place = place,
-                    image = ""
-                )
-                val response = contestService.createContest(request)
-                if (response.isSuccessful) {
-                    onSuccess()
-                    loadContestList() // 목록 갱신
+                val imageUrl = ""
+
+                if (contestId == null) {
+                    val request = ContestCreateRequest(
+                        title = title,
+                        subtitle = "",
+                        content = content,
+                        email = email,
+                        phone = phone,
+                        time = time,
+                        place = place,
+                        image = imageUrl
+                    )
+                    val response = contestService.createContest(request)
+                    if (response.isSuccessful) {
+                        onSuccess()
+                        loadContestList()
+                    } else {
+                        onError("등록 실패: ${response.code()}")
+                    }
                 } else {
-                    onError("등록 실패: ${response.code()}")
+                    val request = ContestUpdateRequest(
+                        title = title,
+                        content = content,
+                        email = email,
+                        phone = phone,
+                        time = time,
+                        place = place,
+                        image = imageUrl
+                    )
+                    val response = contestService.updateContest(contestId, request)
+                    if (response.isSuccessful) {
+                        onSuccess()
+                        loadContestList()
+                        loadContestDetail(contestId)
+                    } else {
+                        onError("수정 실패: ${response.code()}")
+                    }
                 }
             } catch (e: Exception) {
                 onError("오류 발생: ${e.message}")
@@ -129,7 +193,7 @@ class ContestViewModel @Inject constructor(
                 val response = contestService.deleteContest(id)
                 if (response.isSuccessful) {
                     onSuccess()
-                    loadContestList() // 목록 갱신
+                    loadContestList()
                 } else {
                     Log.e("ContestVM", "Delete failed: ${response.code()}")
                 }
@@ -144,12 +208,10 @@ class ContestViewModel @Inject constructor(
             try {
                 val response = contestService.toggleContestAlert(id)
                 if (response.isSuccessful && response.body()?.data?.success == true) {
-                    // 성공 시 로컬 상태 업데이트 (낙관적 업데이트)
                     val currentDetail = _contestDetail.value
                     if (currentDetail != null && currentDetail.id == id) {
                         _contestDetail.value = currentDetail.copy(isAlertActive = !currentDetail.isAlertActive)
                     }
-                    // 리스트 상태도 업데이트가 필요하면 여기서 처리
                 }
             } catch (e: Exception) {
                 Log.e("ContestVM", "Toggle alert error", e)

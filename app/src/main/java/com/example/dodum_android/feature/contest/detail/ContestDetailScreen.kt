@@ -102,7 +102,14 @@ fun ContestDetailScreen(
                                     onDismissRequest = { showMenu = false },
                                     modifier = Modifier.background(Color.White)
                                 ) {
-                                    DropdownMenuItem(text = { Text("수정") }, onClick = { showMenu = false })
+                                    DropdownMenuItem(
+                                        text = { Text("수정") },
+                                        onClick = {
+                                            showMenu = false
+                                            // 수정 화면으로 이동 (ID 포함)
+                                            navController.navigate("contestModify/${data.id}")
+                                        }
+                                    )
                                     DropdownMenuItem(text = { Text("삭제") }, onClick = {
                                         showMenu = false
                                         viewModel.deleteContest(data.id) {
