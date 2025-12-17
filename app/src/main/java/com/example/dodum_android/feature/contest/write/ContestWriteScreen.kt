@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -47,9 +49,12 @@ fun ContestWriteScreen(
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
-    var placeInput by remember { mutableStateOf("") } // 이름 변경 (place -> placeInput)
-    var content by remember { mutableStateOf("") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) } // 이미지
+    var placeInput by remember { mutableStateOf("") }
+
+    // [수정] content를 TextFieldValue로 관리하여 커서/선택영역 제어
+    var content by remember { mutableStateOf(TextFieldValue("")) }
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // 수정 모드 초기화
     LaunchedEffect(contestId) {
@@ -62,11 +67,12 @@ fun ContestWriteScreen(
     LaunchedEffect(editState) {
         editState?.let { state ->
             title = state.title
-            state.subTitle
+            // subtitle은 없으므로 생략
             email = state.email
             phone = state.phone
             time = state.time
             placeInput = state.place
+            content = TextFieldValue(state.subTitle) // 초기값 설정
             // 이미지는 URL 처리 필요 (여기선 생략)
         }
     }
@@ -75,6 +81,29 @@ fun ContestWriteScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? -> selectedImageUri = uri }
 
+    // 마크다운 삽입 함수
+    fun insertMarkdown(prefix: String, suffix: String) {
+        val currentText = content.text
+        val selection = content.selection
+
+        val beforeSelection = currentText.substring(0, selection.start)
+        val selectedText = currentText.substring(selection.start, selection.end)
+        val afterSelection = currentText.substring(selection.end)
+
+        val newText = "$beforeSelection$prefix$selectedText$suffix$afterSelection"
+
+        // 커서 위치 조정: 선택된 텍스트가 있으면 감싼 뒤로, 없으면 태그 사이로
+        val newCursorPos = if (selectedText.isNotEmpty()) {
+            selection.end + prefix.length + suffix.length
+        } else {
+            selection.start + prefix.length
+        }
+
+        content = TextFieldValue(
+            text = newText,
+            selection = TextRange(newCursorPos)
+        )
+    }
 
     Scaffold(
         topBar = { TopBar(navController) },
@@ -114,7 +143,7 @@ fun ContestWriteScreen(
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
                 Box(modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp)) {
-                    if (content.isEmpty()) {
+                    if (content.text.isEmpty()) {
                         Text("본문을 입력하세요", fontSize = 16.sp, color = Color.LightGray)
                     }
                     BasicTextField(
@@ -152,17 +181,44 @@ fun ContestWriteScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                        Text("B", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Gray)
-                        Text("I", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, fontSize = 20.sp, color = Color.Gray)
-                        Text("U", style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline), fontSize = 20.sp, color = Color.Gray)
-                        Icon(Icons.Outlined.Image, contentDescription = "Image", tint = Color.Gray, modifier = Modifier.clickable { galleryLauncher.launch("image/*") })
+                        // Bold 버튼
+                        Text(
+                            text = "B",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.clickable { insertMarkdown("**", "**") }
+                        )
+                        // Italic 버튼
+                        Text(
+                            text = "I",
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                            fontSize = 20.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.clickable { insertMarkdown("*", "*") }
+                        )
+                        // Underline 버튼
+                        Text(
+                            text = "U",
+                            style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline),
+                            fontSize = 20.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.clickable { insertMarkdown("<u>", "</u>") }
+                        )
+
+                        Icon(
+                            imageVector = Icons.Outlined.Image,
+                            contentDescription = "Image",
+                            tint = Color.Gray,
+                            modifier = Modifier.clickable { galleryLauncher.launch("image/*") }
+                        )
                     }
 
                     Row(horizontalArrangement = Arrangement.End) {
                         Button(
                             onClick = {
                                 viewModel.submitContest(
-                                    contestId, title, email, phone, time, placeInput, content,
+                                    contestId, title, email, phone, time, placeInput, content.text, // content.text로 String 전달
                                     onSuccess = {
                                         val msg = if (contestId == null) "등록되었습니다." else "수정되었습니다."
                                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

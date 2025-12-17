@@ -16,6 +16,7 @@ object DodumUrl {
         const val SIGNUP = "${AUTH}signup"
         const val PW = "${AUTH}pwchange"
         const val SIGNOUT = "${AUTH}signout"
+        const val REFRESH = "${AUTH}refresh"
     }
 
     object Email {

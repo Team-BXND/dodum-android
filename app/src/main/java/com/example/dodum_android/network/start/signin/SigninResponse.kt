@@ -16,3 +16,8 @@ data class SigninError(
     val message: String,
     val timestamp: String
 )
+
+data class RefreshTokenResponse(
+    val status: Int,
+    val accessToken: String
+)

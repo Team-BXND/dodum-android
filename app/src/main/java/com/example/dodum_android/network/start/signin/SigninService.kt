@@ -7,4 +7,7 @@ import retrofit2.http.POST
 interface SigninService {
     @POST(DodumUrl.Auth.SIGNIN)
     suspend fun signin(@Body request: SigninRequest): SigninResponse
+
+    @POST(DodumUrl.Auth.REFRESH)
+    suspend fun refreshToken(@Body request: RefreshTokenRequest): RefreshTokenResponse
 }
