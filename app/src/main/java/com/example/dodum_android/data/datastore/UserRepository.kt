@@ -31,7 +31,7 @@ class UserRepository @Inject constructor(
         cachedAccessToken = getAccessTokenSnapshot()
         cachedRefreshToken = getRefreshTokenSnapshot()
     }
-
+    
     fun getCachedAccessToken(): String? = cachedAccessToken
     fun getCachedRefreshToken(): String? = cachedRefreshToken
 
@@ -75,37 +75,4 @@ class UserRepository @Inject constructor(
     suspend fun getRefreshTokenSnapshot(): String? =
         context.dataStore.data.map { it[REFRESH_TOKEN] }.first()
 
-    fun refreshToken(): String? = runBlocking {
-        val refreshToken = getRefreshTokenSnapshot()
-        val username = getPublicIdSnapshot()
-
-        if (refreshToken != null && username != null) {
-            try {
-                // signinService.get() 호출 가능 (dagger.Lazy import 덕분)
-                val response = signinService.get().refreshToken(
-                    RefreshTokenRequest(username, refreshToken)
-                )
-
-                if (response.isSuccessful && response.body() != null) {
-                    // ★ 수정 2: response.body() 안의 data 객체를 통해 accessToken에 접근
-                    val newAccessToken = response.body()?.data?.accessToken
-
-                    if (newAccessToken != null) {
-                        // 새 토큰 저장
-                        saveUserData(accessToken = newAccessToken)
-                        return@runBlocking newAccessToken
-                    } else {
-                        clearUserData()
-                    }
-                } else {
-                    // 갱신 실패 시 로그아웃 처리 등
-                    clearUserData()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                clearUserData()
-            }
-        }
-        return@runBlocking null
-    }
 }

@@ -22,9 +22,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+import javax.inject.Provider
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,9 +34,32 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(userRepository: UserRepository): OkHttpClient {
+    fun provideTokenAuthenticator(
+        userRepository: UserRepository,
+        signinService: Provider<SigninService>
+    ): TokenAuthenticator {
+        return TokenAuthenticator(userRepository, signinService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(userRepository: UserRepository): AuthInterceptor {
+        return AuthInterceptor(userRepository)
+    }
+
+    // ★ 수정: 중복된 provideOkHttpClient 제거하고 하나로 통합
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor { userRepository.getCachedAccessToken() })
+            .addInterceptor(authInterceptor) // 기본 헤더 (액세스 토큰)
+            .authenticator(tokenAuthenticator) // 401 처리 (토큰 갱신)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 
