@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -78,7 +79,10 @@ fun NavBar(
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.clickable(
+                    modifier = Modifier
+                        .width(27.dp)
+                        .height(38.dp)
+                        .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null // 리플 효과 제거
                     ) {
@@ -99,8 +103,7 @@ fun NavBar(
                         painter = painterResource(id = iconRes),
                         contentDescription = label,
                         modifier = Modifier
-                            .width(27.dp)
-                            .height(38.dp)
+                            .fillMaxSize()
                     )
                 }
             }
