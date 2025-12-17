@@ -11,9 +11,9 @@ data class ContestListResponse(
 )
 
 data class ContestData(
-    val id: Int = 0, // id 추가 (목록/상세 공통 사용 위함)
+    val id: Long = 0, // id 추가 (목록/상세 공통 사용 위함)
     val title: String,
-    val content: String,
+    val subTitle: String,
     val email: String,
     val phone: String,
     val time: String, // Date -> String (yyyy-MM-dd 등 포맷팅된 문자열로 처리 가정)
