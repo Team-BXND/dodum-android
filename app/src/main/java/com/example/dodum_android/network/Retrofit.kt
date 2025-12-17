@@ -7,6 +7,7 @@ import com.example.dodum_android.network.misc.MiscService
 import android.content.Context
 import com.example.dodum_android.data.datastore.SurveyDataStore
 import com.example.dodum_android.network.archive.ArchiveService
+import com.example.dodum_android.network.contest.ContestService
 import com.example.dodum_android.network.major.MajorService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
@@ -164,4 +165,13 @@ object ArchiveModule {
     @Provides
     fun provideArchiveService(retrofit: Retrofit): ArchiveService =
         retrofit.create(ArchiveService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object ContestModule {
+    @Singleton
+    @Provides
+    fun provideContestService(retrofit: Retrofit): ContestService =
+        retrofit.create(ContestService::class.java)
 }
