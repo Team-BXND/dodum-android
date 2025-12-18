@@ -17,6 +17,12 @@ class TokenAuthenticator @Inject constructor(
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
+
+        val requestPath = response.request.url.encodedPath
+        if (requestPath.startsWith("/auth")) {
+            return null
+        }
+
         // 재시도 3회 초과 시 중단
         if (response.retryCount() > 3) return null
 

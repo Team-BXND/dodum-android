@@ -1,5 +1,7 @@
 package com.example.dodum_android.root
 
+import androidx.compose.runtime.remember
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,6 +28,7 @@ import com.example.dodum_android.feature.profile.profile.ProfileScreen
 import com.example.dodum_android.feature.start.signin.SigninScreen
 import com.example.dodum_android.feature.start.signup.SignupIdPwScreen
 import com.example.dodum_android.feature.start.signup.SignupInfoScreen
+import com.example.dodum_android.feature.start.signup.SignupViewModel
 import com.example.dodum_android.feature.start.signup.VerifyEmailScreen
 import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
@@ -70,9 +73,41 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable(NavGroup.Splash) { SplashScreen(navController) }
         composable(NavGroup.Welcome) { WelcomeSigninScreen(navController) }
         composable(NavGroup.Signin) { SigninScreen(navController) }
-        composable(NavGroup.SignupIdPw) { SignupIdPwScreen(navController) }
-        composable(NavGroup.SignupInfo) { SignupInfoScreen(navController) }
-        composable(NavGroup.SignupEmail) { VerifyEmailScreen(navController) }
+
+        // [핵심] 회원가입 프로세스에서 ViewModel 공유
+        // SignupIdPwScreen
+        composable(NavGroup.SignupIdPw) { backStackEntry ->
+            // "auth_graph"라는 라우트를 가진 부모 엔트리를 찾습니다.
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry("auth_graph")
+            }
+            // 부모 엔트리의 스코프로 ViewModel을 가져옵니다. (없으면 생성, 있으면 재사용)
+            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+
+            // ViewModel을 화면에 주입합니다.
+            SignupIdPwScreen(navController, viewModel)
+        }
+
+        // SignupInfoScreen
+        composable(NavGroup.SignupInfo) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry("auth_graph")
+            }
+            // 위와 동일한 "auth_graph" 스코프이므로, 같은 ViewModel 인스턴스를 반환받습니다.
+            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+
+            SignupInfoScreen(navController, viewModel)
+        }
+
+        // VerifyEmailScreen
+        composable(NavGroup.SignupEmail) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry("auth_graph")
+            }
+            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+
+            VerifyEmailScreen(navController, viewModel)
+        }
     }
 }
 
