@@ -42,9 +42,12 @@ class TokenAuthenticator @Inject constructor(
                         userRepository.saveUserData(accessToken = token)
                     }
                 } else {
+                    // [수정] 토큰 갱신 실패 시(401 등), 저장된 쓰레기 토큰을 지워야 함
+                    userRepository.clearUserData()
                     null
                 }
             } catch (e: Exception) {
+                // [수정] 네트워크 오류 등으로 실패 시에도 안전하게 null 반환
                 null
             }
         }

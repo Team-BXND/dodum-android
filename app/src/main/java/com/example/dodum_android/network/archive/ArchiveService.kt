@@ -21,11 +21,9 @@ interface ArchiveService {
         @Body request: ArchiveModifyRequest
     ): Response<ArchiveWriteResponse>
 
-    // [수정] path를 "archive"로 하드코딩하여 슬래시 중복 방지
-    // hasBody = true를 넣어 DELETE 요청에 Body를 실어 보냄
     @HTTP(method = "DELETE", path = "archive", hasBody = true)
     suspend fun deleteArchive(
-        @Body request: Map<String, Long> // Body: {"archiveId": 13}
+        @Body request: Map<String, Long>
     ): Response<ArchiveDeleteResponse>
 
     @GET(DodumUrl.Archive.ALL)

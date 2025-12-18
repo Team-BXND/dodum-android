@@ -9,7 +9,7 @@ object DodumUrl {
     const val EMAIL = "${AUTH}email/"
     const val INFO = "${BASE_URL}info/"
     const val MISC = "${BASE_URL}misc/"
-    const val ARCHIVE = "${BASE_URL}archive/"
+    const val ARCHIVE = "${BASE_URL}archive"
 
     object Auth {
         const val SIGNIN = "${AUTH}signin"
@@ -54,9 +54,9 @@ object DodumUrl {
     }
 
     object Archive {
-        const val WRITE = "${ARCHIVE}write"
-        const val ALL = "${ARCHIVE}all"
-        const val DETAIL = "${ARCHIVE}{id}"
+        const val WRITE = "${ARCHIVE}/write"
+        const val ALL = "${ARCHIVE}/all"
+        const val DETAIL = "${ARCHIVE}/{id}"
         const val MODIFY = "${ARCHIVE}"
         const val DELETE = "${ARCHIVE}"
     }
