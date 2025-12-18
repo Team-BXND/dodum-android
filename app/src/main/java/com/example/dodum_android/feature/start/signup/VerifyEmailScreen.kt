@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun VerifyEmailScreen (
-    navController: NavHostController
+    navController: NavHostController,
+    signupViewModel: SignupViewModel
 ) {
     val signupViewModel: SignupViewModel = hiltViewModel()
 
@@ -114,14 +115,15 @@ fun VerifyEmailScreen (
                     else -> {
                         coroutineScope.launch {
                             val emailChecked = signupViewModel.checkEmail(email, authcode)
-
                             if (emailChecked) {
-                                signupViewModel.form = signupViewModel.form.copy(
-                                    email = email
-                                )
-                                val signupSuccess = signupViewModel.signup()
-                                if (signupSuccess) navController.navigate("login")
+                                // [수정] 이메일 정보 저장
+                                signupViewModel.updateEmail(email)
 
+                                // 최종 데이터 확인
+                                println("Final Signup Form: ${signupViewModel.form}")
+
+                                val signupSuccess = signupViewModel.signup()
+                                if (signupSuccess) navController.navigate("signin")
                             } else {
                                 isAuthCodeerror = true
                             }

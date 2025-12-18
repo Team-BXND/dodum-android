@@ -13,8 +13,12 @@ class AuthInterceptor @Inject constructor(
         val token = userRepository.getCachedAccessToken()
 
         val requestBuilder = originalRequest.newBuilder()
-        if (!token.isNullOrEmpty()) {
-            requestBuilder.addHeader("Authorization", "Bearer $token")
+
+        // /auth/** 요청에는 Authorization 헤더를 붙이지 않음
+        if (!originalRequest.url.encodedPath.startsWith("/auth")) {
+            if (!token.isNullOrEmpty()) {
+                requestBuilder.addHeader("Authorization", "Bearer $token")
+            }
         }
 
         return chain.proceed(requestBuilder.build())

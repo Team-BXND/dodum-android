@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.dropdownmenu.AuthDropdown
 import com.example.dodum_android.ui.component.textfield.AuthIntField
@@ -29,7 +30,8 @@ import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
 fun SignupInfoScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    signupViewModel: SignupViewModel
 ) {
     val signupViewModel: SignupViewModel = hiltViewModel()
 
@@ -136,24 +138,24 @@ fun SignupInfoScreen(
                 AuthButton(
                     buttonName = "다음",
                     onClick = {
-                        val hasError = selectedGrade.isEmpty() || phone.isEmpty()
+                        val hasError = selectedGrade.isEmpty() ||
+                                phone.isEmpty()
                         isError = hasError
 
                         if (!hasError) {
-                            signupViewModel.form = signupViewModel.form.copy(
-                                grade = when (selectedGrade) {
-                                    "1학년" -> 1
-                                    "2학년" -> 2
-                                    "3학년" -> 3
-                                    else -> null
-                                },
+                            // [수정] 뷰모델 함수 호출로 데이터 저장
+                            signupViewModel.updateInfo(
+                                grade = selectedGrade,
                                 classNo = classNo,
                                 studentNo = studentNo,
                                 phone = phone,
                                 club = selectedClub
                             )
 
-                            navController.navigate("signupEmail")
+                            // 로그로 확인 (이전 단계 데이터가 남아있어야 함)
+                            println("SignupInfo Saved: ${signupViewModel.form}")
+
+                            navController.navigate(NavGroup.SignupEmail)
                         }
                     }
                 )

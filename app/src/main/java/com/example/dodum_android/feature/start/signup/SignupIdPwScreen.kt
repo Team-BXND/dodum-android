@@ -22,14 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
 fun SignupIdPwScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    signupViewModel: SignupViewModel
 ) {
-    val signupViewModel: SignupViewModel = hiltViewModel()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -99,15 +100,13 @@ fun SignupIdPwScreen(
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordcheck.isNotEmpty() ) {
                             if (password == passwordcheck) {
-//                                signupViewModel.updateIdPw(username, password)
-                                signupViewModel.form = signupViewModel.form.copy(
-                                    username = username,
-                                    password = password
-                                )
-//                                if (signupViewModel.signupSuccess == true) {
-//                                    navController.navigate("signupInfo")
-//                                }
-                                navController.navigate("signupInfo")
+                                // [수정] 뷰모델 함수 호출로 데이터 저장
+                                signupViewModel.updateIdPw(username, password)
+
+                                // 로그로 확인
+                                println("SignupIdPw Saved: ${signupViewModel.form}")
+
+                                navController.navigate(NavGroup.SignupInfo)
                             }
                         } else {
                             isError = true
