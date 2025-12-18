@@ -39,20 +39,16 @@ data class ArchiveEditUiState(
 @HiltViewModel
 class ArchiveWriteViewModel @Inject constructor(
     private val archiveService: ArchiveService,
-    private val userRepository: UserRepository // 사용되지 않는다면 제거 가능
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
+    // ... (StateFlow 변수들 기존과 동일)
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _editUiState = MutableStateFlow<ArchiveEditUiState?>(null)
-    val editUiState: StateFlow<ArchiveEditUiState?> = _editUiState.asStateFlow()
-
-    // 일회성 이벤트를 위한 SharedFlow
     private val _event = MutableSharedFlow<ArchiveWriteEvent>()
     val event: SharedFlow<ArchiveWriteEvent> = _event.asSharedFlow()
 
-    // UI 상태 (필수)
     private val _title = MutableStateFlow("")
     val title: StateFlow<String> = _title.asStateFlow()
 
@@ -71,6 +67,7 @@ class ArchiveWriteViewModel @Inject constructor(
     private val _selectedImageUri = MutableStateFlow<Uri?>(null)
     val selectedImageUri: StateFlow<Uri?> = _selectedImageUri.asStateFlow()
 
+    // ... (onChange 함수들 기존과 동일)
     fun onTitleChange(newTitle: String) { _title.value = newTitle }
     fun onSubtitleChange(newSubtitle: String) { _subtitle.value = newSubtitle }
     fun onTeamNameChange(newTeamName: String) { _teamName.value = newTeamName }
@@ -80,31 +77,56 @@ class ArchiveWriteViewModel @Inject constructor(
     fun onImageRemove() { _selectedImageUri.value = null }
 
 
+    // [핵심 수정] 데이터를 불러오고 -> 그대로 다시 보내서 권한 체크
     fun loadArchiveForEdit(archiveId: Long) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                // 1. 일단 서버에서 기존 데이터를 가져옵니다.
                 val response = archiveService.getArchiveDetail(id = archiveId)
-                if (response.isSuccessful) {
-                    val data = response.body()
-                    if (data != null) {
-                        // 각 상태 개별 업데이트
-                        _title.value = data.title
-                        _subtitle.value = data.subtitle ?: ""
-                        _content.value = data.content // 이 값이 Screen의 TextFieldValue로 가야함
-                        _teamName.value = data.teamname ?: ""
-                        _selectedCategory.value = data.category
 
-                        data.thumbnail?.let { url ->
-                             _selectedImageUri.value = url.toUri()
+                if (response.isSuccessful && response.body() != null) {
+                    val originData = response.body()!!
+
+                    // 2. [권한 확인용] 가져온 원본 데이터를 그대로 담아 수정 요청(PATCH)을 보내봅니다.
+                    //    - 권한이 있다면: 성공(200)하고 내용은 그대로 유지됨 (안전)
+                    //    - 권한이 없다면: 실패(403/401/404)하고 catch/else로 빠짐
+                    val checkRequest = ArchiveModifyRequest(
+                        archiveId = originData.id,
+                        title = originData.title,
+                        subtitle = originData.subtitle,
+                        content = originData.content,
+                        category = originData.category,
+                        teamname = originData.teamname,
+                        thumbnail = originData.thumbnail
+                    )
+
+                    val checkResponse = archiveService.modifyArchive(checkRequest)
+
+                    if (checkResponse.isSuccessful) {
+                        // 3. 권한 확인 통과! 이제 화면에 데이터를 뿌려줍니다.
+                        _title.value = originData.title
+                        _subtitle.value = originData.subtitle ?: ""
+                        _content.value = originData.content
+                        _teamName.value = originData.teamname ?: ""
+                        _selectedCategory.value = originData.category
+                        originData.thumbnail?.let { url ->
+                            _selectedImageUri.value = url.toUri()
                         }
+                    } else {
+                        // 4. 권한 없음 (서버가 거부함) -> 쫓아내기
+                        Log.e("ArchiveWrite", "권한 체크 실패: ${checkResponse.code()}")
+                        _event.emit(ArchiveWriteEvent.ShowToast("수정 권한이 없습니다."))
+                        _event.emit(ArchiveWriteEvent.NavigateBack)
                     }
                 } else {
                     _event.emit(ArchiveWriteEvent.ShowToast("게시글 로드 실패: ${response.code()}"))
+                    _event.emit(ArchiveWriteEvent.NavigateBack)
                 }
             } catch (e: Exception) {
                 _event.emit(ArchiveWriteEvent.ShowToast("에러 발생: ${e.message}"))
                 e.printStackTrace()
+                _event.emit(ArchiveWriteEvent.NavigateBack)
             } finally {
                 _isLoading.value = false
             }
@@ -127,44 +149,40 @@ class ArchiveWriteViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // TODO: 실제 이미지 업로드 로직 구현 후 서버에서 받은 URL 사용하거나 파일
-                val thumbnailUrl = currentImageUri?.toString() ?: "" // 임시
+                val thumbnailUrl = currentImageUri?.toString() ?: ""
                 Log.d("ArchiveWriteViewModel", "thumbnailUrl to send: $thumbnailUrl")
 
                 val response = if (archiveId == null) {
-                    // *** 작성 (POST) ***
+                    // 작성
                     val request = ArchiveWriteRequest(
                         title = currentTitle,
-                        subtitle = currentSubtitle.ifBlank { null }, // 빈 문자열이면 null로 전송
+                        subtitle = currentSubtitle.ifBlank { null },
                         content = currentContent,
-                        thumbnail = thumbnailUrl.ifBlank { null }, // 빈 문자열이면 null로 전송
+                        thumbnail = thumbnailUrl.ifBlank { null },
                         category = currentCategory,
-                        teamname = currentTeamName.ifBlank { null } // 빈 문자열이면 null로 전송
+                        teamname = currentTeamName.ifBlank { null }
                     )
                     archiveService.writeArchive(request)
                 } else {
-                    // *** 수정 (PATCH) ***
+                    // 수정 (사용자가 내용을 바꾼 뒤 최종 요청)
                     val request = ArchiveModifyRequest(
                         archiveId = archiveId,
                         title = currentTitle,
-                        subtitle = currentSubtitle.ifBlank { null }, // 빈 문자열이면 null로 전송
+                        subtitle = currentSubtitle.ifBlank { null },
                         content = currentContent,
                         category = currentCategory,
-                        thumbnail = thumbnailUrl.ifBlank { null }, // 빈 문자열이면 null로 전송
-                        teamname = currentTeamName.ifBlank { null } // 빈 문자열이면 null로 전송
+                        thumbnail = thumbnailUrl.ifBlank { null },
+                        teamname = currentTeamName.ifBlank { null }
                     )
                     archiveService.modifyArchive(request)
                 }
 
                 if (response.isSuccessful) {
-                    val bodyString = response.body()?.toString()
-                    Log.d("ArchiveWriteViewModel", "서버 응답: $bodyString")
                     _event.emit(ArchiveWriteEvent.ShowToast(if (archiveId == null) "게시글 작성 완료" else "게시글 수정 완료"))
                     _event.emit(ArchiveWriteEvent.NavigateBack)
                 } else {
-                    val errorBody = response.errorBody()?.string() ?: "알 수 없는 에러"
-                    Log.e("ArchiveWriteViewModel", "API Error: ${response.code()}, $errorBody")
-                    _event.emit(ArchiveWriteEvent.ShowToast("작성/수정 실패: ${response.code()} $errorBody"))
+                    val errorBody = response.errorBody()?.string() ?: ""
+                    _event.emit(ArchiveWriteEvent.ShowToast("실패: ${response.code()} $errorBody"))
                 }
             } catch (e: Exception) {
                 Log.e("ArchiveWriteViewModel", "Network Error", e)
