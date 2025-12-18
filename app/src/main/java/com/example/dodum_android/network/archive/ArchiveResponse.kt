@@ -37,7 +37,7 @@ data class ArchiveDetailData(
 
 // 작성/수정 응답
 data class ArchiveWriteResponse(
-    val status: Int,
+    val status: String,
     val archiveId: Long
 )
 
