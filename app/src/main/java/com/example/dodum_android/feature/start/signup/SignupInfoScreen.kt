@@ -33,7 +33,6 @@ fun SignupInfoScreen(
     navController: NavHostController,
     signupViewModel: SignupViewModel
 ) {
-    val signupViewModel: SignupViewModel = hiltViewModel()
 
     Box(modifier = Modifier
         .fillMaxSize()

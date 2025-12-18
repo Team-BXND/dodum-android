@@ -32,6 +32,9 @@ import com.example.dodum_android.feature.start.signup.SignupViewModel
 import com.example.dodum_android.feature.start.signup.VerifyEmailScreen
 import com.example.dodum_android.feature.start.splash.SplashScreen
 import com.example.dodum_android.feature.start.welcome.WelcomeSigninScreen
+import androidx.compose.ui.platform.LocalContext
+import androidx.activity.ComponentActivity
+
 
 object NavGroup {
     const val MyInfo = "myInfo"
@@ -74,37 +77,37 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable(NavGroup.Welcome) { WelcomeSigninScreen(navController) }
         composable(NavGroup.Signin) { SigninScreen(navController) }
 
-        // [핵심] 회원가입 프로세스에서 ViewModel 공유
-        // SignupIdPwScreen
-        composable(NavGroup.SignupIdPw) { backStackEntry ->
-            // "auth_graph"라는 라우트를 가진 부모 엔트리를 찾습니다.
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry("auth_graph")
-            }
-            // 부모 엔트리의 스코프로 ViewModel을 가져옵니다. (없으면 생성, 있으면 재사용)
-            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+        // [수정] Activity Scope를 사용하여 ViewModel 공유 (이름 명시로 에러 해결)
 
-            // ViewModel을 화면에 주입합니다.
+        // 1. 아이디/비번 입력 화면
+        composable(NavGroup.SignupIdPw) {
+            val context = LocalContext.current
+            val activity = context as ComponentActivity
+
+            // ★ 수정된 부분: viewModelStoreOwner = activity 라고 명시
+            val viewModel: SignupViewModel = hiltViewModel(viewModelStoreOwner = activity)
+
             SignupIdPwScreen(navController, viewModel)
         }
 
-        // SignupInfoScreen
-        composable(NavGroup.SignupInfo) { backStackEntry ->
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry("auth_graph")
-            }
-            // 위와 동일한 "auth_graph" 스코프이므로, 같은 ViewModel 인스턴스를 반환받습니다.
-            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+        // 2. 정보 입력 화면
+        composable(NavGroup.SignupInfo) {
+            val context = LocalContext.current
+            val activity = context as ComponentActivity
+
+            // ★ 수정된 부분: viewModelStoreOwner = activity 라고 명시
+            val viewModel: SignupViewModel = hiltViewModel(viewModelStoreOwner = activity)
 
             SignupInfoScreen(navController, viewModel)
         }
 
-        // VerifyEmailScreen
-        composable(NavGroup.SignupEmail) { backStackEntry ->
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry("auth_graph")
-            }
-            val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+        // 3. 이메일 인증 화면
+        composable(NavGroup.SignupEmail) {
+            val context = LocalContext.current
+            val activity = context as ComponentActivity
+
+            // ★ 수정된 부분: viewModelStoreOwner = activity 라고 명시
+            val viewModel: SignupViewModel = hiltViewModel(viewModelStoreOwner = activity)
 
             VerifyEmailScreen(navController, viewModel)
         }
