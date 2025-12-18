@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.dodum_android.ui.component.bar.TopBar
+import com.example.dodum_android.ui.component.util.MarkdownVisualTransformation
 import com.example.dodum_android.ui.theme.MainColor // DodumMainColor로 변경 권장
 import kotlinx.coroutines.flow.collectLatest // Flow 이벤트 처리를 위해 임포트
 
@@ -52,6 +53,8 @@ fun ArchiveWriteScreen(
     var isBold by remember { mutableStateOf(false) }
     var isItalic by remember { mutableStateOf(false) }
     var isUnderline by remember { mutableStateOf(false) }
+
+    val markdownVisualTransformation = remember { MarkdownVisualTransformation() }
 
     // content 상태를 TextFieldValue로 관리하여 커서 위치 추적
     var contentTextFieldValue by remember {
@@ -171,8 +174,10 @@ fun ArchiveWriteScreen(
                         onValueChange = {
                             contentTextFieldValue = it
                             viewModel.onContentChange(it.text)
-                        }, // ViewModel로 전달
+                        },
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black, lineHeight = 24.sp),
+                        // ★ [핵심] 여기서 VisualTransformation 적용
+                        visualTransformation = markdownVisualTransformation,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

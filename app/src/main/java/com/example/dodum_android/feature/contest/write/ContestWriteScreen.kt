@@ -32,6 +32,8 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.dodum_android.feature.contest.ContestViewModel
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.theme.MainColor
+import com.example.dodum_android.ui.component.util.MarkdownVisualTransformation
+
 
 @Composable
 fun ContestWriteScreen(
@@ -51,10 +53,13 @@ fun ContestWriteScreen(
     var time by remember { mutableStateOf("") }
     var placeInput by remember { mutableStateOf("") }
 
-    // [수정] content를 TextFieldValue로 관리하여 커서/선택영역 제어
+    // content를 TextFieldValue로 관리하여 커서/선택영역 제어
     var content by remember { mutableStateOf(TextFieldValue("")) }
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    // [추가] Markdown VisualTransformation 생성
+    val markdownVisualTransformation = remember { MarkdownVisualTransformation() }
 
     // 수정 모드 초기화
     LaunchedEffect(contestId) {
@@ -67,12 +72,11 @@ fun ContestWriteScreen(
     LaunchedEffect(editState) {
         editState?.let { state ->
             title = state.title
-            // subtitle은 없으므로 생략
             email = state.email
             phone = state.phone
             time = state.time
             placeInput = state.place
-            content = TextFieldValue(state.subTitle.toString()) // 초기값 설정
+            content = TextFieldValue(state.subTitle ?: "") // 초기값 설정 (subTitle이 null일 수 있으므로 처리)
             // 이미지는 URL 처리 필요 (여기선 생략)
         }
     }
@@ -92,7 +96,6 @@ fun ContestWriteScreen(
 
         val newText = "$beforeSelection$prefix$selectedText$suffix$afterSelection"
 
-        // 커서 위치 조정: 선택된 텍스트가 있으면 감싼 뒤로, 없으면 태그 사이로
         val newCursorPos = if (selectedText.isNotEmpty()) {
             selection.end + prefix.length + suffix.length
         } else {
@@ -142,6 +145,7 @@ fun ContestWriteScreen(
 
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
+                // 본문 입력 필드
                 Box(modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp)) {
                     if (content.text.isEmpty()) {
                         Text("본문을 입력하세요", fontSize = 16.sp, color = Color.LightGray)
@@ -150,6 +154,8 @@ fun ContestWriteScreen(
                         value = content,
                         onValueChange = { content = it },
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black, lineHeight = 24.sp),
+                        // ★ [적용] VisualTransformation 연결
+                        visualTransformation = markdownVisualTransformation,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -218,7 +224,7 @@ fun ContestWriteScreen(
                         Button(
                             onClick = {
                                 viewModel.submitContest(
-                                    contestId, title, email, phone, time, placeInput, content.text, // content.text로 String 전달
+                                    contestId, title, email, phone, time, placeInput, content.text,
                                     onSuccess = {
                                         val msg = if (contestId == null) "등록되었습니다." else "수정되었습니다."
                                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
