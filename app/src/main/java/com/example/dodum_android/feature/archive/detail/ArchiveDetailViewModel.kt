@@ -44,36 +44,31 @@ class ArchiveDetailViewModel @Inject constructor(
     fun loadDetail(archiveId: Long) {
         viewModelScope.launch {
             try {
-                // [수정] 실제 서버 통신 활성화 (id 사용)
                 val response = archiveService.getArchiveDetail(id = archiveId)
                 if (response.isSuccessful) {
-                    _detail.value = response.body()
+                    // [수정] Response Wrapper에서 data 필드를 추출
+                    _detail.value = response.body()?.data
                 } else {
                     Log.e("ArchiveDetailViewModel", "Load Fail: ${response.code()}")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
-            // [주석 처리됨] 더미 데이터
-            /*
-            _detail.value = ArchiveDetailData( ... )
-            */
         }
     }
 
     fun deleteArchive(archiveId: Long, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
-                // [수정] 실제 서버 통신 활성화
-                val response = archiveService.deleteArchive(archiveId)
-                if (response.isSuccessful) {
+                val response = archiveService.deleteArchive(archiveId = archiveId)
+                // 응답 성공 및 status 확인 (명세서에 status는 String임)
+                if (response.isSuccessful && response.body()?.status == "success") {
                     onSuccess()
                 } else {
-                    Log.e("ArchiveDetailViewModel", "Delete Fail: ${response.code()}")
+                    Log.e("ArchiveDetail", "삭제 실패: ${response.code()} - ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("ArchiveDetail", "네트워크 에러", e)
             }
         }
     }

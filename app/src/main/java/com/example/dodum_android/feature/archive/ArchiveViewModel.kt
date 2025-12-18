@@ -46,6 +46,8 @@ class ArchiveViewModel @Inject constructor(
             try {
                 val categoryToFetch = category ?: _selectedCategory.value
                 val response = archiveService.getArchiveList(categoryToFetch)
+                val body = response.body()
+
                 if (response.isSuccessful) {
                     _archiveList.value = response.body() ?: emptyList()
                     Log.d("ArchiveViewModel", "Loaded: ${response.body()}")

@@ -86,23 +86,15 @@ class ArchiveWriteViewModel @Inject constructor(
             try {
                 val response = archiveService.getArchiveDetail(id = archiveId)
                 if (response.isSuccessful) {
-                    val data = response.body()
+                    val data = response.body()?.data
                     if (data != null) {
-                        // ViewModel의 상태를 업데이트
+                        // 각 상태 개별 업데이트
                         _title.value = data.title
                         _subtitle.value = data.subtitle ?: ""
-                        _content.value = data.content
+                        _content.value = data.content // 이 값이 Screen의 TextFieldValue로 가야함
                         _teamName.value = data.teamname ?: ""
-                         _selectedCategory.value = data.category
+                        _selectedCategory.value = data.category
 
-                        _editUiState.value = ArchiveEditUiState( // UI 업데이트용으로만 사용될 수 있음
-                            title = data.title,
-                            subtitle = data.subtitle,
-                            content = data.content,
-                            category = data.category, // API 응답에 category 필드가 있다면
-                            teamName = data.teamname,
-                            thumbnailUrl = data.thumbnail
-                        )
                         data.thumbnail?.let { url ->
                              _selectedImageUri.value = url.toUri()
                         }

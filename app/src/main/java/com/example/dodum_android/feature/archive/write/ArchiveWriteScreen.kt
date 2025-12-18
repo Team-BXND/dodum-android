@@ -54,17 +54,22 @@ fun ArchiveWriteScreen(
     var isItalic by remember { mutableStateOf(false) }
     var isUnderline by remember { mutableStateOf(false) }
 
+    val content by viewModel.content.collectAsState()
+
+
+
     val markdownVisualTransformation = remember { MarkdownVisualTransformation() }
 
-    // content 상태를 TextFieldValue로 관리하여 커서 위치 추적
+    // [중요] contentTextFieldValue를 위한 상태
     var contentTextFieldValue by remember {
-        mutableStateOf(TextFieldValue(viewModel.content.value))
+        mutableStateOf(TextFieldValue(""))
     }
 
-    // 수정 모드일 때 초기 데이터 로드 (한 번만 실행)
-    LaunchedEffect(archiveId) {
-        if (archiveId != null) {
-            viewModel.loadArchiveForEdit(archiveId)
+    // 수정 모드 데이터 로드 완료 시 본문 필드 업데이트
+    LaunchedEffect(content) {
+        // 커서 위치를 유지하면서 텍스트만 업데이트
+        if (content != contentTextFieldValue.text) {
+            contentTextFieldValue = contentTextFieldValue.copy(text = content)
         }
     }
 

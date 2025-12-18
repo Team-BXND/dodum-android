@@ -2,8 +2,6 @@ package com.example.dodum_android.feature.archive.detail
 
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,15 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.R
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.theme.MainColor
 
@@ -34,15 +29,12 @@ fun ArchiveDetailScreen(
     archiveId: Long,
     viewModel: ArchiveDetailViewModel = hiltViewModel()
 ) {
-    // 화면 진입 시 상세 데이터 로드
     LaunchedEffect(archiveId) {
         viewModel.loadDetail(archiveId)
     }
 
     val detail by viewModel.detail.collectAsState()
     val userRole by viewModel.userRole.collectAsState()
-    val currentUserId by viewModel.currentUserId.collectAsState()
-
     val context = LocalContext.current
     var showMenu by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -57,16 +49,10 @@ fun ArchiveDetailScreen(
             }
         } else {
             val data = detail!!
-
-            // TODO: 실제 API 연동 시 data.authorId와 currentUserId를 비교해야 함.
-            // 현재는 더미 데이터 또는 임시 로직으로 처리.
-            // val isAuthor = data.authorId == currentUserId
-            val isAuthor = true // 테스트를 위해 항상 true로 설정 (실제 구현 시 위 주석 해제)
-
-            val isAdminOrTeacher = userRole == "ADMIN" || userRole == "TEACHER"
-
-            val canEdit = isAuthor
-            val canDelete = isAuthor || isAdminOrTeacher
+            // 임시 권한 설정 (실제 로직에 맞게 조정 필요)
+            val isAuthor = true
+            val isAdmin = userRole == "ADMIN"
+            val canShowMenu = true
 
             Column(
                 modifier = Modifier
@@ -74,12 +60,12 @@ fun ArchiveDetailScreen(
                     .fillMaxSize()
                     .verticalScroll(scrollState)
             ) {
+                // 상단 타이틀 영역
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 25.dp, end = 15.dp, top = 20.dp, bottom = 20.dp)
                 ) {
-                    // 텍스트 정보 (좌측 정렬)
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -94,7 +80,7 @@ fun ArchiveDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        if (data.subtitle?.isNotEmpty() == true) {
+                        if (!data.subtitle.isNullOrEmpty()) {
                             Text(
                                 text = data.subtitle,
                                 fontSize = 14.sp,
@@ -112,40 +98,32 @@ fun ArchiveDetailScreen(
                         )
                     }
 
-                    // 메뉴 버튼 (권한이 있을 때만 표시)
-                    if (canDelete || canEdit) {
+                    if (canShowMenu) {
                         Box(modifier = Modifier.align(Alignment.TopEnd)) {
                             IconButton(onClick = { showMenu = true }) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = "Menu",
-                                    tint = Color(0xFFADADAD)
-                                )
+                                Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
                             }
                             DropdownMenu(
                                 expanded = showMenu,
-                                onDismissRequest = { showMenu = false },
-                                modifier = Modifier.background(Color.White)
+                                onDismissRequest = { showMenu = false }
                             ) {
-                                if (canEdit) {
+                                if (isAuthor) {
                                     DropdownMenuItem(
                                         text = { Text("수정") },
                                         onClick = {
                                             showMenu = false
-                                            // 수정 화면으로 이동 (NavGroup.ArchiveModify 사용)
-                                            // 주의: route 정의가 "archiveModify/{archiveId}" 이므로 ID를 넣어줌
                                             navController.navigate("archiveModify/$archiveId")
                                         }
                                     )
                                 }
-                                if (canDelete) {
+                                if (isAuthor || isAdmin) {
                                     DropdownMenuItem(
-                                        text = { Text("삭제") },
+                                        text = { Text("삭제", color = Color.Red) },
                                         onClick = {
                                             showMenu = false
                                             viewModel.deleteArchive(archiveId) {
                                                 Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                                                navController.popBackStack() // 목록으로 돌아가기
+                                                navController.popBackStack()
                                             }
                                         }
                                     )
@@ -153,8 +131,9 @@ fun ArchiveDetailScreen(
                             }
                         }
                     }
-                }
+                } // End Title Box
 
+                // 구분선과 본문이 Column 안에 포함되어야 합니다.
                 DashedDivider(
                     color = Color(0xFFE3E3E3),
                     modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
@@ -168,20 +147,8 @@ fun ArchiveDetailScreen(
                     modifier = Modifier.padding(horizontal = 25.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
-
-//                Image(
-//                    painter = painterResource(id = R.drawable.dodam_view),
-//                    contentDescription = "Project Detail Image",
-//                    contentScale = ContentScale.FillWidth,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 25.dp)
-//                        .wrapContentHeight()
-//                )
-
-//                Spacer(modifier = Modifier.height(50.dp))
-            }
+                Spacer(modifier = Modifier.height(50.dp))
+            } // End Column (이 괄호의 위치가 문제였습니다)
         }
     }
 }
