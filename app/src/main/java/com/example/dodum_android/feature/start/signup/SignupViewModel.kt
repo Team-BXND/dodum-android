@@ -201,5 +201,11 @@ class SignupViewModel @Inject constructor (
         }
     }
 
+    fun resetState() {
+        form = SignupForm()
+        signupSuccess = null
+        emailSuccess = null
+    }
+
 
 }
