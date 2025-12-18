@@ -56,7 +56,12 @@ fun ArchiveWriteScreen(
 
     val content by viewModel.content.collectAsState()
 
-
+    // [★추가 1] 화면 진입 시, 수정 모드(archiveId 존재)라면 데이터 로드 요청
+    LaunchedEffect(archiveId) {
+        if (archiveId != null && archiveId != 0L) {
+            viewModel.loadArchiveForEdit(archiveId)
+        }
+    }
 
     val markdownVisualTransformation = remember { MarkdownVisualTransformation() }
 
@@ -64,6 +69,15 @@ fun ArchiveWriteScreen(
     var contentTextFieldValue by remember {
         mutableStateOf(TextFieldValue(""))
     }
+
+    // [★추가 2] ViewModel에서 데이터를 불러왔을 때, 로컬 TextFieldValue에 반영
+    LaunchedEffect(content) {
+        // 서버에서 불러온 값이 있고, 현재 입력창이 비어있거나 다를 때만 업데이트 (커서 튐 방지)
+        if (content.isNotEmpty() && contentTextFieldValue.text != content) {
+            contentTextFieldValue = contentTextFieldValue.copy(text = content)
+        }
+    }
+
 
     // 수정 모드 데이터 로드 완료 시 본문 필드 업데이트
     LaunchedEffect(content) {
@@ -124,14 +138,14 @@ fun ArchiveWriteScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // 제목 입력
+                // [수정] 제목 입력 (Box 조건문 수정: 값이 있어도 Placeholder처럼 보이는 문제 방지)
                 Box {
                     if (title.isEmpty()) {
                         Text("제목을 입력하세요", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFFADADAD))
                     }
                     BasicTextField(
                         value = title,
-                        onValueChange = { viewModel.onTitleChange(it) }, // ViewModel로 전달
+                        onValueChange = { viewModel.onTitleChange(it) },
                         textStyle = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -139,14 +153,14 @@ fun ArchiveWriteScreen(
 
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
-                // 부제목 입력
+                // [수정] 부제목 입력
                 Box {
                     if (subtitle.isEmpty()) {
                         Text("부제목을 입력하세요 (선택)", fontSize = 18.sp, color = Color(0xFFADADAD))
                     }
                     BasicTextField(
                         value = subtitle,
-                        onValueChange = { viewModel.onSubtitleChange(it) }, // ViewModel로 전달
+                        onValueChange = { viewModel.onSubtitleChange(it) },
                         textStyle = TextStyle(fontSize = 18.sp, color = Color.Gray),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -154,14 +168,14 @@ fun ArchiveWriteScreen(
 
                 Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE3E3E3))
 
-                // 팀명 입력
+                // [수정] 팀명 입력
                 Box {
                     if (teamName.isEmpty()) {
                         Text("팀 이름을 입력하세요", fontSize = 16.sp, color = Color(0xFFADADAD))
                     }
                     BasicTextField(
                         value = teamName,
-                        onValueChange = { viewModel.onTeamNameChange(it) }, // ViewModel로 전달
+                        onValueChange = { viewModel.onTeamNameChange(it) },
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
                         modifier = Modifier.fillMaxWidth()
                     )
