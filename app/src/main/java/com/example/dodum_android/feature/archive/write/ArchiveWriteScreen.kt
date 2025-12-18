@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +21,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.dodum_android.ui.component.bar.TopBar
-import com.example.dodum_android.ui.theme.MainColor
+import com.example.dodum_android.ui.theme.MainColor // DodumMainColor로 변경 권장
+import kotlinx.coroutines.flow.collectLatest // Flow 이벤트 처리를 위해 임포트
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArchiveWriteScreen(
     navController: NavController,
@@ -36,39 +40,49 @@ fun ArchiveWriteScreen(
 ) {
     val context = LocalContext.current
     val isLoading by viewModel.isLoading.collectAsState()
-    val editState by viewModel.editUiState.collectAsState()
 
-    // 상태 변수들
-    var title by remember { mutableStateOf("") }
-    var subtitle by remember { mutableStateOf("") }
-    var teamName by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("동아리") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    // ViewModel의 상태를 관찰하여 UI 업데이트
+    val title by viewModel.title.collectAsState()
+    val subtitle by viewModel.subtitle.collectAsState()
+    val teamName by viewModel.teamName.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
+    val selectedImageUri by viewModel.selectedImageUri.collectAsState()
 
-    // 수정 모드일 때 초기 데이터 로드 및 적용
+    // 버튼 상태
+    var isBold by remember { mutableStateOf(false) }
+    var isItalic by remember { mutableStateOf(false) }
+    var isUnderline by remember { mutableStateOf(false) }
+
+    // content 상태를 TextFieldValue로 관리하여 커서 위치 추적
+    var contentTextFieldValue by remember {
+        mutableStateOf(TextFieldValue(viewModel.content.value))
+    }
+
+    // 수정 모드일 때 초기 데이터 로드 (한 번만 실행)
     LaunchedEffect(archiveId) {
         if (archiveId != null) {
             viewModel.loadArchiveForEdit(archiveId)
         }
     }
 
-    // editState가 로드되면 UI 업데이트
-    LaunchedEffect(editState) {
-        editState?.let {
-            title = it.title
-            subtitle = it.subtitle
-            content = it.content
-            teamName = it.teamName
-            selectedCategory = it.category
-            // 이미지는 URL을 Uri로 변환하거나 별도 처리 필요 (여기선 생략)
+    // ViewModel의 일회성 이벤트를 처리
+    LaunchedEffect(Unit) { // 한 번만 실행되도록 Unit 키 사용
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is ArchiveWriteEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                ArchiveWriteEvent.NavigateBack -> {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 
     val categories = listOf("동아리", "나르샤", "대회 수상작", "미니 프로젝트")
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> selectedImageUri = uri }
+    ) { uri: Uri? -> viewModel.onImageSelect(uri) } // ViewModel로 URI 전달
 
     Scaffold(
         topBar = { TopBar(navController) },
@@ -79,7 +93,6 @@ fun ArchiveWriteScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            // ... (입력 영역 UI - 기존과 동일) ...
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -95,8 +108,8 @@ fun ArchiveWriteScreen(
                             text = category,
                             fontSize = 16.sp,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            color = if (isSelected) MainColor else Color.Gray,
-                            modifier = Modifier.clickable { selectedCategory = category }
+                            color = if (isSelected) MainColor else Color.Gray, // MainColor -> DodumMainColor 권장
+                            modifier = Modifier.clickable { viewModel.onCategorySelect(category) } // ViewModel로 전달
                         )
                     }
                 }
@@ -110,7 +123,7 @@ fun ArchiveWriteScreen(
                     }
                     BasicTextField(
                         value = title,
-                        onValueChange = { title = it },
+                        onValueChange = { viewModel.onTitleChange(it) }, // ViewModel로 전달
                         textStyle = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -125,7 +138,7 @@ fun ArchiveWriteScreen(
                     }
                     BasicTextField(
                         value = subtitle,
-                        onValueChange = { subtitle = it },
+                        onValueChange = { viewModel.onSubtitleChange(it) }, // ViewModel로 전달
                         textStyle = TextStyle(fontSize = 18.sp, color = Color.Gray),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -140,7 +153,7 @@ fun ArchiveWriteScreen(
                     }
                     BasicTextField(
                         value = teamName,
-                        onValueChange = { teamName = it },
+                        onValueChange = { viewModel.onTeamNameChange(it) }, // ViewModel로 전달
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -150,12 +163,15 @@ fun ArchiveWriteScreen(
 
                 // 본문 입력
                 Box(modifier = Modifier.weight(1f)) {
-                    if (content.isEmpty()) {
+                    if (contentTextFieldValue.text.isEmpty()) {
                         Text("본문을 입력하세요", fontSize = 16.sp, color = Color(0xFFADADAD))
                     }
                     BasicTextField(
-                        value = content,
-                        onValueChange = { content = it },
+                        value = contentTextFieldValue,
+                        onValueChange = {
+                            contentTextFieldValue = it
+                            viewModel.onContentChange(it.text)
+                        }, // ViewModel로 전달
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black, lineHeight = 24.sp),
                         modifier = Modifier.fillMaxSize()
                     )
@@ -170,7 +186,7 @@ fun ArchiveWriteScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .clickable { selectedImageUri = null },
+                            .clickable { viewModel.onImageRemove() }, // ViewModel로 이미지 제거 요청
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -182,41 +198,75 @@ fun ArchiveWriteScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp, vertical = 10.dp)
             ) {
-                // ... (툴바 아이콘 유지) ...
+                // insertMarkdown 함수 정의
+                fun insertMarkdown(prefix: String, suffix: String) {
+                    val text = contentTextFieldValue.text
+                    val selection = contentTextFieldValue.selection
+                    val start = selection.start.coerceAtLeast(0).coerceAtMost(text.length)
+                    val end = selection.end.coerceAtLeast(0).coerceAtMost(text.length)
+                    val before = text.substring(0, start)
+                    val selected = text.substring(start, end)
+                    val after = text.substring(end)
+                    val newText = before + prefix + selected + suffix + after
+                    val newCursorPos = start + prefix.length + selected.length + suffix.length
+                    contentTextFieldValue = TextFieldValue(
+                        text = newText,
+                        selection = androidx.compose.ui.text.TextRange(newCursorPos, newCursorPos)
+                    )
+                    viewModel.onContentChange(newText)
+                }
+
+                // 버튼 클릭 시 마크다운 삽입 + 상태 토글
+                fun toggleMarkdown(prefix: String, suffix: String, state: MutableState<Boolean>) {
+                    insertMarkdown(prefix, suffix)
+                    state.value = !state.value
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                        Text("B", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Gray)
-                        Text("I", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, fontSize = 20.sp, color = Color.Gray)
-                        Text("U", style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline), fontSize = 20.sp, color = Color.Gray)
-                        Icon(Icons.Outlined.Image, contentDescription = "Add Image", tint = Color.Gray, modifier = Modifier.clickable { galleryLauncher.launch("image/*") })
+                        // Bold 버튼
+                        Text(
+                            text = "B",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = if(isBold) MainColor else Color.Gray,
+                            modifier = Modifier.clickable { toggleMarkdown("**", "**", mutableStateOf(isBold).also { isBold = !isBold }) }
+                        )
+                        // Italic 버튼
+                        Text(
+                            text = "I",
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                            fontSize = 20.sp,
+                            color = if(isItalic) MainColor else Color.Gray,
+                            modifier = Modifier.clickable { toggleMarkdown("*", "*", mutableStateOf(isItalic).also { isItalic = !isItalic }) }
+                        )
+                        // Underline 버튼
+                        Text(
+                            text = "U",
+                            style = TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline),
+                            fontSize = 20.sp,
+                            color = if(isUnderline) MainColor else Color.Gray,
+                            modifier = Modifier.clickable { toggleMarkdown("<u>", "</u>", mutableStateOf(isUnderline).also { isUnderline = !isUnderline }) }
+                        )
                     }
 
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(
-                            onClick = { navController.popBackStack() },
+                            onClick = { navController.popBackStack() }, // "취소" 버튼은 그냥 뒤로 가기
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) { Text("취소", fontSize = 14.sp) }
 
                         Button(
-                            onClick = {
-                                viewModel.submitArchive(
-                                    archiveId, title, subtitle, content, selectedCategory, teamName, selectedImageUri,
-                                    onSuccess = {
-                                        val msg = if (archiveId == null) "게시 완료" else "수정 완료"
-                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                                        navController.popBackStack()
-                                    },
-                                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
-                                )
-                            },
+                            onClick = { viewModel.submitArchive(archiveId) }, // ViewModel로 submit 요청
                             enabled = !isLoading,
-                            colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                            colors = ButtonDefaults.buttonColors(containerColor = MainColor), // MainColor -> DodumMainColor 권장
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) {
@@ -224,6 +274,18 @@ fun ArchiveWriteScreen(
                         }
                     }
                 }
+
+            }
+        }
+        // 로딩 스피너
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = MainColor) // MainColor -> DodumMainColor 권장
             }
         }
     }

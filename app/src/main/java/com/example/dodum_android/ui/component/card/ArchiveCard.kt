@@ -59,7 +59,7 @@ fun ArchiveCard(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
                     placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
-                    error = painterResource(id = R.drawable.dodam_logo)
+                    error = null
                 )
             }
 

@@ -170,17 +170,17 @@ fun ArchiveDetailScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Image(
-                    painter = painterResource(id = R.drawable.dodam_view),
-                    contentDescription = "Project Detail Image",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp)
-                        .wrapContentHeight()
-                )
+//                Image(
+//                    painter = painterResource(id = R.drawable.dodam_view),
+//                    contentDescription = "Project Detail Image",
+//                    contentScale = ContentScale.FillWidth,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 25.dp)
+//                        .wrapContentHeight()
+//                )
 
-                Spacer(modifier = Modifier.height(50.dp))
+//                Spacer(modifier = Modifier.height(50.dp))
             }
         }
     }
