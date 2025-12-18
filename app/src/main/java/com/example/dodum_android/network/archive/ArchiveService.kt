@@ -9,7 +9,7 @@ interface ArchiveService {
     @GET(DodumUrl.Archive.DETAIL)
     suspend fun getArchiveDetail(
         @Path("id") id: Long
-    ): Response<ArchiveDetailResponse>
+    ): Response<ArchiveDetailData>
 
     @POST(DodumUrl.Archive.WRITE)
     suspend fun writeArchive(
@@ -21,13 +21,15 @@ interface ArchiveService {
         @Body request: ArchiveModifyRequest
     ): Response<ArchiveWriteResponse>
 
-    @DELETE(DodumUrl.Archive.DELETE)
+    // [수정] path를 "archive"로 하드코딩하여 슬래시 중복 방지
+    // hasBody = true를 넣어 DELETE 요청에 Body를 실어 보냄
+    @HTTP(method = "DELETE", path = "archive", hasBody = true)
     suspend fun deleteArchive(
-        @Query("archiveId") archiveId: Long
+        @Body request: Map<String, Long> // Body: {"archiveId": 13}
     ): Response<ArchiveDeleteResponse>
 
     @GET(DodumUrl.Archive.ALL)
     suspend fun getArchiveList(
-        @Query("category") category: String
+        @Query("category") category: String?
     ): Response<List<ArchiveItem>>
 }

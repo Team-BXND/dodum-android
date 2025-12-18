@@ -86,7 +86,7 @@ class ArchiveWriteViewModel @Inject constructor(
             try {
                 val response = archiveService.getArchiveDetail(id = archiveId)
                 if (response.isSuccessful) {
-                    val data = response.body()?.data
+                    val data = response.body()
                     if (data != null) {
                         // 각 상태 개별 업데이트
                         _title.value = data.title
