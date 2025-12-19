@@ -17,7 +17,7 @@ fun MajorGraphChart(graph: Graph) {
     val data = listOf(
         Triple("Web", graph.web, Color(0xFF26874E)),
         Triple("Server", graph.server, Color(0xFF64B5F6)),
-        Triple("iOS", graph.iOS, Color(0xFF8EF2B7)),
+        Triple("iOS", graph.ios, Color(0xFF8EF2B7)),
         Triple("Android", graph.android, Color(0xFF64B5F6))
     )
 
