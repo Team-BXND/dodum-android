@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun AnimatedClickableBox(
+fun AnimatedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
@@ -26,8 +26,6 @@ fun AnimatedClickableBox(
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(if (pressed) 0.95f else 1f)
     val coroutineScope = rememberCoroutineScope()
-
-
     Box(
         modifier = modifier
             .scale(scale)
