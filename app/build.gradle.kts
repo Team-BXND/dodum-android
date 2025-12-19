@@ -55,6 +55,8 @@ android {
 
 dependencies {
 
+    implementation(libs.compose.markdown)
+
     implementation (libs.androidx.lifecycle.livedata.ktx) // LiveData
     implementation (libs.androidx.runtime.livedata) // observeAsState
     implementation(libs.kotlinx.serialization.json)
