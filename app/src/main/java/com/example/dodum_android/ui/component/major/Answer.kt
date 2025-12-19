@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,20 +32,19 @@ fun Answer(
     text: String,
     onTextChange: (String) -> Unit,
 ){
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+
         Box(
             modifier = Modifier
-                .height(120.dp)
+                .heightIn(min = 120.dp)
                 .width(8.dp)
                 .background(MainColor, shape = RoundedCornerShape(16.dp))
         )
 
         Box(
             modifier = Modifier
-                .height(120.dp)
                 .fillMaxWidth()
+                .heightIn(min = 120.dp)
                 .shadow(
                     elevation = 8.dp,
                     shape = RoundedCornerShape(16.dp),
@@ -52,17 +53,17 @@ fun Answer(
                 )
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
-
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 23.dp, top = 12.dp)
+                    .fillMaxWidth()
+                    .padding(23.dp)
             ) {
-
                 Text(
                     text = question,
-                    fontSize = 16.sp,
+                    fontSize = 16.sp
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 TextField(
                     value = text,
@@ -76,9 +77,7 @@ fun Answer(
                         unfocusedIndicatorColor = Color.Black,
                         cursorColor = Color.Black,
                     ),
-                    modifier = Modifier
-                        .padding(bottom = 27.dp, end = 100.dp)
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
