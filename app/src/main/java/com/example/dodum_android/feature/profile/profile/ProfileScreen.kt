@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.root.NavGroup
-import com.example.dodum_android.ui.component.button.AnimatedClickableBox
+import com.example.dodum_android.ui.component.button.AnimatedButton
 import com.example.dodum_android.ui.component.profile.MyPostItem
 import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
@@ -43,35 +44,32 @@ import com.example.dodum_android.ui.theme.MainColor
 fun ProfileScreen(
     navController: NavController
 ) {
-
-    val profileId: Int = 3
-
     val viewModel: ProfileViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) { viewModel.loadProfile() }
-    LaunchedEffect(Unit) { viewModel.loadMyPosts() }
-    val profile = viewModel.profile.value
+    LaunchedEffect(Unit) {
+        viewModel.loadProfile()
+        viewModel.loadMyPosts()
+    }
+
+    val profile by viewModel.profile
     val posts by viewModel.myPosts.collectAsState()
-    val userRole = viewModel.userRole.value
-//    val userRole = "ADMIN"
+    val myPostCount by viewModel.myPostCount
+    val userRole by viewModel.userRole
 
     Column {
         TopAppBar(navController)
 
         Box(
             modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .padding(vertical = 17.dp)
+                .padding(horizontal = 32.dp, vertical = 17.dp)
                 .height(228.dp)
                 .fillMaxWidth()
-                .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
+                .shadow(8.dp, RoundedCornerShape(16.dp))
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                AnimatedClickableBox(
+                AnimatedButton(
                     onClick = { navController.navigate(NavGroup.MyInfo) },
                     modifier = Modifier
                         .padding(end = 11.dp, top = 11.dp)
@@ -80,16 +78,11 @@ fun ProfileScreen(
                         .background(MainColor, RoundedCornerShape(8.dp))
                         .align(Alignment.End)
                 ) {
-                    Text(
-                        "나의 정보",
-                        fontSize = 17.sp,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                    Text("나의 정보", fontSize = 17.sp, color = Color.White)
                 }
 
-                if (userRole == "TEACHER" || userRole == "ADMIN") {
-                    AnimatedClickableBox(
+                if (userRole in listOf("TEACHER", "ADMIN")) {
+                    AnimatedButton(
                         onClick = { navController.navigate(NavGroup.FalsePost) },
                         modifier = Modifier
                             .padding(end = 11.dp, top = 11.dp)
@@ -98,38 +91,26 @@ fun ProfileScreen(
                             .background(MainColor, RoundedCornerShape(8.dp))
                             .align(Alignment.End)
                     ) {
-                        Text(
-                            "미승인 글",
-                            fontSize = 17.sp,
-                            color = Color.White,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
+                        Text("미승인 글", fontSize = 17.sp, color = Color.White)
                     }
                 }
             }
+
             Column {
-                Row(horizontalArrangement = Arrangement.Start) {
+                Row {
                     Box(
                         modifier = Modifier
                             .padding(top = 20.dp, start = 12.dp)
-                            .width(80.dp)
-                            .height(80.dp)
-                            .background(Color.Gray, shape = CircleShape)
+                            .size(80.dp)
+                            .background(Color.Gray, CircleShape)
                     )
 
-                    Column(
-                        modifier = Modifier
-                            .padding(top = 34.dp, start = 20.dp)
-                    ) {
-                        Text(
-                            text = profile?.username ?: "",
-                            fontSize = 29.sp
-                        )
-                        Column(Modifier.padding(top = 8.dp)) {
-                            Text(text = profile?.email ?: "")
-                            Text(text = "${profile?.grade ?: 0}학년 ${profile?.class_no ?: 0}반 ${profile?.student_no ?: 0}번")
-                            Text(text = profile?.club ?: "")
-                        }
+                    Column(modifier = Modifier.padding(top = 34.dp, start = 20.dp)) {
+                        Text(profile?.username ?: "", fontSize = 29.sp)
+                        Spacer(Modifier.height(8.dp))
+                        Text(profile?.email ?: "")
+                        Text("${profile?.grade ?: 0}학년 ${profile?.class_no ?: 0}반 ${profile?.student_no ?: 0}번")
+                        Text(profile?.club ?: "")
                     }
                 }
 
@@ -137,55 +118,29 @@ fun ProfileScreen(
                     modifier = Modifier
                         .padding(top = 32.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        22.dp,
-                        Alignment.CenterHorizontally
-                    )
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Filled.Archive,
-                                contentDescription = "내가 쓴 글"
-                            )
-                            Spacer(Modifier.padding(5.dp))
-                            Text(text = "내가 쓴 글", fontSize = 17.sp)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Filled.Archive, contentDescription = null)
+                            Spacer(Modifier.width(5.dp))
+                            Text("내가 쓴 글", fontSize = 17.sp)
                         }
-                        Text("${62}개")
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .height(42.dp)
-                            .background(Color.Black)
-                    )
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Comment,
-                                contentDescription = "내가 쓴 댓글",
-
-                                )
-                            Spacer(Modifier.padding(5.dp))
-                            Text(text = "내가 쓴 댓글", fontSize = 17.sp)
-                        }
-                        Text("${310}개")
+                        Text("${myPostCount}개")
                     }
                 }
             }
         }
 
-        AnimatedClickableBox(
-            onClick = { navController.navigate(NavGroup.MyPosts) },
+        AnimatedButton(
+            onClick = { navController.navigate(NavGroup.MyPosts) }
         ) {
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .padding(top = 17.dp, bottom = 69.dp)
-                    .fillMaxSize()
-                    .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
+                    .padding(horizontal = 32.dp, vertical = 17.dp)
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .shadow(8.dp, RoundedCornerShape(16.dp))
                     .background(Color.White, RoundedCornerShape(16.dp))
             ) {
                 Column {
@@ -197,17 +152,12 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "내가 쓴 글",
-                            fontSize = 24.sp
-                        )
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = "arrow forward",
-                        )
+                        Text("내가 쓴 글", fontSize = 24.sp)
+                        Icon(Icons.AutoMirrored.Filled.ArrowForward, null)
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(Modifier.height(8.dp))
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()

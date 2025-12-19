@@ -2,7 +2,6 @@ package com.example.dodum_android.data.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.dodum_android.data.datastore.UserPrefsKeys.ACCESS_TOKEN
 import com.example.dodum_android.data.datastore.UserPrefsKeys.PUBLIC_ID

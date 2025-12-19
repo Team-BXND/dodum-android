@@ -27,8 +27,6 @@ import com.example.dodum_android.ui.theme.SubColor
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import coil3.util.CoilUtils
-import com.example.dodum_android.network.major.Graph
 import com.example.dodum_android.ui.component.graph.MajorGraphChart
 
 @Composable
@@ -38,19 +36,20 @@ fun MajorResultScreen(
     val viewModel: MajorViewModel = hiltViewModel()
     val majorResponse = viewModel.result.collectAsState().value
 
-    val majorkey = majorResponse?.majorkey
-    val major = majorResponse?.major
-//    val major = "웹 개발자"
-//    val majorkey = "web"
-    val majorInfo = majors[majorkey?.lowercase() ?: ""]
-//    val testGraph = Graph(
-//        web = 80,
-//        server = 60,
-//        iOS = 70,
-//        android = 90
-//    )
+    if (majorResponse == null) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("결과를 불러오는 중입니다...")
+        }
+        return
+    }
 
-
+    val major = majorResponse.major
+    val majorKey = majorResponse.majorKey
+    val majorInfo = majors[majorKey.lowercase()]
 
     val scrollState = rememberScrollState()
 
@@ -64,11 +63,11 @@ fun MajorResultScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 추천 전공 이름
+        // 추천 전공 제목
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = SubColor, fontWeight = FontWeight.Bold)) {
-                    append("${major ?: ""}")
+                    append(major)
                 }
                 withStyle(style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Bold)) {
                     append("가 적성에 맞네요!")
@@ -77,6 +76,7 @@ fun MajorResultScreen(
             fontSize = 29.sp
         )
 
+        // 전공 이미지
         majorInfo?.imageRes?.let { res ->
             Image(
                 painter = painterResource(id = res),
@@ -95,18 +95,32 @@ fun MajorResultScreen(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
                 .fillMaxWidth()
-                .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
+                .shadow(
+                    elevation = 8.dp,
+                    spotColor = MainColor,
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp)
-            ) {
+            Column(modifier = Modifier.padding(20.dp)) {
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = MainColor, fontWeight = FontWeight.Bold, fontSize = 29.sp)) {
-                            append("${major ?: ""}")
+                        withStyle(
+                            style = SpanStyle(
+                                color = MainColor,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 29.sp
+                            )
+                        ) {
+                            append(major)
                         }
-                        withStyle(style = SpanStyle(color = MainColor, fontWeight = FontWeight.Bold, fontSize = 29.sp)) {
+                        withStyle(
+                            style = SpanStyle(
+                                color = MainColor,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 29.sp
+                            )
+                        ) {
                             append("란?")
                         }
                     }
@@ -135,12 +149,14 @@ fun MajorResultScreen(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
                 .fillMaxWidth()
-                .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
+                .shadow(
+                    elevation = 8.dp,
+                    spotColor = MainColor,
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp)
-            ) {
+            Column(modifier = Modifier.padding(20.dp)) {
                 Text(
                     text = "선정 이유",
                     color = MainColor,
@@ -151,7 +167,7 @@ fun MajorResultScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = majorResponse?.SelectedReason ?: "",
+                    text = majorResponse.selectedReason,
                     fontSize = 20.sp
                 )
             }
@@ -159,16 +175,19 @@ fun MajorResultScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // 전공별 적성 그래프
         Box(
             modifier = Modifier
                 .padding(horizontal = 37.dp)
                 .fillMaxWidth()
-                .shadow(8.dp, spotColor = MainColor , shape =  RoundedCornerShape(16.dp), clip = false)
+                .shadow(
+                    elevation = 8.dp,
+                    spotColor = MainColor,
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp)
-            ) {
+            Column(modifier = Modifier.padding(20.dp)) {
                 Text(
                     text = "전공별 적성",
                     color = MainColor,
@@ -177,10 +196,9 @@ fun MajorResultScreen(
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
-            majorResponse?.graph?.let { graph ->
-                MajorGraphChart(graph)
-            }
-//                MajorGraphChart(testGraph)
+
+                MajorGraphChart(majorResponse.graph)
+
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }

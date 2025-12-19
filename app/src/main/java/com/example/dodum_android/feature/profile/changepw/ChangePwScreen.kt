@@ -1,7 +1,5 @@
 package com.example.dodum_android.feature.profile.changepw
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.dodum_android.ui.component.button.AnimatedClickableBox
+import com.example.dodum_android.ui.component.button.AnimatedButton
 import com.example.dodum_android.ui.component.textfield.CustomTextField
 import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
@@ -83,7 +81,7 @@ fun ChangePwScreen(navController: NavController) {
                         val firstWeight = 124f / totalWeight
                         val secondWeight = 103f / totalWeight
 
-                        AnimatedClickableBox (
+                        AnimatedButton (
                             onClick = { viewModel.changePassword(
                                 email = email,
                                 newPwd = newPassword,
@@ -103,7 +101,7 @@ fun ChangePwScreen(navController: NavController) {
                             )
                         }
 
-                        AnimatedClickableBox (
+                        AnimatedButton (
                             onClick = { navController.popBackStack() },
                             modifier = Modifier
                                 .padding(end = 72.dp)

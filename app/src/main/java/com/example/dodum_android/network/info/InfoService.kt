@@ -17,54 +17,47 @@ interface InfoService {
         @Query("page") page: Int
     ): InfoListResponse
 
-
-    @GET(DodumUrl.Info.INFO_CATEGORY)
-    suspend fun getInfoByCategory(
-        @Path("category") category: String,
-        @Query("search") search: String,
-        @Query("page") page: Int
-    ): InfoCategoryResponse
-
-
+    /** 정보 작성 */
     @POST(DodumUrl.Info.GET_INFO)
     suspend fun postInfo(
         @Body body: InfoPostRequest
     ): InfoPostResponse
 
-
+    /** 정보 삭제 */
     @DELETE(DodumUrl.Info.INFO_ID)
     suspend fun deleteInfo(
         @Path("id") id: Int,
         @Header("Authorization") token: String
     ): InfoDeleteResponse
 
-
+    /** 정보 수정 */
     @PUT(DodumUrl.Info.INFO_ID)
     suspend fun putInfo(
         @Path("id") id: Int,
         @Body body: InfoPutRequest
     ): InfoPutResponse
 
-
+    /** 정보 상세 조회 */
     @GET(DodumUrl.Info.INFO_ID)
     suspend fun getInfoDetail(
         @Path("id") id: Int
     ): InfoDetailResponse
 
+    /** 좋아요 */
     @POST(DodumUrl.Info.LIKE)
     suspend fun postLike(
         @Path("id") id: Int
-    ): InfoLikeResponse
+    ): InfoBooleanResponse
 
-
+    /** 승인 */
     @POST(DodumUrl.Info.APPROVE)
     suspend fun approveInfo(
         @Path("id") id: Int
-    ): InfoApproveResponse
+    ): InfoBooleanResponse
 
-
+    /** 거절 */
     @POST(DodumUrl.Info.DISAPPROVE)
     suspend fun disapproveInfo(
         @Path("id") id: Int
-    ): InfoDisapproveResponse
+    ): InfoBooleanResponse
 }

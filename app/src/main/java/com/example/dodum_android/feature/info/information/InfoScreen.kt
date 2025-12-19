@@ -20,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,32 +38,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.TopBar
+import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun InfoScreen(
     navController: NavController,
+    infoId: Int
 ) {
-
     val viewModel: InfoViewModel = hiltViewModel()
+    val detail by viewModel.detail.collectAsState()
 
     var menuOpen by remember { mutableStateOf(false) }
 
     val density = LocalDensity.current
-
     var menuXdp by remember { mutableStateOf(0.dp) }
     var menuYdp by remember { mutableStateOf(0.dp) }
 
-    val title = "해커톤 행사 건"
-    val userName = "3101 홍길동"
-    val date = "2025.11.25"
-    val content = "자세한 대회내용 자세한 대회내용 자세한 대회내용 자세한 대회내용 자세한 대회내용"
+    LaunchedEffect(infoId) {
+        viewModel.loadDetail(infoId)
+    }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    if (detail == null) return
 
-        Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Column {
 
             TopBar(navController)
 
@@ -69,17 +72,18 @@ fun InfoScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize()
-                    .shadow(elevation = 8.dp, RoundedCornerShape(16.dp))
+                    .shadow(8.dp, RoundedCornerShape(16.dp))
                     .background(Color.White, RoundedCornerShape(16.dp))
                     .padding(24.dp)
             ) {
 
+                /** 제목 + 메뉴 */
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = title,
+                        text = detail!!.title,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF1B1B1B)
@@ -87,8 +91,8 @@ fun InfoScreen(
 
                     Column(
                         modifier = Modifier
-                            .onGloballyPositioned { coordinates ->
-                                val pos = coordinates.positionInWindow()
+                            .onGloballyPositioned {
+                                val pos = it.positionInWindow()
                                 menuXdp = with(density) { pos.x.toDp() }
                                 menuYdp = with(density) { pos.y.toDp() }
                             }
@@ -109,8 +113,9 @@ fun InfoScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(Modifier.height(20.dp))
 
+                /** 작성자 + 날짜 */
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -122,17 +127,24 @@ fun InfoScreen(
                     )
 
                     Column {
-                        Text(userName, fontSize = 12.sp, color = Color(0xFF1B1B1B))
-                        Text(date, fontSize = 12.sp, color = Color(0xFFADADAD))
+                        Text(
+                            text = detail!!.author,
+                            fontSize = 12.sp,
+                            color = Color(0xFF1B1B1B)
+                        )
+                        Text(
+                            text = detail!!.date,
+                            fontSize = 12.sp,
+                            color = Color(0xFFADADAD)
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
-
+                Spacer(Modifier.height(20.dp))
                 Divider(color = Color(0xFFE3E3E3))
+                Spacer(Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
-
+                /** 이미지 */
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,10 +152,11 @@ fun InfoScreen(
                         .background(Color.LightGray, RoundedCornerShape(14.dp))
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(Modifier.height(20.dp))
 
+                /** 내용 */
                 Text(
-                    text = content,
+                    text = detail!!.content,
                     fontSize = 20.sp,
                     lineHeight = 24.sp,
                     color = Color(0xFF1B1B1B)
@@ -151,9 +164,9 @@ fun InfoScreen(
             }
         }
 
+        /** 메뉴 팝업 */
         if (menuOpen) {
 
-            // 바깥 클릭 시 닫기 (이펙트 제거 포함)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -163,49 +176,43 @@ fun InfoScreen(
                     ) { menuOpen = false }
             )
 
-            val popupWidth = 85.dp
-            val popupHeight = 48.dp
-            val hGap = 8.dp
-            val vGap = 6.dp
-
             Box(
                 modifier = Modifier
                     .absoluteOffset(
-                        x = menuXdp - popupWidth - hGap,
-                        y = menuYdp + vGap
+                        x = menuXdp - 93.dp,
+                        y = menuYdp + 8.dp
                     )
-                    .size(popupWidth, popupHeight)
+                    .size(93.dp, 52.dp)
                     .background(Color.White, RoundedCornerShape(12.dp))
                     .border(1.dp, Color(0xFFADADAD), RoundedCornerShape(12.dp))
-                    .padding(vertical = 6.dp)
             ) {
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly
-                ) {
+                Column {
+
                     Text(
                         "수정",
-                        fontSize = 13.sp,
-                        color = Color(0xFF1B1B1B),
                         modifier = Modifier
-                            .padding(start = 12.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { menuOpen = false }
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                            .clickable {
+                                menuOpen = false
+                                navController.navigate(NavGroup.IWRITE)
+                            },
+                        fontSize = 13.sp
                     )
 
-                    Divider(color = Color(0xFFE3E3E3), thickness = 1.dp)
+                    Divider(color = Color(0xFFE3E3E3))
 
                     Text(
                         "삭제",
-                        fontSize = 13.sp,
-                        color = Color(0xFF1B1B1B),
                         modifier = Modifier
-                            .padding(start = 12.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { menuOpen = false }
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                            .clickable {
+                                menuOpen = false
+                                // 삭제 로직 연결 가능
+                            },
+                        fontSize = 13.sp,
+                        color = Color.Red
                     )
                 }
             }

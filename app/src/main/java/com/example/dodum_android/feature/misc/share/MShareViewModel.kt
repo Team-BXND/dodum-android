@@ -4,10 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.dodum_android.network.misc.MiscCategory
+import com.example.dodum_android.network.misc.MiscCriteria
 import com.example.dodum_android.network.misc.MiscItemList
 import com.example.dodum_android.network.misc.MiscListData
 import com.example.dodum_android.network.misc.MiscService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.min
@@ -17,48 +24,67 @@ class MShareViewModel @Inject constructor(
     private val miscService: MiscService
 ) : ViewModel() {
 
-    var miscList by mutableStateOf<List<MiscItemList>>(emptyList())
-        private set
 
-    var currentPage by mutableStateOf(1)
-        private set
+    /* ---------- State ---------- */
 
-    var totalPages by mutableStateOf(1)
-        private set
+    private val _miscList = MutableStateFlow<List<MiscItemList>>(emptyList())
+    val miscList: StateFlow<List<MiscItemList>> = _miscList.asStateFlow()
+
+    private val _currentPage = MutableStateFlow(1)
+    val currentPage: StateFlow<Int> = _currentPage.asStateFlow()
+
+    private val _totalPages = MutableStateFlow(1)
+    val totalPages: StateFlow<Int> = _totalPages.asStateFlow()
 
     private val pageSize = 7
 
-    // 더미 데이터 (최신 글이 앞으로 오도록 정렬)
-    private val fakeData = List(30) { index ->
-        MiscItemList(
-            id = index + 1L,
-            title = "게시글 ${index + 1}",
-            content = "내용 ${index + 1}",
-            likes = (1..10).random(),
-            category = "share",
-            isApproved = true,
-            author = "작성자 ${index + 1}"
-        )
-    }.sortedByDescending { it.id }
+    private var currentCategory: MiscCategory = MiscCategory.LECTURE_RECOMMENDATION
+    private var currentCriteria: MiscCriteria = MiscCriteria.LATEST
 
+    /* ---------- init ---------- */
 
     init {
-        updateTotalPages(fakeData.size)
         loadPage(1)
     }
 
+    /* ---------- Page ---------- */
+
     fun loadPage(page: Int) {
-        currentPage = page
-        miscList = getPageData(page)
+        _currentPage.value = page
+
+        viewModelScope.launch {
+            runCatching {
+                miscService.getMiscList(
+                    category = currentCategory.id,
+                    criteria = currentCriteria.name,
+                    page = page
+                )
+            }.onSuccess { response ->
+                if (response.success && response.data != null) {
+                    _miscList.value = response.data.infos
+                    updateTotalPages(response.data.infos.size)
+                }
+            }
+        }
     }
+
+    /* ---------- Category ---------- */
+
+    fun changeCategory(category: MiscCategory) {
+        currentCategory = category
+        loadPage(1)
+    }
+
+    /* ---------- Criteria ---------- */
+
+    fun changeCriteria(criteria: MiscCriteria) {
+        currentCriteria = criteria
+        loadPage(1)
+    }
+
+    /* ---------- Page Count ---------- */
 
     private fun updateTotalPages(totalCount: Int) {
-        totalPages = ceil(totalCount / pageSize.toFloat()).toInt()
-    }
-
-    private fun getPageData(page: Int): List<MiscItemList> {
-        val from = (page - 1) * pageSize
-        val to = min(from + pageSize, fakeData.size)
-        return fakeData.subList(from, to)
+        _totalPages.value = ceil(totalCount / pageSize.toFloat()).toInt()
     }
 }

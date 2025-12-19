@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -27,40 +28,33 @@ class ProfileViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _profile = mutableStateOf<Profile?>(null)
-    private val _myPosts = MutableStateFlow<List<MyPost>>(emptyList())
-    private val _userRole = mutableStateOf<String?>(null)
-
     val profile: State<Profile?> = _profile
+
+    private val _myPosts = MutableStateFlow<List<MyPost>>(emptyList())
     val myPosts: StateFlow<List<MyPost>> = _myPosts
+
+    private val _myPostCount = mutableStateOf(0)
+    val myPostCount: State<Int> = _myPostCount
+
+    private val _userRole = mutableStateOf<String?>(null)
     val userRole: State<String?> = _userRole
 
     init {
         viewModelScope.launch {
-            try {
-                val token = userRepository.getAccessTokenSnapshot()  // 저장된 토큰 가져오기
-                _userRole.value = token?.let { GetRole(it) }
-                Log.d("ProfileViewModel", "사용자 역할 로드 완료: ${_userRole.value}")
-            } catch (e: Exception) {
-                Log.e("ProfileViewModel", "사용자 역할 로드 중 오류 발생", e)
-            }
+            val token = userRepository.getAccessTokenSnapshot()
+            _userRole.value = token?.let { GetRole(it) }
         }
     }
 
     fun loadProfile() {
         viewModelScope.launch {
             try {
-                Log.d("ProfileViewModel", "프로필 불러오기 시작...")
                 val response = myInfoService.getProfile()
                 if (response.isSuccessful) {
                     _profile.value = response.body()?.data
-                    Log.d("ProfileViewModel", "프로필 불러오기 성공: ${_profile.value}")
-                } else {
-                    _profile.value = null
-                    Log.e("ProfileViewModel", "프로필 불러오기 실패: ${response.code()} ${response.message()}")
                 }
             } catch (e: Exception) {
-                _profile.value = null
-                Log.e("ProfileViewModel", "프로필 불러오기 중 예외 발생", e)
+                Log.e("ProfileViewModel", "프로필 로드 실패", e)
             }
         }
     }
@@ -68,35 +62,33 @@ class ProfileViewModel @Inject constructor(
     fun loadMyPosts() {
         viewModelScope.launch {
             try {
-                Log.d("ProfileViewModel", "내 게시글 불러오기 시작...")
                 val response = myPostService.getMyPosts()
                 val posts = if (response.isSuccessful) {
                     response.body()?.data ?: emptyList()
                 } else {
-                    Log.e("ProfileViewModel", "내 게시글 불러오기 실패: ${response.code()} ${response.message()}")
                     emptyList()
                 }
-                _myPosts.value = posts.sortedByDescending { post ->
-                    parseDate(post.date ?: "")
+
+                val sortedPosts = posts.sortedByDescending {
+                    parseDate(it.date ?: "")
                 }
-                Log.d("ProfileViewModel", "내 게시글 불러오기 완료: ${_myPosts.value.size}개 게시글")
+
+                _myPosts.value = sortedPosts
+                _myPostCount.value = sortedPosts.size   // ✅ 서버 기반 개수
             } catch (e: Exception) {
                 _myPosts.value = emptyList()
-                Log.e("ProfileViewModel", "내 게시글 불러오기 중 예외 발생", e)
+                _myPostCount.value = 0
             }
         }
     }
 
-
     private fun parseDate(dateString: String): Long {
         return try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            val localDateTime = LocalDateTime.parse(dateString, formatter)
-            localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val localDate = LocalDate.parse(dateString, formatter)
+            localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         } catch (e: Exception) {
-            Log.e("ProfileViewModel", "날짜 파싱 실패: $dateString", e)
             0L
         }
     }
-
 }

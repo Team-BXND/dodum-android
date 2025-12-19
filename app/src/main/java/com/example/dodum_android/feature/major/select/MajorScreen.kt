@@ -132,7 +132,7 @@ fun MajorScreen(
                     ) {
                         // 객관식 질문들
                         items(mixed.objective) { q ->
-                            var selectedIndex by remember { mutableStateOf(1) }
+                            var selectedIndex by remember { mutableStateOf(2) }
 
                             Multiple(
                                 question = q.text,

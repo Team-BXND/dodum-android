@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.root.NavGroup
-import com.example.dodum_android.ui.component.button.AnimatedClickableBox
+import com.example.dodum_android.ui.component.button.AnimatedButton
 import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
@@ -131,7 +131,7 @@ fun MyInformScreen(
                     val firstWeight = 124f / totalWeight
                     val secondWeight = 103f / totalWeight
 
-                    AnimatedClickableBox(
+                    AnimatedButton(
                         onClick = { navController.navigate(NavGroup.ChangeInfo) },
                         modifier = Modifier
                             .padding(start = 69.dp)
@@ -146,7 +146,7 @@ fun MyInformScreen(
                         )
                     }
 
-                    AnimatedClickableBox (
+                    AnimatedButton (
                         onClick = { viewModel.SignOut { success, message ->
                             if (success) {
                                 Log.d(TAG, "로그아웃 성공: $message")

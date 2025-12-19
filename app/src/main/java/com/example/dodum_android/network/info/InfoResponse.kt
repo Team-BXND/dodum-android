@@ -1,83 +1,53 @@
 package com.example.dodum_android.network.info
 
-// GET /info
-data class InfoListResponse(
-    val status: Int,
-    val data: List<InfoListData>
+// 성공여부
+data class InfoBooleanResponse(
+    val success: Boolean
 )
 
-data class InfoListData(
+// 목록 조회
+data class InfoListResponse(
+    val status: Int,
+    val data: List<InfoItem>
+)
+
+data class InfoItem(
     val id: Int,
     val title: String,
     val author: String,
     val likes: Int,
     val view: Int,
-    val comment: Int,
+    val comment: Int, // 서버에 있으니 유지
     val image: String
 )
 
-// GET /info/{Category}
-data class InfoCategoryResponse(
+// 상세 조회
+data class InfoDetailResponse(
     val status: Int,
-    val data: List<InfoCategoryData>
+    val data: InfoDetail
 )
 
-data class InfoCategoryData(
+data class InfoDetail(
     val title: String,
+    val content: String,
     val author: String,
-    val likes: Int,
-    val view: Int,
-    val comment: Int
+    val date: String
 )
 
-// POST /info
+// 작성
 data class InfoPostResponse(
     val status: Int,
     val data: String
 )
 
-// DELETE /info/{id}
-data class InfoDeleteResponse(
-    val status: Int,
-    val data: String
-)
-
-// PUT /info/{id}
+// 수정
 data class InfoPutResponse(
     val status: Int,
     val data: String
 )
 
-// GET /info/{id}
-data class InfoDetailResponse(
-    val status: Int,
-    val data: InfoDetailData
-)
-
-data class InfoDetailData(
-    val title: String,
-    val content: String,
-    val author: String,
-    val date: String // LocalDateTime → String
-)
-
-// POST /info/{id}/comments
-data class InfoCommentResponse(
+// 삭제
+data class InfoDeleteResponse(
     val status: Int,
     val data: String
-)
-
-// POST /info/{id}/like
-data class InfoLikeResponse(
-    val success: Boolean
-)
-
-// POST /info/{id}/approve
-data class InfoApproveResponse(
-    val success: Boolean
-)
-
-// POST /info/{id}/disapprove
-data class InfoDisapproveResponse(
-    val success: Boolean
 )

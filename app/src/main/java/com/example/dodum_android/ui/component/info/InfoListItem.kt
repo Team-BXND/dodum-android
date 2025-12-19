@@ -23,10 +23,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.example.dodum_android.network.info.InfoListData
+import com.example.dodum_android.network.info.InfoItem
 
 @Composable
-fun InfoListItem(item: InfoListData, onClick: () -> Unit = {}) {
+fun InfoListItem(item: InfoItem, onClick: () -> Unit = {}) {
 
     Column(
         modifier = Modifier

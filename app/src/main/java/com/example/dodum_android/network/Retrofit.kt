@@ -78,6 +78,11 @@ object AuthModule {
     @Singleton
     fun provideSignOutService(retrofit: Retrofit): SignOutService =
         retrofit.create(SignOutService::class.java)
+
+    @Singleton
+    @Provides
+    fun providePwService(retrofit: Retrofit): PwService =
+        retrofit.create(PwService::class.java)
 }
 
 @Module
@@ -108,15 +113,6 @@ object PostModule {
     @Provides
     fun provideMypostService(retrofit: Retrofit): MyPostService =
         retrofit.create(MyPostService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object PwModule {
-    @Singleton
-    @Provides
-    fun providePwService(retrofit: Retrofit): PwService =
-        retrofit.create(PwService::class.java)
 }
 
 @Module

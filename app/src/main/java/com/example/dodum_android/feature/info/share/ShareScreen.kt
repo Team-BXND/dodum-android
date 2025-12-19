@@ -1,16 +1,21 @@
 package com.example.dodum_android.feature.info.share
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.dodum_android.R
 import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.TopBar
 import com.example.dodum_android.ui.component.indicator.PageIndicator
@@ -29,6 +34,18 @@ fun ShareScreen(
 
     Scaffold(
         topBar = { TopBar(navController) },
+        floatingActionButton = {
+            Image(
+                painter = painterResource(R.drawable.add),
+                contentDescription = "글 쓰기",
+                modifier = Modifier
+                    .size(52.dp)
+                    .clickable(indication = null,
+                        interactionSource = null) {
+                        navController.navigate(NavGroup.IWRITE)
+                    }
+            )
+        },
         containerColor = Color.White,
         bottomBar = {
             PageIndicator(
@@ -49,7 +66,7 @@ fun ShareScreen(
         ) {
             items(list) { item ->
                 InfoListItem(item) {
-                    navController.navigate(NavGroup.Info)
+                    navController.navigate("${NavGroup.Info}/${item.id}")
                 }
             }
         }

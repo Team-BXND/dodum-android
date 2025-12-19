@@ -34,7 +34,7 @@ import com.example.dodum_android.R
 import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.NavBar
 import com.example.dodum_android.ui.component.bar.TopAppBar
-import com.example.dodum_android.ui.component.button.AnimatedClickableBox
+import com.example.dodum_android.ui.component.button.AnimatedButton
 import com.example.dodum_android.ui.component.dropdownmenu.ClubDropDownMenu
 import com.example.dodum_android.ui.component.textfield.CustomTextField
 import com.example.dodum_android.ui.theme.MainColor
@@ -165,7 +165,7 @@ fun ChangeInformScreen(
                         val secondWeight = 102f / totalWeight
                         val thirdWeight = 72f / totalWeight
 
-                        AnimatedClickableBox (
+                        AnimatedButton (
                             onClick = { navController.navigate("changepw") },
                             modifier = Modifier
                                 .weight(firstWeight)
@@ -179,7 +179,7 @@ fun ChangeInformScreen(
                             )
                         }
 
-                        AnimatedClickableBox(
+                        AnimatedButton(
                             onClick = {
                                 viewModel.updateProfile(
                                     grade = grade ?: 0,
@@ -203,7 +203,7 @@ fun ChangeInformScreen(
                         }
 
 
-                        AnimatedClickableBox (
+                        AnimatedButton (
                             onClick = { navController.popBackStack() },
                             modifier = Modifier
                                 .weight(thirdWeight)

@@ -6,9 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dodum_android.feature.info.information.InfoScreen
 import com.example.dodum_android.feature.info.share.ShareScreen
+import com.example.dodum_android.feature.info.write.IWriteScreen
 import com.example.dodum_android.feature.misc.share.MShareScreen
 import com.example.dodum_android.feature.major.result.MajorResultScreen
 import com.example.dodum_android.feature.major.select.MajorScreen
+import com.example.dodum_android.feature.misc.misc.MiscScreen
+import com.example.dodum_android.feature.misc.write.MWriteScreen
 import com.example.dodum_android.feature.profile.changeinfo.ChangeInformScreen
 import com.example.dodum_android.feature.profile.changepw.ChangePwScreen
 import com.example.dodum_android.feature.profile.falsepost.FalsPostScreen
@@ -40,11 +43,13 @@ object NavGroup {
     const val MajorRecommend = "majorRecommend"
     const val MajorResult = "majorResult"
 
-    const val Info = "info"
+    const val Info = "info/{infoId}"
     const val Share = "share"
+    const val IWRITE = "infoWrite"
 
-    const val MISC = "misc"
+    const val MISC = "misc/{miscId}"
     const val MSHARE = "miscShare"
+    const val MWRITE = "miscWrite"
 }
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -60,33 +65,53 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.profileNavGroup(navController: NavHostController) {
-    navigation(startDestination = NavGroup.Profile, route = "profile_graph"){
-        composable(NavGroup.Profile) { ProfileScreen(navController)}
-        composable(NavGroup.MyInfo) { MyInformScreen(navController)}
+    navigation(startDestination = NavGroup.Profile, route = "profile_graph") {
+        composable(NavGroup.Profile) { ProfileScreen(navController) }
+        composable(NavGroup.MyInfo) { MyInformScreen(navController) }
         composable(NavGroup.ChangeInfo) { ChangeInformScreen(navController) }
         composable(NavGroup.ChangePw) { ChangePwScreen(navController) }
-        composable(NavGroup.MyPosts) { MypostScreen(navController)}
-        composable(NavGroup.FalsePost) { FalsPostScreen(navController)}
+        composable(NavGroup.MyPosts) { MypostScreen(navController) }
+        composable(NavGroup.FalsePost) { FalsPostScreen(navController) }
     }
 }
 
 fun NavGraphBuilder.infoNavGroup(navController: NavHostController) {
     navigation(startDestination = NavGroup.Share, route = "info_graph") {
         composable(NavGroup.Share) { ShareScreen(navController) }
-        composable(NavGroup.Info) { InfoScreen(navController)}
+        composable(NavGroup.Info) { backStackEntry ->
+            val infoId = backStackEntry.arguments
+                ?.getString("infoId")
+                ?.toInt() ?: return@composable
+
+            InfoScreen(
+                navController = navController,
+                infoId = infoId
+            )
+        }
+        composable(NavGroup.IWRITE) { IWriteScreen(navController) }
     }
 }
 
 fun NavGraphBuilder.miscNavGroup(navController: NavHostController) {
-    navigation(startDestination = NavGroup.MISC, route = "misc_graph") {
+    navigation(startDestination = NavGroup.MSHARE, route = "misc_graph") {
         composable(NavGroup.MSHARE) { MShareScreen(navController) }
-        composable(NavGroup.MISC) { MShareScreen(navController) }
+        composable(NavGroup.MISC) { backStackEntry ->
+            val miscId = backStackEntry.arguments
+                ?.getString("miscId")
+                ?.toInt() ?: return@composable
+
+            MiscScreen(
+                navController = navController,
+                miscId = miscId
+            )
+        }
+        composable(NavGroup.MWRITE) { MWriteScreen(navController) }
     }
 }
 
-fun NavGraphBuilder.majorNavGraph(navController: NavHostController){
-    navigation(startDestination = NavGroup.MajorResult, route = "major_graph"){
+fun NavGraphBuilder.majorNavGraph(navController: NavHostController) {
+    navigation(startDestination = NavGroup.MajorRecommend, route = "major_graph") {
         composable(NavGroup.MajorRecommend) { MajorScreen(navController) }
-        composable(NavGroup.MajorResult) { MajorResultScreen(navController)}
+        composable(NavGroup.MajorResult) { MajorResultScreen(navController) }
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.dodum_android.R
 import com.example.dodum_android.root.NavGroup
-import com.example.dodum_android.ui.component.button.AnimatedClickableBox
+import com.example.dodum_android.ui.component.button.AnimatedButton
 
 @Composable
 fun TopAppBar(navController: NavController) {
@@ -28,7 +28,7 @@ fun TopAppBar(navController: NavController) {
                 .height(55.33.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
-        AnimatedClickableBox(
+        AnimatedButton(
             onClick = { navController.navigate(NavGroup.Profile) },
             modifier = Modifier
             .padding(horizontal = 7.66.dp)
