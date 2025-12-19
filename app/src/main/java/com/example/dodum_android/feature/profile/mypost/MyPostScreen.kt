@@ -31,13 +31,15 @@ import com.example.dodum_android.ui.component.bar.TopAppBar
 fun MypostScreen(
     navController: NavController
 ) {
+    val profileId: Int = 3
+
     val viewModel: MyPostViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val posts by viewModel.myPosts.collectAsState()
 
     Column {
-        TopAppBar(navController)
+        TopAppBar(navController, profileId)
         Box(
             modifier = Modifier
                 .padding(horizontal = 32.dp)
@@ -71,4 +73,5 @@ fun MypostScreen(
             }
         }
     }
+
 }

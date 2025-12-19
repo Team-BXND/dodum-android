@@ -12,7 +12,7 @@ import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AnimatedClickableBox
 
 @Composable
-fun TopAppBar(navController: NavController) {
+fun TopAppBar(navController: NavController, profileId: Int) {
     Row(
         modifier = Modifier
             .padding(horizontal = 13.dp)
@@ -29,7 +29,7 @@ fun TopAppBar(navController: NavController) {
         )
         Spacer(modifier = Modifier.weight(1f))
         AnimatedClickableBox(
-            onClick = { navController.navigate(NavGroup.Profile) },
+            onClick = { navController.navigate(NavGroup.MyInform) },
             modifier = Modifier
             .padding(horizontal = 7.66.dp)
             .fillMaxHeight()

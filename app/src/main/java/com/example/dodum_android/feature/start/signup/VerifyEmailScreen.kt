@@ -30,9 +30,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun VerifyEmailScreen (
-    navController: NavHostController,
-    signupViewModel: SignupViewModel
+    navController: NavHostController
 ) {
+    val signupViewModel: SignupViewModel = hiltViewModel()
 
     Box (modifier = Modifier
         .fillMaxSize()
@@ -71,8 +71,8 @@ fun VerifyEmailScreen (
             val coroutineScope = rememberCoroutineScope()
 
             AuthEmailTextField(
-//                modifier = Modifier
-//                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
                 value = email,
                 onValueChange = { email = it },
                 isError = isEmailerror,
@@ -114,15 +114,14 @@ fun VerifyEmailScreen (
                     else -> {
                         coroutineScope.launch {
                             val emailChecked = signupViewModel.checkEmail(email, authcode)
+
                             if (emailChecked) {
-                                // [수정] 이메일 정보 저장
-                                signupViewModel.updateEmail(email)
-
-                                // 최종 데이터 확인
-                                println("Final Signup Form: ${signupViewModel.form}")
-
+                                signupViewModel.form = signupViewModel.form.copy(
+                                    email = email
+                                )
                                 val signupSuccess = signupViewModel.signup()
-                                if (signupSuccess) navController.navigate("signin")
+                                if (signupSuccess) navController.navigate("login")
+
                             } else {
                                 isAuthCodeerror = true
                             }

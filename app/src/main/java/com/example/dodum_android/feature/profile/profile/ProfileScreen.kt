@@ -48,17 +48,16 @@ fun ProfileScreen(
 
     val viewModel: ProfileViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) { viewModel.loadProfile() }
+    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
     LaunchedEffect(Unit) { viewModel.loadMyPosts() }
     val profile = viewModel.profile.value
     val posts by viewModel.myPosts.collectAsState()
-    val userRole = viewModel.userRole.value
-//    val userRole = "ADMIN"
 
     Column {
-        TopAppBar(navController)
+        TopAppBar(navController, profileId)
 
-        Box(
+        AnimatedClickableBox(
+            onClick = { navController.navigate("MyInform") },
             modifier = Modifier
                 .padding(horizontal = 32.dp)
                 .padding(vertical = 17.dp)
@@ -67,44 +66,22 @@ fun ProfileScreen(
                 .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
                 .background(Color.White, RoundedCornerShape(16.dp))
         ) {
+            Box(modifier = Modifier.fillMaxSize()) { // 루트 Box
 
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                AnimatedClickableBox(
-                    onClick = { navController.navigate(NavGroup.MyInfo) },
+                Box(
                     modifier = Modifier
                         .padding(end = 11.dp, top = 11.dp)
                         .width(98.dp)
                         .height(28.dp)
                         .background(MainColor, RoundedCornerShape(8.dp))
-                        .align(Alignment.End)
+                        .align(Alignment.TopEnd)
                 ) {
                     Text(
                         "나의 정보",
                         fontSize = 17.sp,
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.Center)
                     )
-                }
-
-                if (userRole == "TEACHER" || userRole == "ADMIN") {
-                    AnimatedClickableBox(
-                        onClick = { navController.navigate(NavGroup.FalsePost) },
-                        modifier = Modifier
-                            .padding(end = 11.dp, top = 11.dp)
-                            .width(98.dp)
-                            .height(28.dp)
-                            .background(MainColor, RoundedCornerShape(8.dp))
-                            .align(Alignment.End)
-                    ) {
-                        Text(
-                            "미승인 글",
-                            fontSize = 17.sp,
-                            color = Color.White,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
                 }
             }
             Column {
@@ -179,7 +156,7 @@ fun ProfileScreen(
 
         AnimatedClickableBox(
             onClick = { navController.navigate(NavGroup.MyPosts) },
-        ) {
+            ) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)

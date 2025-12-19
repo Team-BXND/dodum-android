@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.dodum_android.R
 import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.bar.NavBar
@@ -42,16 +41,28 @@ import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
 fun ChangeInformScreen(
-    navController: NavHostController
+    navController: NavController
 ) {
+    val profileId: Int = 3 // 임시값
     val viewModel: ChangeInfoViewModel = hiltViewModel()
 
+    var username by remember { mutableStateOf("") }
     var grade by remember { mutableStateOf<Int?>(null) }
     var classNo by remember { mutableStateOf<Int?>(null) }
     var studentNo by remember { mutableStateOf<Int?>(null) }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var selectedClub by remember { mutableStateOf("NONE") }
+    val isFormValid = remember(username, grade, classNo, studentNo, phone, email, selectedClub) {
+        username.isNotBlank()
+                && grade != null
+                && classNo != null
+                && studentNo != null
+                && phone.isNotBlank()
+                && email.isNotBlank()
+                && selectedClub != "NONE"
+    }
+
 
     Box(
         modifier = Modifier
@@ -61,7 +72,7 @@ fun ChangeInformScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAppBar(navController)
+            TopAppBar(navController,profileId)
 
             Column(
                 modifier = Modifier
@@ -89,6 +100,21 @@ fun ChangeInformScreen(
                         .padding(top = 45.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 아이디
+                        Text(
+                            text = "아이디", fontSize = 19.sp
+                        )
+                        Box(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            CustomTextField(
+                                text = username,
+                                onTextChange = { username = it },
+                                placeholderText = "아이디"
+                            )
+                        }
+                    }
+
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { // 학번
                         Text(
                             text = "학번", fontSize = 19.sp
@@ -183,6 +209,7 @@ fun ChangeInformScreen(
                         AnimatedClickableBox(
                             onClick = {
                                 viewModel.updateProfile(
+                                    id = profileId,
                                     grade = grade ?: 0,
                                     classNo = classNo ?: 0,
                                     studentNo = studentNo ?: 0,
@@ -222,9 +249,9 @@ fun ChangeInformScreen(
                 }
 
             }
-            //navController.navigate(NavGroup.Signin)
 
-            NavBar(navController = navController, thisScreen = "contest")
+            NavBar(navController = navController,NavGroup.ChangePw)
+
 
         }
 

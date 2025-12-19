@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,9 +33,6 @@ fun SigninScreen (
     navController: NavHostController
 ) {
     val signinViewModel: SigninViewModel = hiltViewModel()
-    val signinState by signinViewModel.signinState.collectAsState()
-
-
 
     Box(modifier = Modifier
         .fillMaxSize() ) {
@@ -100,7 +95,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate(NavGroup.ChangePw)
+                                navController.navigate("/* 추가해야 함 */")
                             }
                             .align(Alignment.CenterStart)
                     )
@@ -109,7 +104,7 @@ fun SigninScreen (
                         color = FontGray,
                         modifier = Modifier
                             .clickable{
-                                navController.navigate(NavGroup.SignupIdPw)
+                                navController.navigate("signupIdPw")
                             }
                             .align(Alignment.CenterEnd)
                     )
@@ -118,24 +113,17 @@ fun SigninScreen (
                 Spacer(modifier = Modifier .height(35.dp))
 
                 AuthButton(
-                    buttonName = "로그인",
+                    buttonname = "로그인",
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
-                            signinViewModel.signin(username, password)
+                            signinViewModel.signin(username = username, password = password)
+                            if ( signinViewModel.signinSuccess == true ) {
+                                navController.navigate(NavGroup.Profile)
+                            }
                         } else {
                             isError = true
                         }
-                    }
-                )
-
-                LaunchedEffect(signinState) {
-                    if (signinState == SigninViewModel.SigninStatus.Success) {
-                        navController.navigate(NavGroup.ArchiveList)
-//                        navController.navigate(NavGroup.Profile)
-                    } else if (signinState == SigninViewModel.SigninStatus.Error) {
-                        isError = true
-                    }
-                }
+                    })
             }
         }
 

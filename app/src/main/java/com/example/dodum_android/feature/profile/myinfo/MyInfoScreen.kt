@@ -37,7 +37,7 @@ fun MyInformScreen(
 
     val viewModel: MyInfoViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) { viewModel.loadProfile() }
+    LaunchedEffect(Unit) { viewModel.loadProfile(profileId) }
     val profile = viewModel.profile.value
 
     Box(
@@ -49,7 +49,7 @@ fun MyInformScreen(
             modifier = Modifier.fillMaxSize()
         ) {
 
-            TopAppBar(navController)
+            TopAppBar(navController,profileId)
 
 
             Column(
@@ -132,7 +132,7 @@ fun MyInformScreen(
                     val secondWeight = 103f / totalWeight
 
                     AnimatedClickableBox(
-                        onClick = { navController.navigate(NavGroup.ChangeInfo) },
+                        onClick = { navController.navigate(NavGroup.ChangeInform) },
                         modifier = Modifier
                             .padding(start = 69.dp)
                             .weight(firstWeight)
@@ -147,16 +147,7 @@ fun MyInformScreen(
                     }
 
                     AnimatedClickableBox (
-                        onClick = { viewModel.SignOut { success, message ->
-                            if (success) {
-                                Log.d(TAG, "로그아웃 성공: $message")
-                                navController.navigate(NavGroup.Signin) {
-                                    popUpTo(0)
-                                }
-                            } else {
-                                Log.d(TAG, "로그아웃 실패: $message")
-                            }
-                        } },
+                        onClick = { Log.d(TAG, "MyInformScreen: 로그아웃 클릭") },
                         modifier = Modifier
                             .padding(end = 72.dp)
                             .weight(secondWeight)

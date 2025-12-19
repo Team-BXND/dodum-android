@@ -6,13 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.dodum_android.data.datastore.UserRepository
 import com.example.dodum_android.network.start.email.EmailCheckRequest
-import com.example.dodum_android.network.start.email.EmailSendErrorResponse
 import com.example.dodum_android.network.start.email.EmailSendRequest
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signup.SignupRequest
 import com.example.dodum_android.network.start.signup.SignupResponse
 import com.example.dodum_android.network.start.signup.SignupService
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.HttpException
 import java.io.IOException
@@ -24,12 +22,6 @@ class SignupViewModel @Inject constructor (
     private val emailService: EmailService,
     private val userRepository: UserRepository
 ) : ViewModel() {
-
-    init {
-        // ★ 이 로그가 화면 넘길 때마다 뜨면 -> 뷰모델이 계속 새로 만들어진다는 증거입니다.
-        // 제대로 고치면 처음에 딱 한 번만 떠야 합니다.
-        println("SignupViewModel Created: $this")
-    }
 
 
 //    username:String
@@ -43,7 +35,48 @@ class SignupViewModel @Inject constructor (
 //    major:String
 //    history:String
 //    club:”BIND”|”3D”|”두카미”|”Louter”|”CNS”|”모디”|”ALT”|”Chatty”|”NONE”
-
+//
+//    private val _username = mutableStateOf("")
+//    private val _password = mutableStateOf("")
+//
+//    private val _grade = mutableStateOf<Int?>(null)
+//    private val _class_no = mutableStateOf<Int?>(null)
+//    private val _student_no = mutableStateOf<Int?>(null)
+//    private val _phone = mutableStateOf("")
+//    private val _club = mutableStateOf<String?>(null)
+//
+//    private val _email = mutableStateOf("")
+//
+//    private val _major = mutableStateOf<String?>(null)
+//    private val _history = mutableStateOf<String?>(null)
+//
+//
+//    fun updateIdPw(username: String, password: String) {
+//        _username.value = username
+//        _password.value = password
+//    }
+//
+//    fun updateContactInfo(
+//        gradee: String?, class_no: Int?, student_no: Int?, phone: String, club: String?
+//    ) {
+//        val grade = when (gradee) {
+//            "1학년" -> 1
+//            "2학년" -> 2
+//            "3학년" -> 3
+//            else -> null
+//        }
+//
+//        _grade.value = grade
+//        _class_no.value = class_no
+//        _student_no.value = student_no
+//        _phone.value = phone
+//
+//        _club.value = club?.ifBlank { null }
+//    }
+//
+//    fun updateEmail(email: String) {
+//        _email.value = email
+//    }
 
     var form by mutableStateOf(SignupForm())
         internal set
@@ -53,40 +86,6 @@ class SignupViewModel @Inject constructor (
 
     var emailSuccess by mutableStateOf<Boolean?>(null)
         private set
-
-
-    // [추가] 1단계: 아이디/비밀번호 저장
-    fun updateIdPw(username: String, password: String) {
-        form = form.copy(username = username, password = password)
-    }
-
-    // [추가] 2단계: 신상 정보 저장
-    fun updateInfo(
-        grade: String,
-        classNo: Int,
-        studentNo: Int,
-        phone: String,
-        club: String
-    ) {
-        val gradeInt = when (grade) {
-            "1학년" -> 1
-            "2학년" -> 2
-            "3학년" -> 3
-            else -> null
-        }
-        form = form.copy(
-            grade = gradeInt,
-            classNo = classNo,
-            studentNo = studentNo,
-            phone = phone,
-            club = club.ifBlank { null }
-        )
-    }
-
-    // [추가] 3단계: 이메일 저장
-    fun updateEmail(email: String) {
-        form = form.copy(email = email)
-    }
 
     suspend fun signup(): Boolean {
         return try {
@@ -152,11 +151,8 @@ class SignupViewModel @Inject constructor (
                 emailSuccess = true
                 true
             } else {
-                val errorJson = response.errorBody()?.string()
-                val errorResponse = Gson().fromJson(errorJson, EmailSendErrorResponse::class.java)
-
-                println("이메일 전송 실패: code=${errorResponse.error.code}, message=${errorResponse.error.message}")
-
+                val errorBody = response.errorBody()?.string()
+                println("이메일 전송 실패: $errorBody")
                 emailSuccess = false
                 false
             }
@@ -200,12 +196,5 @@ class SignupViewModel @Inject constructor (
             false
         }
     }
-
-    fun resetState() {
-        form = SignupForm()
-        signupSuccess = null
-        emailSuccess = null
-    }
-
 
 }

@@ -17,12 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.dropdownmenu.AuthDropdown
 import com.example.dodum_android.ui.component.textfield.AuthIntField
@@ -30,9 +30,9 @@ import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
 fun SignupInfoScreen(
-    navController: NavHostController,
-    signupViewModel: SignupViewModel
+    navController: NavHostController
 ) {
+    val signupViewModel: SignupViewModel = hiltViewModel()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -67,8 +67,8 @@ fun SignupInfoScreen(
                 var selectedGrade by remember { mutableStateOf("") }
                 var selectedClub by remember { mutableStateOf("") }
 
-                var classNo by remember { mutableIntStateOf(0) }
-                var studentNo by remember { mutableIntStateOf(0) }
+                var class_no by remember { mutableIntStateOf(0) }
+                var student_no by remember { mutableIntStateOf(0) }
                 var phone by remember { mutableStateOf("") }
 
                 var isError by remember { mutableStateOf(false) }
@@ -95,8 +95,8 @@ fun SignupInfoScreen(
 
                     AuthIntField(
                         placename = "반",
-                        value = classNo,
-                        onValueChange = { classNo = it },
+                        value = class_no,
+                        onValueChange = { class_no = it },
                         iserror = isError
                     )
 
@@ -104,8 +104,8 @@ fun SignupInfoScreen(
 
                     AuthIntField(
                         placename = "번호",
-                        value = studentNo,
-                        onValueChange = { studentNo = it },
+                        value = student_no,
+                        onValueChange = { student_no = it },
                         iserror = isError
                     )
                 }
@@ -135,26 +135,27 @@ fun SignupInfoScreen(
                 Spacer(modifier = Modifier .height(35.dp))
 
                 AuthButton(
-                    buttonName = "다음",
+                    buttonname = "다음",
                     onClick = {
-                        val hasError = selectedGrade.isEmpty() ||
-                                phone.isEmpty()
+                        val hasError = selectedGrade.isEmpty() || class_no == 0 || student_no == 0 ||
+                                phone.isEmpty() || selectedClub.isEmpty()
                         isError = hasError
 
                         if (!hasError) {
-                            // [수정] 뷰모델 함수 호출로 데이터 저장
-                            signupViewModel.updateInfo(
-                                grade = selectedGrade,
-                                classNo = classNo,
-                                studentNo = studentNo,
+                            signupViewModel.form = signupViewModel.form.copy(
+                                grade = when (selectedGrade) {
+                                    "1학년" -> 1
+                                    "2학년" -> 2
+                                    "3학년" -> 3
+                                    else -> null
+                                },
+                                classNo = class_no,
+                                studentNo = student_no,
                                 phone = phone,
-                                club = selectedClub
+                                club = selectedClub.ifBlank { null }
                             )
 
-                            // 로그로 확인 (이전 단계 데이터가 남아있어야 함)
-                            println("SignupInfo Saved: ${signupViewModel.form}")
-
-                            navController.navigate(NavGroup.SignupEmail)
+                            navController.navigate("signupEmail")
                         }
                     }
                 )

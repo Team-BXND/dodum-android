@@ -23,6 +23,7 @@ class ChangeInfoViewModel @Inject constructor(
 
 
     fun updateProfile(
+        id: Int,
         grade: Int,
         classNo: Int,
         studentNo: Int,
@@ -40,10 +41,11 @@ class ChangeInfoViewModel @Inject constructor(
                     email = email,
                     club = club
                 )
-                val response = myInfoService.updateProfile(request)
+                val response = myInfoService.updateProfile(id, request)
 
                 if (response.isSuccessful) {
                     val message = response.body()?.data ?: "수정 성공"
+                    // 필요하면 메시지를 LiveData/StateFlow로 노출
                     Log.d("ProfileUpdate", "성공: $message")
                 } else {
                     Log.e("ProfileUpdate", "실패: ${response.code()}")
@@ -55,10 +57,10 @@ class ChangeInfoViewModel @Inject constructor(
         }
     }
 
-    fun refreshProfile() {
+    fun refreshProfile(id: Int) {
         viewModelScope.launch {
             try {
-                val response = myInfoService.getProfile()
+                val response = myInfoService.getProfile(id)
                 if (response.isSuccessful) {
                     _profile.value = response.body()?.data
                 }

@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    kotlin("plugin.serialization") version "2.2.0"
 }
 
 val localProperties = gradleLocalProperties(rootDir,project.providers)
@@ -55,10 +54,6 @@ android {
 
 dependencies {
 
-    implementation (libs.androidx.lifecycle.livedata.ktx) // LiveData
-    implementation (libs.androidx.runtime.livedata) // observeAsState
-    implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
@@ -82,11 +77,9 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
     implementation (libs.androidx.material.icons.extended)
     implementation (libs.androidx.navigation.compose)
     implementation (libs.retrofit)
@@ -101,5 +94,4 @@ dependencies {
     implementation(libs.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.text)
-
 }

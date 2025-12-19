@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,19 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.dodum_android.root.NavGroup
 import com.example.dodum_android.ui.component.button.AuthButton
 import com.example.dodum_android.ui.component.textfield.AuthTextField
 
 @Composable
 fun SignupIdPwScreen(
-    navController: NavHostController,
-    signupViewModel: SignupViewModel
+    navController: NavHostController
 ) {
-
-    LaunchedEffect(Unit) {
-        signupViewModel.resetState()
-    }
+    val signupViewModel: SignupViewModel = hiltViewModel()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -101,17 +95,19 @@ fun SignupIdPwScreen(
                 Spacer(modifier = Modifier .height(35.dp))
 
                 AuthButton(
-                    buttonName = "다음",
+                    buttonname = "다음",
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordcheck.isNotEmpty() ) {
                             if (password == passwordcheck) {
-                                // [수정] 뷰모델 함수 호출로 데이터 저장
-                                signupViewModel.updateIdPw(username, password)
-
-                                // 로그로 확인
-                                println("SignupIdPw Saved: ${signupViewModel.form}")
-
-                                navController.navigate(NavGroup.SignupInfo)
+//                                signupViewModel.updateIdPw(username, password)
+                                signupViewModel.form = signupViewModel.form.copy(
+                                    username = username,
+                                    password = password
+                                )
+//                                if (signupViewModel.signupSuccess.value == true) {
+//                                    navController.navigate("signupInfo")
+//                                }
+                                navController.navigate("signupInfo") //테스트용
                             }
                         } else {
                             isError = true

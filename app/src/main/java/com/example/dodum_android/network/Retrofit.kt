@@ -1,32 +1,19 @@
 package com.example.dodum_android.network
 
-import com.example.dodum_android.data.datastore.UserRepository
-import com.example.dodum_android.network.profile.falsepost.FalsePostService
-import com.example.dodum_android.network.info.InfoService
-import com.example.dodum_android.network.misc.MiscService
-import android.content.Context
-import com.example.dodum_android.data.datastore.SurveyDataStore
-import com.example.dodum_android.network.archive.ArchiveService
-import com.example.dodum_android.network.contest.ContestService
-import com.example.dodum_android.network.major.MajorService
 import com.example.dodum_android.network.profile.myinfo.MyInfoService
 import com.example.dodum_android.network.profile.mypost.MyPostService
 import com.example.dodum_android.network.profile.password.PwService
 import com.example.dodum_android.network.start.email.EmailService
 import com.example.dodum_android.network.start.signin.SigninService
-import com.example.dodum_android.network.start.signout.SignOutService
 import com.example.dodum_android.network.start.signup.SignupService
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import javax.inject.Provider
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -34,56 +21,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTokenAuthenticator(
-        userRepository: UserRepository,
-        signinService: Provider<SigninService>
-    ): TokenAuthenticator {
-        return TokenAuthenticator(userRepository, signinService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(userRepository: UserRepository): AuthInterceptor {
-        return AuthInterceptor(userRepository)
-    }
-
-    // ★ 수정: 중복된 provideOkHttpClient 제거하고 하나로 통합
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(
-        authInterceptor: AuthInterceptor,
-        tokenAuthenticator: TokenAuthenticator
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor) // 기본 헤더 (액세스 토큰)
-            .authenticator(tokenAuthenticator) // 401 처리 (토큰 갱신)
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(DodumUrl.BASE_URL)
-            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataStoreModule {
-
-    @Provides
-    @Singleton
-    fun provideSurveyDataStore(
-        @ApplicationContext context: Context
-    ): SurveyDataStore {
-        return SurveyDataStore(context)
     }
 }
 
@@ -100,11 +42,6 @@ object AuthModule {
     @Singleton
     fun provideSignupService(retrofit: Retrofit): SignupService =
         retrofit.create(SignupService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideSignOutService(retrofit: Retrofit): SignOutService =
-        retrofit.create(SignOutService::class.java)
 }
 
 @Module
@@ -119,11 +56,11 @@ object EmailModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object MyInfoModule {
+object InfoModule {
 
     @Singleton
     @Provides
-    fun provideMyInfoService(retrofit: Retrofit): MyInfoService =
+    fun provideInfoService(retrofit: Retrofit): MyInfoService =
         retrofit.create(MyInfoService::class.java)
 }
 
@@ -144,59 +81,4 @@ object PwModule {
     @Provides
     fun providePwService(retrofit: Retrofit): PwService =
         retrofit.create(PwService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object InfoModule {
-    @Singleton
-    @Provides
-    fun provideInfoService(retrofit: Retrofit): InfoService =
-        retrofit.create(InfoService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object MiscModule {
-    @Singleton
-    @Provides
-    fun provideMiscService(retrofit: Retrofit): MiscService =
-        retrofit.create(MiscService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object MajorModule {
-    @Singleton
-    @Provides
-    fun provideMajorService(retrofit: Retrofit): MajorService =
-        retrofit.create(MajorService::class.java)
-}
-
-
-@Module
-@InstallIn(SingletonComponent::class)
-object FalsePostModule {
-    @Singleton
-    @Provides
-    fun provideFalsePostService(retrofit: Retrofit): FalsePostService =
-        retrofit.create(FalsePostService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object ArchiveModule {
-    @Singleton
-    @Provides
-    fun provideArchiveService(retrofit: Retrofit): ArchiveService =
-        retrofit.create(ArchiveService::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object ContestModule {
-    @Singleton
-    @Provides
-    fun provideContestService(retrofit: Retrofit): ContestService =
-        retrofit.create(ContestService::class.java)
 }
