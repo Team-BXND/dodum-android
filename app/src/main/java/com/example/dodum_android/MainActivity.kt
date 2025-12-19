@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             }
 
             if (tokenLoaded) {
-                AppNavHost(navController = navController)
+                MainScreen()
             }
         }
 
