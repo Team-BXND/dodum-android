@@ -1,14 +1,10 @@
 package com.example.dodum_android.feature.misc.share
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dodum_android.network.misc.MiscCategory
 import com.example.dodum_android.network.misc.MiscCriteria
 import com.example.dodum_android.network.misc.MiscItemList
-import com.example.dodum_android.network.misc.MiscListData
 import com.example.dodum_android.network.misc.MiscService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.ceil
-import kotlin.math.min
 
 @HiltViewModel
 class MShareViewModel @Inject constructor(

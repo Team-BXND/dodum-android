@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -35,9 +34,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.dodum_android.root.NavGroup
+import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.component.button.AnimatedButton
 import com.example.dodum_android.ui.component.profile.MyPostItem
-import com.example.dodum_android.ui.component.bar.TopAppBar
 import com.example.dodum_android.ui.theme.MainColor
 
 @Composable
